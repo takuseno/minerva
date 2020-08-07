@@ -1,0 +1,8 @@
+*.pyc
+*__pycache__
+d3rlpy_data
+test_data
+*.csv
+*.xml
+.python-version
+.coverage
