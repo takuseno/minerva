@@ -2,8 +2,14 @@
 
 if [ $# = 0 ]; then
   YAPF_ARG="-i"
+  STANDARD_ARG="--fix"
 else
   YAPF_ARG=$*
+  STANDARD_ARG=""
 fi
 
+# format Python
 yapf -r -vv $YAPF_ARG ganglion tests
+
+# format JavaScript
+npx standard $STANDARD_ARG front *.js

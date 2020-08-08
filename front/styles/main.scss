@@ -1,0 +1,32 @@
+html {
+  width: 100%;
+  height: 100%;
+  font-family: helvetica, arial, 'hiragino kaku gothic pro', meiryo, 'ms pgothic', sans-serif;
+
+  body {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+
+    #root {
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+    }
+
+  }
+
+}
+
+.main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

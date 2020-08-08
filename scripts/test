@@ -9,3 +9,6 @@ pytest --cov-report=xml --cov=ganglion tests -p no:warnings -v
 
 # clean up
 rm -r test_data
+
+# build javascript
+npm run build

@@ -1,0 +1,51 @@
+.sidebar {
+  width: 200px;
+  height: 100%;
+  background-color: #ecf0f1;
+  border-right: thin solid #bdc3c7;
+
+  .list {
+    width: 100%;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      width: 100%;
+
+      li {
+        width: 100%;
+      }
+    }
+
+    .add {
+      border-bottom: thin solid #bdc3c7;
+    }
+
+    .item {
+      text-align: center;
+      margin: 0;
+      padding: 12px;
+      box-sizing: border-box;
+
+      .option {
+        text-decoration: none;
+        width: 100%;
+        font-size: 1em;
+        color: black;
+      }
+
+      &:hover {
+        color: white;
+        background: #3498db;
+
+        .option {
+          color: white;
+        }
+
+      }
+
+    }
+  }
+}
