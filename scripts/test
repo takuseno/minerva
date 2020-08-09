@@ -1,6 +1,7 @@
 #!/bin/bash -eux
 
 # create temporary directory for tests
+rm -rf test_data
 mkdir -p test_data
 
 # run tests

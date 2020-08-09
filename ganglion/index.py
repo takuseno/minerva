@@ -3,11 +3,11 @@ import click
 import os
 import ganglion.models
 
-from flask import Flask, redirect, url_for
+from flask import Flask, Blueprint, redirect, url_for
 from flask.json import JSONEncoder
-from ganglion.api import api_app
 from ganglion.config import config, prepare_directory
 from ganglion.database import init_db, db, ma
+from ganglion.controllers import dataset_route
 
 app = Flask(__name__, static_folder='dist')
 for name, val in config.items():
@@ -47,7 +47,7 @@ def send_file(path):
 
 
 # API endpoints
-app.register_blueprint(api_app, url_prefix='/api')
+app.register_blueprint(dataset_route, url_prefix='/api/dataset')
 
 
 @click.group()

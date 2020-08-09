@@ -1,5 +1,6 @@
 import pytest
 import os
+import json
 import ganglion.config as config
 
 from d3rlpy.datasets import get_cartpole
@@ -49,19 +50,29 @@ def test_dataset_api(client):
         dataset_name = res.json['name']
 
     # check get
-    res = client.get('/api/dataset/%d' % dataset_id)
+    res = client.get('/api/dataset/%d' % dataset_id, follow_redirects=True)
     assert res.status_code == 200
     assert res.json['id'] == dataset_id
     assert res.json['name'] == dataset_name
 
     # check get_all
-    res = client.get('/api/dataset')
+    res = client.get('/api/dataset', follow_redirects=True)
     assert res.status_code == 200
     assert len(res.json['datasets']) == 1
     assert res.json['datasets'][0]['id'] == dataset_id
 
+    # check update
+    res = client.put('/api/dataset/%d' % dataset_id,
+                     data=json.dumps({'name': 'updated'}),
+                     content_type='application/json',
+                     follow_redirects=True)
+    assert res.status_code == 200
+    assert res.json['name'] == 'updated'
+    with app.app_context():
+        assert Dataset.get(dataset_id).name == 'updated'
+
     # check delete
-    res = client.delete('/api/dataset/%d' % dataset_id)
+    res = client.delete('/api/dataset/%d' % dataset_id, follow_redirects=True)
     assert res.status_code == 200
     with app.app_context():
         assert Dataset.get(dataset_id) is None

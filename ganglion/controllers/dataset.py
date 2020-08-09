@@ -1,19 +1,21 @@
+import numpy as np
 import werkzeug
 import os
 import uuid
+import json
 
 from flask import Blueprint, request, jsonify
 from sqlalchemy import desc
 from d3rlpy.dataset import MDPDataset
-from .database import db
-from .dataset import import_csv_as_mdp_dataset
-from .config import UPLOAD_DIR, DATASET_DIR
-from .models.dataset import Dataset, DatasetSchema
+from ..database import db
+from ..dataset import import_csv_as_mdp_dataset
+from ..config import UPLOAD_DIR, DATASET_DIR
+from ..models.dataset import Dataset, DatasetSchema
 
-api_app = Blueprint('api', __name__)
+dataset_route = Blueprint('dataset', __name__)
 
 
-@api_app.route('/dataset/upload', methods=['POST'])
+@dataset_route.route('/upload', methods=['POST'])
 def upload_dataset():
     # validation
     if 'dataset' not in request.files:
@@ -34,18 +36,21 @@ def upload_dataset():
     dataset_name = str(uuid.uuid1()) + '.h5'
     dataset_path = os.path.join(DATASET_DIR, dataset_name)
     mdp_dataset.dump(dataset_path)
+
+    # compute statistics
     stats = mdp_dataset.compute_stats()
+    # handle ndarray serialization
+    stats_json = json.dumps(jsonify(stats).json)
 
     # insert record
-    dataset = Dataset.create(file_name, dataset_name, is_image, is_discrete)
+    dataset = Dataset.create(file_name, dataset_name, is_image, is_discrete,
+                             stats_json)
 
     # return json
-    data = DatasetSchema().dump(dataset)
-    data['statistics'] = stats
-    return jsonify(data)
+    return jsonify(DatasetSchema().dump(dataset))
 
 
-@api_app.route('/dataset', methods=['GET'])
+@dataset_route.route('/', methods=['GET'])
 def get_all_dataset():
     datasets = db.session.query(Dataset)\
         .order_by(desc(Dataset.id))\
@@ -58,27 +63,22 @@ def get_all_dataset():
     })
 
 
-@api_app.route('/dataset/<dataset_id>', methods=['GET'])
+@dataset_route.route('/<dataset_id>', methods=['GET'])
 def get_dataset(dataset_id):
     dataset = Dataset.get(dataset_id, raise_404=True)
-
-    # compute stats
-    dataset_path = os.path.join(DATASET_DIR, dataset.file_name)
-    mdp_dataset = MDPDataset.load(dataset_path)
-    stats = mdp_dataset.compute_stats()
-
-    # return json
-    data = DatasetSchema().dump(dataset)
-    data['statistics'] = stats
-    return jsonify(data)
+    return jsonify(DatasetSchema().dump(dataset))
 
 
-@api_app.route('/dataset/<dataset_id>', methods=['PUT'])
+@dataset_route.route('/<dataset_id>', methods=['PUT'])
 def update_dataset(dataset_id):
-    pass
+    dataset = Dataset.get(dataset_id, raise_404=True)
+    json = request.get_json()
+    dataset.name = json['name']
+    db.session.commit()
+    return jsonify(DatasetSchema().dump(dataset))
 
 
-@api_app.route('/dataset/<dataset_id>', methods=['DELETE'])
+@dataset_route.route('/<dataset_id>', methods=['DELETE'])
 def delete_dataset(dataset_id):
     dataset = Dataset.get(dataset_id, raise_404=True)
     dataset.delete()
