@@ -1,13 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  BrowserRouter,
-  Route,
-  Switch,
-  useParams,
-  useHistory,
-  useLocation
-} from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import Main from './components/Main'
 
 function App () {
