@@ -1,7 +1,7 @@
 import os
 
 from d3rlpy.dataset import MDPDataset
-from werkzeug.exceptions import HTTPException
+from werkzeug.exceptions import NotFound
 from datetime import datetime
 from ..database import db, ma
 from ..config import DATASET_DIR
@@ -49,7 +49,7 @@ class Dataset(db.Model):
     def get(cls, dataset_id, raise_404=False):
         dataset = db.session.query(Dataset).get(dataset_id)
         if not dataset and raise_404:
-            raise HTTPException(code=404)
+            raise NotFound()
         return dataset
 
     def load_mdp_dataset(self):
