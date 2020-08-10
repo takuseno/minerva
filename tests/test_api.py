@@ -33,7 +33,7 @@ def test_dataset_api(client):
 
     # prepare upload request
     with open(csv_path, 'rb') as f:
-        data = {'is_image': 0, 'is_discrete': 1}
+        data = {'is_image': 'false', 'is_discrete': 'true'}
         file = FileStorage(stream=f,
                            filename='dataset.csv',
                            content_type='text/csv')
