@@ -2,11 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import Main from './components/Main'
+import { GlobalProvider } from './context'
 
 function App () {
   return (
     <BrowserRouter>
-      <Main />
+      <GlobalProvider>
+        <Main />
+      </GlobalProvider>
     </BrowserRouter>
   )
 }

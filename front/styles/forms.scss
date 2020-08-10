@@ -1,0 +1,88 @@
+@import "./colors.scss";
+
+.ganglion-form-file {
+  input {
+    display: none;
+  }
+
+  .ganglion-form-file-button {
+    display: inline-block;
+    background: white;
+    border: 1px solid $black-dark;
+    border-radius: 2px;
+    color: $black-dark;
+    content: 'Choose a file';
+    -webkit-user-select: none;
+    font-size: 1em;
+    font-weight: 200;
+    outline: none;
+    cursor: pointer;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-right: 24px;
+    padding-left: 24px;
+    margin: 6px;
+    white-space: nowrap;
+
+    &:hover {
+      border: thin solid $blue-light;
+      color: $blue-light;
+    }
+  }
+}
+
+.ganglion-form-group {
+  text-align: center;
+
+  input {
+    margin: 12px;
+  }
+
+  button {
+    margin: 12px;
+  }
+}
+
+.ganglion-form-row {
+  input {
+    margin: 12px;
+  }
+
+  button {
+    margin: 12px;
+  }
+}
+
+.ganglion-form-button {
+  border: 1px solid $black-dark;
+  border-radius: 2px;
+  color: $black-dark;
+  background-color: white;
+  cursor: pointer;
+
+  &:hover {
+    border: thin solid $blue-light;
+    color: $blue-light;
+  }
+
+  span {
+    display: block;
+    font-size: 1em;
+    font-weight: 200;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+}
+
+.ganglion-form-checkbox {
+  input {
+    diplay: none;
+  }
+
+  span {
+    font-size: 1em;
+    font-weight: 200;
+  }
+}

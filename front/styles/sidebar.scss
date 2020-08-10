@@ -1,8 +1,10 @@
+@import "./colors.scss";
+
 .sidebar {
-  width: 200px;
+  width: 240px;
   height: 100%;
-  background-color: #ecf0f1;
-  border-right: thin solid #bdc3c7;
+  background-color: $white-light;
+  border-right: thin solid $white-dark;
 
   .list {
     width: 100%;
@@ -20,26 +22,29 @@
     }
 
     .add {
-      border-bottom: thin solid #bdc3c7;
+      border-bottom: thin solid $white-dark;
     }
 
     .item {
       text-align: center;
       margin: 0;
-      padding: 12px;
-      box-sizing: border-box;
+      display: block;
 
       .option {
+        display: block;
         text-decoration: none;
         width: 100%;
         font-size: 1em;
         font-weight: 300;
         color: black;
+        padding: 12px;
+        box-sizing: border-box;
+        cursor: pointer;
       }
 
       &:hover {
         color: white;
-        background: #3498db;
+        background: $blue-light;
 
         .option {
           color: white;

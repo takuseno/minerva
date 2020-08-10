@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import '../styles/header.scss'
 
-export default function Header () {
+export function Header () {
   const location = useLocation()
   return (
     <div className='header'>
