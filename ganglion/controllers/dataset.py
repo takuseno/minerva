@@ -28,8 +28,8 @@ def upload_dataset():
     file.save(file_path)
 
     # save as MDPDataset
-    is_image = bool(int(request.form.get('is_image')))
-    is_discrete = bool(int(request.form.get('is_discrete')))
+    is_image = request.form.get('is_image') == 'true'
+    is_discrete = request.form.get('is_discrete') == 'true'
     mdp_dataset = import_csv_as_mdp_dataset(file_path,
                                             image=is_image,
                                             discrete_action=is_discrete)
@@ -39,6 +39,8 @@ def upload_dataset():
 
     # compute statistics
     stats = mdp_dataset.compute_stats()
+    stats['observation_shape'] = mdp_dataset.get_observation_shape()
+    stats['action_size'] = mdp_dataset.get_action_size()
     # handle ndarray serialization
     stats_json = json.dumps(jsonify(stats).json)
 
