@@ -1,3 +1,5 @@
+/* global FormData */
+
 import axios from 'axios'
 import { Record } from 'immutable'
 
@@ -14,7 +16,7 @@ export class Dataset extends DatasetRecord {
     return new Promise((resolve, reject) => {
       axios.get(`/api/dataset/${id}`)
         .then((res) => {
-          const dataset = Dataset.fromResponse(res)
+          const dataset = Dataset.fromResponse(res.data)
           resolve(dataset)
         })
         .catch((err) => reject(err))
@@ -32,17 +34,19 @@ export class Dataset extends DatasetRecord {
     })
   }
 
-  static upload (file, isImage, isDiscrete) {
+  static upload (file, isImage, isDiscrete, progressCallback = () => {}) {
     const params = new FormData()
     params.append('dataset', file)
     params.append('is_image', isImage)
     params.append('is_discrete', isDiscrete)
+    const config = {
+      headers: { 'Content-type': 'multipart/form-data' },
+      onUploadProgress: progressCallback
+    }
     return new Promise((resolve, reject) => {
-      axios.post('/api/dataset/upload', params, {
-          headers: { 'Content-type': 'multipart/form-data' }
-        })
+      axios.post('/api/dataset/upload', params, config)
         .then((res) => {
-          const dataset = Dataset.fromResponse(res)
+          const dataset = Dataset.fromResponse(res.data)
           resolve(dataset)
         })
         .catch((err) => reject(err))
@@ -50,20 +54,21 @@ export class Dataset extends DatasetRecord {
   }
 
   delete () {
-    axios.delete(`/api/dataset/${this.id}`)
+    return axios.delete(`/api/dataset/${this.id}`)
   }
 
   update () {
-    axios.put(`/api/dataset/${this.id}`, this.toRequest())
+    return axios.put(`/api/dataset/${this.id}`, this.toRequest())
   }
 
-  static fromResponse (res) {
+  static fromResponse (data) {
+    console.log(data)
     const dataset = new Dataset({
-      id: res.data.id,
-      name: res.data.name,
-      statistics: JSON.parse(res.data.statistics),
-      createdAt: res.data.created_at,
-      updatedAt: res.data.updated_at
+      id: data.id,
+      name: data.name,
+      statistics: JSON.parse(data.statistics),
+      createdAt: data.created_at,
+      updatedAt: data.updated_at
     })
     return dataset
   }

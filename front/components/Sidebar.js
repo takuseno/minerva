@@ -1,10 +1,10 @@
 import React from 'react'
-import { Switch, Link, Route, useRouteMatch } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import '../styles/sidebar.scss'
 
 export function DatasetSidebar (props) {
   const datasets = props.datasets
-  const match = useRouteMatch()
+  const { id } = useParams()
   return (
     <div className='sidebar'>
       <div className='list'>
@@ -18,9 +18,10 @@ export function DatasetSidebar (props) {
         </p>
         <ul>
           {datasets.map((dataset) => {
+            const itemClass = dataset.id === Number(id) ? 'item active' : 'item'
             return (
-              <li key={dataset.id} className='item'>
-                <Link className='option' to={`${match.url}/${dataset.id}`}>
+              <li key={dataset.id} className={itemClass}>
+                <Link className='option' to={`/datasets/${dataset.id}`}>
                   {dataset.name}
                 </Link>
               </li>
@@ -34,7 +35,6 @@ export function DatasetSidebar (props) {
 
 export function ProjectSidebar (props) {
   const projects = props.projects
-  const match = useRouteMatch()
   return (
     <div className='sidebar'>
       <div className='list'>
@@ -45,7 +45,7 @@ export function ProjectSidebar (props) {
           {projects.map((project) => {
             return (
               <li key={project.id} className='item'>
-                <Link className='option' to={`${match.url}/${project.id}`}>
+                <Link className='option' to={`projects/${project.id}`}>
                   {project.name}
                 </Link>
               </li>

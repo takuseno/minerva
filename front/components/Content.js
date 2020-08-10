@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import { DatasetSidebar, ProjectSidebar } from './Sidebar'
 import { DatasetDashboard, ProjectDashboard } from './Dashboard'
 import { DatasetUploadDialog } from './CreateDialog'
@@ -8,11 +9,26 @@ export function DatasetContent (props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   return (
     <div className='content'>
-      <DatasetSidebar
-        datasets={props.datasets}
-        openUploadDialog={() => setIsDialogOpen(true)}
-      />
-      <DatasetDashboard />
+      {props.datasets.size > 0 &&
+        <Switch>
+          <Route path='/datasets/:id'>
+            <DatasetSidebar
+              datasets={props.datasets}
+              openUploadDialog={() => setIsDialogOpen(true)}
+            />
+            <DatasetDashboard datasets={props.datasets} />
+          </Route>
+          <Route exact path='/datasets'>
+            <Redirect to={`/datasets/${props.datasets.first().id}`} />
+          </Route>
+        </Switch>}
+      {props.datasets.size === 0 &&
+        <Route path='/datasets'>
+          <DatasetSidebar
+            datasets={props.datasets}
+            openUploadDialog={() => setIsDialogOpen(true)}
+          />
+        </Route>}
       <DatasetUploadDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}

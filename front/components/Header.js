@@ -11,7 +11,7 @@ export function Header () {
       </div>
       <div className='links'>
         {['projects', 'datasets'].map((link) => {
-          const isActive = location.pathname.split('/')[1] == link
+          const isActive = location.pathname.split('/')[1] === link
           const className = isActive ? 'link active' : 'link'
           const to = '/' + link
           return (

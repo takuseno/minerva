@@ -5,6 +5,7 @@
   height: 100%;
   background-color: $white-light;
   border-right: thin solid $white-dark;
+  overflow: auto;
 
   .list {
     width: 100%;
@@ -50,6 +51,15 @@
           color: white;
         }
 
+      }
+
+      &.active {
+        color: white;
+        background: $blue-dark;
+
+        .option {
+          color: white;
+        }
       }
 
     }

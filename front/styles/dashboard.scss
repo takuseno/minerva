@@ -1,5 +1,82 @@
+@import './colors.scss';
+
+.detail {
+  margin: 12px;
+
+  table {
+    border-collapse: collapse;
+
+    tr {
+      th {
+        text-align: right;
+        font-size: 1.1em;
+        font-weight: 200;
+      }
+
+      td {
+        text-align: left;
+        font-size: 1.1em;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+.statistics {
+  text-align: center;
+
+  .card {
+    display: inline-block;
+    width: 40%;
+
+    .statistics-title {
+      float: left;
+      font-size: 1.2em;
+      font-weight: 300;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    th, td {
+      font-size: 1em;
+      font-weight: 100;
+      border: 1px solid $black-dark;
+    }
+  }
+}
+
+.dataset-section {
+  margin-top: 6px;
+  margin-bottom: 6px;
+
+  .section-title {
+    font-size: 1.5em;
+    font-weight: 300;
+  }
+}
+
+.card {
+  padding: 12px;
+  margin: 12px;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, .1);
+}
+
 .dashboard {
   position: reletive;
   width: 100%;
   flex-grow: 1;
+  padding: 16px;
+  overflow: auto;
+
+  .dataset-header {
+    width: 100%;
+    border-bottom: 1px solid $black-light;
+
+    .dataset-name {
+      font-size: 2em;
+      font-weight: 200;
+    }
+  }
 }

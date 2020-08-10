@@ -10,11 +10,40 @@ export function GlobalProvider ({ children }) {
 
   // initialization
   useEffect(() => {
-    setDatasets(List([new Dataset({ id: 1, name: 'test_dataset' })]))
+    Dataset.getAll()
+      .then((datasets) => {
+        setDatasets(List(datasets))
+      })
   }, [])
   useEffect(() => {
     setProjects(List([{ id: 1, name: 'test_project' }]))
   }, [])
+
+  // actions
+  const uploadDataset = (file, isImage, isDiscrete, progressCallback) => {
+    return Dataset.upload(file, isImage, isDiscrete, progressCallback)
+      .then((dataset) => {
+        setDatasets(datasets.insert(0, dataset))
+        return dataset
+      })
+  }
+
+  const deleteDataset = (dataset) => {
+    return dataset.delete()
+      .then(() => {
+        setDatasets(datasets.filter((d) => d.id !== dataset.id))
+        return dataset
+      })
+  }
+
+  const updateDataset = (dataset) => {
+    return dataset.update()
+      .then(() => {
+        const index = datasets.findIndex((d) => d.id === dataset.id)
+        setDatasets(datasets.set(index, dataset))
+        return dataset
+      })
+  }
 
   return (
     <GlobalContext.Provider
@@ -22,7 +51,10 @@ export function GlobalProvider ({ children }) {
         datasets,
         setDatasets,
         projects,
-        setProjects
+        setProjects,
+        uploadDataset,
+        deleteDataset,
+        updateDataset
       }}
     >
       {children}
