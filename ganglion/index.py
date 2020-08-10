@@ -9,7 +9,8 @@ from ganglion.config import config, prepare_directory
 from ganglion.database import init_db, db, ma
 from ganglion.controllers import dataset_route
 
-app = Flask(__name__, static_folder='dist')
+static_path = os.path.join(os.path.dirname(__file__), '..', 'dist')
+app = Flask(__name__, static_folder=static_path)
 for name, val in config.items():
     app.config[name] = val
 
@@ -34,6 +35,9 @@ init_db(app)
 # create ganglion directory
 prepare_directory()
 
+# API endpoints
+app.register_blueprint(dataset_route, url_prefix='/api/dataset')
+
 
 # proxy
 @app.route('/', defaults={'path': ''})
@@ -44,10 +48,6 @@ def send_file(path):
     if path.find('.js') == -1:
         path = 'index.html'
     return app.send_static_file(path)
-
-
-# API endpoints
-app.register_blueprint(dataset_route, url_prefix='/api/dataset')
 
 
 @click.group()
