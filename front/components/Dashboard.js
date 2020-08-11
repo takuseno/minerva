@@ -1,6 +1,10 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useState, useContext } from 'react'
+import { useParams, useHistory } from 'react-router-dom'
+import { GlobalContext } from '../context'
 import { Histogram } from './graphs'
+import { Button, TextForm } from './forms'
+import { ConfirmationDialog } from './ConfirmationDialog.js'
+import 'react-confirm-alert/src/react-confirm-alert.css'
 import '../styles/dashboard.scss'
 
 function Card ({ children }) {
@@ -44,10 +48,62 @@ function StatisticsCard (props) {
   )
 }
 
-export function DatasetDashboard (props) {
-  const { id } = useParams()
-  const datasets = props.datasets
-  const dataset = datasets.find((d) => d.id === Number(id))
+function DatasetHeader (props) {
+  const dataset = props.dataset
+  const [isEditing, setIsEditing] = useState(false)
+  const [datasetName, setDatasetName] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
+  const { updateDataset, deleteDataset } = useContext(GlobalContext)
+  const history = useHistory()
+
+  const handleEdit = () => {
+    setDatasetName(dataset.name)
+    setIsEditing(true)
+  }
+  const handleUpdate = () => {
+    setIsEditing(false)
+    updateDataset(dataset.set('name', datasetName))
+  }
+  const handleDelete = () => {
+    setIsDeleting(false)
+    deleteDataset(dataset)
+    history.push('/datasets')
+  }
+
+  if (isEditing) {
+    return (
+      <div className='dataset-header'>
+        <TextForm value={datasetName} onChange={setDatasetName} focus />
+        <div className='edit-buttons'>
+          <Button text='UPDATE' onClick={handleUpdate} />
+          <Button text='CANCEL' onClick={() => setIsEditing(false)} />
+        </div>
+      </div>
+    )
+  } else {
+    return (
+      <div className='dataset-header'>
+        <span className='dataset-name'>{dataset.name}</span>
+        <div className='edit-buttons'>
+          <Button text='EDIT' onClick={handleEdit} />
+          <Button text='DELETE' onClick={() => setIsDeleting(true)} />
+          <ConfirmationDialog
+            title={`Deleting ${dataset.name}.`}
+            message='Are you sure to delete this dataset?'
+            isOpen={isDeleting}
+            onClose={() => setIsDeleting(false)}
+            onConfirm={handleDelete}
+            confirmText='DELETE'
+            cancelText='CANCEL'
+          />
+        </div>
+      </div>
+    )
+  }
+}
+
+function DatasetStatistics (props) {
+  const dataset = props.dataset
   const stats = dataset.statistics
   const actionSpace = dataset.isDiscrete ? 'discrete' : 'continuous'
   const observationSpace = dataset.isImage ? 'image' : 'vector'
@@ -55,10 +111,7 @@ export function DatasetDashboard (props) {
   const rewardHist = stats.reward.histogram
   const actionHist = stats.action.histogram
   return (
-    <div className='dashboard'>
-      <div className='dataset-header'>
-        <span className='dataset-name'>{dataset.name}</span>
-      </div>
+    <div>
       <div className='dataset-section'>
         <span className='section-title'>Information</span>
       </div>
@@ -107,7 +160,7 @@ export function DatasetDashboard (props) {
         values={rewardHist[0]}
         labels={rewardHist[1]}
         xLabel='reward'
-        yLabel='number of episodes'
+        yLabel='number of steps'
       />
       {dataset.isDiscrete &&
         <Card>
@@ -130,6 +183,7 @@ export function DatasetDashboard (props) {
               std={stats.action.std[i]}
               max={stats.action.max[i]}
               min={stats.action.min[i]}
+              graphTitle='histogram'
               values={hist[0]}
               labels={hist[1]}
               xLabel={`action (dim=${i})`}
@@ -139,6 +193,23 @@ export function DatasetDashboard (props) {
         })}
     </div>
   )
+}
+
+export function DatasetDashboard (props) {
+  const { id } = useParams()
+  const datasets = props.datasets
+  const dataset = datasets.find((d) => d.id === Number(id))
+  if (dataset === undefined) {
+    // TODO: show error page
+    return (<div className='dashboard' />)
+  } else {
+    return (
+      <div className='dashboard'>
+        <DatasetHeader dataset={dataset} />
+        <DatasetStatistics dataset={dataset} />
+      </div>
+    )
+  }
 }
 
 export function ProjectDashboard () {

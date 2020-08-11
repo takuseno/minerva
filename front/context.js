@@ -29,20 +29,15 @@ export function GlobalProvider ({ children }) {
   }
 
   const deleteDataset = (dataset) => {
+    const newDatasets = datasets.filter((d) => d.id !== dataset.id)
+    setDatasets(newDatasets)
     return dataset.delete()
-      .then(() => {
-        setDatasets(datasets.filter((d) => d.id !== dataset.id))
-        return dataset
-      })
   }
 
   const updateDataset = (dataset) => {
+    const index = datasets.findIndex((d) => d.id === dataset.id)
+    setDatasets(datasets.set(index, dataset))
     return dataset.update()
-      .then(() => {
-        const index = datasets.findIndex((d) => d.id === dataset.id)
-        setDatasets(datasets.set(index, dataset))
-        return dataset
-      })
   }
 
   return (

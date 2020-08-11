@@ -1,5 +1,10 @@
 @import "./colors.scss";
 
+.ganglion-form-text {
+  font-size: 1em;
+  font-weight: 200;
+}
+
 .ganglion-form-file {
   input {
     display: none;

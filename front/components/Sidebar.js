@@ -1,18 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { DatasetUploadDialog } from './CreateDialog'
 import '../styles/sidebar.scss'
 
 export function DatasetSidebar (props) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const datasets = props.datasets
   const { id } = useParams()
   return (
     <div className='sidebar'>
       <div className='list'>
         <p className='item add'>
-          <span
-            className='option'
-            onClick={() => props.openUploadDialog()}
-          >
+          <span className='option' onClick={() => setIsDialogOpen(true)}>
             ADD DATASET
           </span>
         </p>
@@ -29,6 +28,10 @@ export function DatasetSidebar (props) {
           })}
         </ul>
       </div>
+      <DatasetUploadDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+      />
     </div>
   )
 }

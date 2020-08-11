@@ -63,11 +63,32 @@
 
   .dataset-header {
     width: 100%;
+    padding: 6px;
     border-bottom: 1px solid $black-light;
 
     .dataset-name {
       font-size: 2em;
       font-weight: 200;
+    }
+
+    .ganglion-form-text {
+      font-size: 2em;
+      font-weight: 200;
+      border: none;
+      padding: 0;
+
+      &:focus {
+        border: none;
+        outline: 0;
+      }
+    }
+
+    .edit-buttons {
+      float: right;
+
+      button {
+        margin: 6px;
+      }
     }
   }
 }

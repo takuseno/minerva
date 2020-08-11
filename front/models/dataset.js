@@ -64,7 +64,6 @@ export class Dataset extends DatasetRecord {
   }
 
   static fromResponse (data) {
-    console.log(data)
     const dataset = new Dataset({
       id: data.id,
       name: data.name,

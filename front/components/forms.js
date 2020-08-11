@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import '../styles/forms.scss'
 
 export function FormGroup ({ children }) {
@@ -14,6 +14,24 @@ export function FormRow ({ children }) {
     <div className='ganglion-form-row'>
       {children}
     </div>
+  )
+}
+
+export function TextForm (props) {
+  const inputEl = useRef(null)
+  useEffect(() => {
+    if (props.focus) {
+      inputEl.current.focus()
+    }
+  }, [])
+  return (
+    <input
+      className='ganglion-form-text'
+      type='text'
+      value={props.value}
+      onChange={(e) => props.onChange(e.target.value)}
+      ref={inputEl}
+    />
   )
 }
 
