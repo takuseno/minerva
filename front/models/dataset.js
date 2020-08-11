@@ -6,6 +6,8 @@ import { Record } from 'immutable'
 const DatasetRecord = Record({
   id: 0,
   name: '',
+  isImage: false,
+  isDiscrete: false,
   statistics: {},
   createdAt: '',
   updatedAt: ''
@@ -66,6 +68,8 @@ export class Dataset extends DatasetRecord {
     const dataset = new Dataset({
       id: data.id,
       name: data.name,
+      isImage: data.is_image,
+      isDiscrete: data.is_discrete,
       statistics: JSON.parse(data.statistics),
       createdAt: data.created_at,
       updatedAt: data.updated_at

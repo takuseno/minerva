@@ -1,43 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import HighCharts from 'highcharts'
-import HighChartsReact from 'highcharts-react-official'
+import { Histogram } from './graphs'
 import '../styles/dashboard.scss'
-
-function Histogram (props) {
-  const values = props.values
-  const labels = props.labels.map((v) => v.toFixed(2))
-  const option = {
-    title: {
-      text: props.title,
-      style: {
-        'font-size': '1.2em',
-        'font-weight': '200'
-      }
-    },
-    chart: {
-      type: 'area'
-    },
-    xAxis: {
-      title: {
-        text: props.xLabel
-      },
-      categories: labels
-    },
-    yAxis: {
-      title: {
-        text: props.yLabel
-      }
-    },
-    legend: {
-      enabled: false
-    },
-    series: [{ data: values }]
-  }
-  return (
-    <HighChartsReact highcharts={HighCharts} options={option} />
-  )
-}
 
 function Card ({ children }) {
   return (
@@ -47,15 +11,49 @@ function Card ({ children }) {
   )
 }
 
+function StatisticsCard (props) {
+  return (
+    <Card>
+      <p className='statistics-title'>{props.title}</p>
+      <table className='statistics-table'>
+        <tr>
+          <th>mean</th>
+          <td>{props.mean.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <th>standard deviation</th>
+          <td>{props.std.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <th>maximum value</th>
+          <td>{props.max.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <th>minimum value</th>
+          <td>{props.min.toFixed(2)}</td>
+        </tr>
+      </table>
+      <Histogram
+        title={props.graphTitle}
+        values={props.values}
+        labels={props.labels}
+        xLabel={props.xLabel}
+        yLabel={props.yLabel}
+      />
+    </Card>
+  )
+}
+
 export function DatasetDashboard (props) {
   const { id } = useParams()
   const datasets = props.datasets
   const dataset = datasets.find((d) => d.id === Number(id))
   const stats = dataset.statistics
-  const actionSpace = dataset.is_discrete ? 'discrete' : 'continuous'
-  const observationSpace = dataset.is_image ? 'image' : 'vector'
+  const actionSpace = dataset.isDiscrete ? 'discrete' : 'continuous'
+  const observationSpace = dataset.isImage ? 'image' : 'vector'
   const returnHist = stats.return.histogram
   const rewardHist = stats.reward.histogram
+  const actionHist = stats.action.histogram
   return (
     <div className='dashboard'>
       <div className='dataset-header'>
@@ -87,64 +85,58 @@ export function DatasetDashboard (props) {
       <div className='dataset-section'>
         <span className='section-title'>Statistics</span>
       </div>
-      <div className='statistics'>
+      <StatisticsCard
+        title='Return Statistics'
+        mean={stats.return.mean}
+        std={stats.return.std}
+        max={stats.return.max}
+        min={stats.return.min}
+        graphTitle='histogram'
+        values={returnHist[0]}
+        labels={returnHist[1]}
+        xLabel='return'
+        yLabel='number of episodes'
+      />
+      <StatisticsCard
+        title='Reward Statistics'
+        mean={stats.reward.mean}
+        std={stats.reward.std}
+        max={stats.reward.max}
+        min={stats.reward.min}
+        graphTitle='histogram'
+        values={rewardHist[0]}
+        labels={rewardHist[1]}
+        xLabel='reward'
+        yLabel='number of episodes'
+      />
+      {dataset.isDiscrete &&
         <Card>
-          <p className='statistics-title'>Return Statistics</p>
-          <table>
-            <tr>
-              <th>mean</th>
-              <td>{stats.return.mean.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <th>standard deviation</th>
-              <td>{stats.return.std.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <th>maximum value</th>
-              <td>{stats.return.max.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <th>minimum value</th>
-              <td>{stats.return.min.toFixed(2)}</td>
-            </tr>
-          </table>
+          <p className='statistics-title'>Action Statistics</p>
           <Histogram
-            values={returnHist[0]}
-            labels={returnHist[1]}
-            title='Return Distribution'
-            xLabel='Return'
-            yLabel='Number of episodes'
+            title='histogram'
+            values={actionHist[0]}
+            labels={actionHist[1]}
+            xLabel='action id'
+            yLabel='number of steps'
           />
-        </Card>
-        <Card>
-          <p className='statistics-title'>Reward Statistics</p>
-          <table>
-            <tr>
-              <th>mean</th>
-              <td>{stats.reward.mean.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <th>standard deviation</th>
-              <td>{stats.reward.std.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <th>maximum value</th>
-              <td>{stats.reward.max.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <th>minimum value</th>
-              <td>{stats.reward.min.toFixed(2)}</td>
-            </tr>
-          </table>
-          <Histogram
-            values={rewardHist[0]}
-            labels={rewardHist[1]}
-            title='Reward Distribution'
-            xLabel='Reward'
-            yLabel='Number of steps'
-          />
-        </Card>
-      </div>
+        </Card>}
+      {!dataset.isDiscrete &&
+        actionHist.map((hist, i) => {
+          return (
+            <StatisticsCard
+              key={i}
+              title={`Action Statistics (dim=${i})`}
+              mean={stats.action.mean[i]}
+              std={stats.action.std[i]}
+              max={stats.action.max[i]}
+              min={stats.action.min[i]}
+              values={hist[0]}
+              labels={hist[1]}
+              xLabel={`action (dim=${i})`}
+              yLabel='number of steps'
+            />
+          )
+        })}
     </div>
   )
 }
