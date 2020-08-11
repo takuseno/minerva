@@ -1,4 +1,4 @@
-@import './colors.scss';
+@import './colors';
 
 .detail {
   margin: 12px;
@@ -8,15 +8,15 @@
 
     tr {
       th {
-        text-align: right;
         font-size: 1.1em;
         font-weight: 200;
+        text-align: right;
       }
 
       td {
-        text-align: left;
         font-size: 1.1em;
         font-weight: 400;
+        text-align: left;
       }
     }
   }
@@ -28,18 +28,20 @@
 }
 
 .statistics-table {
-  width: 300px;
   border-collapse: collapse;
-  th, td {
+  width: 300px;
+
+  th,
+  td {
+    border: 1px solid $black-dark;
     font-size: 1em;
     font-weight: 100;
-    border: 1px solid $black-dark;
   }
 }
 
 .dataset-section {
-  margin-top: 6px;
   margin-bottom: 6px;
+  margin-top: 6px;
 
   .section-title {
     font-size: 1.5em;
@@ -48,23 +50,23 @@
 }
 
 .card {
-  padding: 24px;
+  box-shadow: 0 10px 20px 0 $shadow-black;
   margin: 12px;
-  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, .1);
+  padding: 24px;
   text-align: center;
 }
 
 .dashboard {
+  flex-grow: 1;
+  overflow: auto;
+  padding: 16px;
   position: reletive;
   width: 100%;
-  flex-grow: 1;
-  padding: 16px;
-  overflow: auto;
 
   .dataset-header {
-    width: 100%;
-    padding: 6px;
     border-bottom: 1px solid $black-light;
+    padding: 6px;
+    width: 100%;
 
     .dataset-name {
       font-size: 2em;
@@ -72,13 +74,13 @@
     }
 
     .ganglion-form-text {
+      border: 0;
       font-size: 2em;
       font-weight: 200;
-      border: none;
       padding: 0;
 
       &:focus {
-        border: none;
+        border: 0;
         outline: 0;
       }
     }

@@ -1,11 +1,11 @@
-@import "./colors.scss";
+@import './colors';
 
 .sidebar {
-  width: 240px;
-  height: 100%;
   background-color: $white-light;
   border-right: thin solid $white-dark;
+  height: 100%;
   overflow: auto;
+  width: 240px;
 
   .list {
     width: 100%;
@@ -27,38 +27,38 @@
     }
 
     .item {
-      text-align: center;
-      margin: 0;
       display: block;
+      margin: 0;
+      text-align: center;
 
       .option {
+        box-sizing: border-box;
+        color: $black;
+        cursor: pointer;
         display: block;
-        text-decoration: none;
-        width: 100%;
         font-size: 1em;
         font-weight: 300;
-        color: black;
         padding: 12px;
-        box-sizing: border-box;
-        cursor: pointer;
+        text-decoration: none;
+        width: 100%;
       }
 
       &:hover {
-        color: white;
         background: $blue-light;
+        color: $white;
 
         .option {
-          color: white;
+          color: $white;
         }
 
       }
 
       &.active {
-        color: white;
         background: $blue-dark;
+        color: $white;
 
         .option {
-          color: white;
+          color: $white;
         }
       }
 

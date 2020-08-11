@@ -1,3 +1,5 @@
+// sass-lint:disable class-name-format
+
 .dialog-title {
   font-size: 1.5em;
   font-weight: 100;
@@ -7,17 +9,19 @@
   opacity: 0;
 }
 
-.ReactModalPortal .ReactModal__Overlay {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  transition: opacity 200ms ease-in-out;
+.ReactModalPortal {
+  .ReactModal__Overlay {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    transition: opacity 200ms ease-in-out;
 
-  &--after-open {
-    opacity: 1;
-  }
+    &--after-open {
+      opacity: 1;
+    }
 
-  &--before-close {
-    opacity: 0;
+    &--before-close {
+      opacity: 0;
+    }
   }
 }

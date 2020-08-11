@@ -4,7 +4,6 @@ import { GlobalContext } from '../context'
 import { Histogram } from './graphs'
 import { Button, TextForm } from './forms'
 import { ConfirmationDialog } from './ConfirmationDialog.js'
-import 'react-confirm-alert/src/react-confirm-alert.css'
 import '../styles/dashboard.scss'
 
 function Card ({ children }) {

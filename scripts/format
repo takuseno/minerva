@@ -13,3 +13,6 @@ yapf -r -vv $YAPF_ARG ganglion tests
 
 # format JavaScript
 npx standard $STANDARD_ARG front 'front/**/*.js' 'front/*.js' '*.js'
+
+# check SCSS format
+npx sass-lint 'front/styles/*.scss' -v -q

@@ -1,4 +1,4 @@
-@import "./colors.scss";
+@import './colors';
 
 .ganglion-form-text {
   font-size: 1em;
@@ -11,22 +11,22 @@
   }
 
   .ganglion-form-file-button {
-    display: inline-block;
-    background: white;
+    background: $white;
     border: 1px solid $black-dark;
     border-radius: 2px;
     color: $black-dark;
     content: 'Choose a file';
-    -webkit-user-select: none;
+    cursor: pointer;
+    display: inline-block;
     font-size: 1em;
     font-weight: 200;
-    outline: none;
-    cursor: pointer;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    padding-right: 24px;
-    padding-left: 24px;
     margin: 6px;
+    outline: none;
+    padding-bottom: 6px;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 6px;
+    user-select: none;
     white-space: nowrap;
 
     &:hover {
@@ -59,10 +59,10 @@
 }
 
 .ganglion-form-button {
+  background-color: $white;
   border: 1px solid $black-dark;
   border-radius: 2px;
   color: $black-dark;
-  background-color: white;
   cursor: pointer;
 
   &:hover {
@@ -74,18 +74,14 @@
     display: block;
     font-size: 1em;
     font-weight: 200;
-    padding-top: 6px;
     padding-bottom: 6px;
-    padding-right: 24px;
     padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 6px;
   }
 }
 
 .ganglion-form-checkbox {
-  input {
-    diplay: none;
-  }
-
   span {
     font-size: 1em;
     font-weight: 200;
