@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { Link, useParams, useHistory } from 'react-router-dom'
 import { GlobalContext } from '../context'
 import { Button, TextForm } from './forms'
 import { ConfirmationDialog } from './ConfirmationDialog.js'
@@ -42,6 +42,7 @@ function ProjectHeader (props) {
       <div className='project-header'>
         <span className='project-name'>{project.name}</span>
         <div className='edit-buttons'>
+          <Button text='RUN' onClick={() => {}} />
           <Button text='EDIT' onClick={handleEdit} />
           <Button text='DELETE' onClick={() => setIsDeleting(true)} />
           <ConfirmationDialog
@@ -59,6 +60,43 @@ function ProjectHeader (props) {
   }
 }
 
+function ProjectDetail (props) {
+  const project = props.project
+  const algorithm = project.algorithm.toUpperCase().replace('_', ' ')
+  return (
+    <div className='project-detail'>
+      <table>
+        <tr>
+          <th>DATASET</th>
+          <td>
+            <Link to={`/datasets/${project.dataset.id}`}>
+              {project.dataset.name}
+            </Link>
+          </td>
+        </tr>
+        <tr>
+          <th>ALGORITHM</th>
+          <td>{algorithm}</td>
+        </tr>
+      </table>
+    </div>
+  )
+}
+
+function ExperimentList (props) {
+  return (
+    <div className='experiment-list'>
+      <ProjectDetail project={props.project} />
+    </div>
+  )
+}
+
+function ProjectMetrics (props) {
+  return (
+    <div className='project-metrics' />
+  )
+}
+
 export function ProjectDashboard (props) {
   const { id } = useParams()
   const projects = props.projects
@@ -66,6 +104,10 @@ export function ProjectDashboard (props) {
   return (
     <div className='dashboard'>
       <ProjectHeader project={project} />
+      <div className='dashboard-body'>
+        <ExperimentList project={project} />
+        <ProjectMetrics />
+      </div>
     </div>
   )
 }
