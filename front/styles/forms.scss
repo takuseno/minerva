@@ -1,8 +1,9 @@
 @import './colors';
+@import './font';
 
 .ganglion-form-text {
   font-size: 1em;
-  font-weight: 200;
+  font-weight: $weight-300;
 }
 
 .ganglion-form-file {
@@ -19,7 +20,7 @@
     cursor: pointer;
     display: inline-block;
     font-size: 1em;
-    font-weight: 200;
+    font-weight: $weight-300;
     margin: 6px;
     outline: none;
     padding-bottom: 6px;
@@ -73,7 +74,7 @@
   span {
     display: block;
     font-size: 1em;
-    font-weight: 200;
+    font-weight: $weight-300;
     padding-bottom: 6px;
     padding-left: 24px;
     padding-right: 24px;
@@ -84,6 +85,6 @@
 .ganglion-form-checkbox {
   span {
     font-size: 1em;
-    font-weight: 200;
+    font-weight: $weight-300;
   }
 }

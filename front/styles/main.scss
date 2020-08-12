@@ -1,5 +1,7 @@
+@import url('http://fonts.googleapis.com/earlyaccess/notosansjp.css');
+
 html {
-  font-family: helvetica, arial, 'hiragino kaku gothic pro', meiryo, 'ms pgothic', sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
   height: 100%;
   width: 100%;
 
@@ -21,6 +23,13 @@ html {
     }
   }
 
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
 }
 
 .main {

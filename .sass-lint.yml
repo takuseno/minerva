@@ -1,3 +1,7 @@
 rules:
   nesting-depth:
     - 0
+  no-url-protocols:
+    - 0
+  no-url-domains:
+    - 0
