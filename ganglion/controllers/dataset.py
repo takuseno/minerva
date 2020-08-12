@@ -39,6 +39,8 @@ def upload_dataset():
 
     # get dataset size
     data_size = os.path.getsize(dataset_path)
+    episode_size = len(mdp_dataset)
+    step_size = sum(map(len, mdp_dataset))
 
     # compute statistics
     stats = mdp_dataset.compute_stats()
@@ -48,8 +50,8 @@ def upload_dataset():
     stats_json = json.dumps(jsonify(stats).json)
 
     # insert record
-    dataset = Dataset.create(file_name, dataset_name, data_size, is_image,
-                             is_discrete, stats_json)
+    dataset = Dataset.create(file_name, dataset_name, episode_size, step_size,
+                             data_size, is_image, is_discrete, stats_json)
 
     # return json
     return jsonify(DatasetSchema().dump(dataset))

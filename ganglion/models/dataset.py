@@ -14,6 +14,8 @@ class Dataset(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     file_name = db.Column(db.String(100))
+    episode_size = db.Column(db.Integer)
+    step_size = db.Column(db.Integer)
     data_size = db.Column(db.Integer)
     is_image = db.Column(db.Boolean)
     is_discrete = db.Column(db.Boolean)
@@ -26,10 +28,12 @@ class Dataset(db.Model, BaseModel):
 
     projects = db.relationship(Project, backref='dataset')
 
-    def __init__(self, name, file_name, data_size, is_image, is_discrete,
-                 statistics):
+    def __init__(self, name, file_name, episode_size, step_size, data_size,
+                 is_image, is_discrete, statistics):
         self.name = name
         self.file_name = file_name
+        self.episode_size = episode_size
+        self.step_size = step_size
         self.data_size = data_size
         self.is_image = is_image
         self.is_discrete = is_discrete
@@ -39,10 +43,10 @@ class Dataset(db.Model, BaseModel):
         return '<Dataset {}:{}>'.format(self.id, self.name)
 
     @classmethod
-    def create(cls, name, file_name, data_size, is_image, is_discrete,
-               statistics):
-        dataset = Dataset(name, file_name, data_size, is_image, is_discrete,
-                          statistics)
+    def create(cls, name, file_name, episode_size, step_size, data_size,
+               is_image, is_discrete, statistics):
+        dataset = Dataset(name, file_name, episode_size, step_size, data_size,
+                          is_image, is_discrete, statistics)
         db.session.add(dataset)
         db.session.commit()
         return dataset
@@ -63,8 +67,9 @@ class Dataset(db.Model, BaseModel):
 class DatasetSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Dataset
-        fields = ('id', 'name', 'file_name', 'data_size', 'is_image',
-                  'is_discrete', 'statistics', 'created_at', 'updated_at')
+        fields = ('id', 'name', 'file_name', 'episode_size', 'step_size',
+                  'data_size', 'is_image', 'is_discrete', 'statistics',
+                  'created_at', 'updated_at')
 
     created_at = ma.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
     updated_at = ma.DateTime('%Y-%m-%dT%H:%M:%S+09:00')

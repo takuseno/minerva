@@ -45,14 +45,19 @@ def _upload_dataset(client):
                           data=data,
                           content_type='multipart/form-data')
 
-    return res
+    return res, mdp_dataset
 
 
 def test_dataset_api(client):
     # check upload dataset
-    res = _upload_dataset(client)
+    res, mdp_dataset = _upload_dataset(client)
     assert res.status_code == 200
     assert res.json['name'] == 'dataset.csv'
+    assert res.json['episode_size'] == len(mdp_dataset)
+    step_size = 0
+    for episode in mdp_dataset:
+        step_size += len(episode)
+    assert res.json['step_size'] == step_size
 
     dataset_id = res.json['id']
     dataset_name = res.json['name']
@@ -94,7 +99,7 @@ def test_dataset_api(client):
 
 def test_project_api(client):
     # upload dataset
-    res = _upload_dataset(client)
+    res, _ = _upload_dataset(client)
 
     dataset_id = res.json['id']
 

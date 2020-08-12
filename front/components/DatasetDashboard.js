@@ -129,23 +129,31 @@ function DatasetStatistics (props) {
       <div className='detail'>
         <table>
           <tr>
-            <th>observation type:</th>
+            <th>observation type</th>
             <td>{observationSpace}</td>
           </tr>
           <tr>
-            <th>observation shape:</th>
+            <th>observation shape</th>
             <td>{stats.observation_shape}</td>
           </tr>
           <tr>
-            <th>action type:</th>
+            <th>action type</th>
             <td>{actionSpace}</td>
           </tr>
           <tr>
-            <th>action size:</th>
+            <th>action size</th>
             <td>{stats.action_size}</td>
           </tr>
           <tr>
-            <th>dataset size:</th>
+            <th>number of episodes</th>
+            <td>{dataset.episodeSize}</td>
+          </tr>
+          <tr>
+            <th>number of steps</th>
+            <td>{dataset.stepSize}</td>
+          </tr>
+          <tr>
+            <th>dataset size</th>
             <td>{convertByteToString(dataset.dataSize)}</td>
           </tr>
         </table>
