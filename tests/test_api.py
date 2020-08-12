@@ -14,8 +14,8 @@ from ganglion.models.dataset import Dataset
 def client():
     config.ROOT_DIR = os.path.abspath('test_data')
     config.DATASET_DIR = os.path.join(config.ROOT_DIR, 'dataset')
-    config.DATABASE_PATTH = os.path.join(config.ROOT_DIR, 'database.db')
-    database_path = config.DATABASE_PATTH
+    config.DATABASE_PATH = os.path.join(config.ROOT_DIR, 'database.db')
+    database_path = config.DATABASE_PATH
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///%s' % database_path
     config.prepare_directory()
@@ -48,12 +48,17 @@ def test_dataset_api(client):
 
         dataset_id = res.json['id']
         dataset_name = res.json['name']
+        dataset_file_name = res.json['file_name']
+
+        dataset_path = os.path.join(config.DATASET_DIR, dataset_file_name)
+        assert os.path.exists(dataset_path)
 
     # check get
     res = client.get('/api/dataset/%d' % dataset_id, follow_redirects=True)
     assert res.status_code == 200
     assert res.json['id'] == dataset_id
     assert res.json['name'] == dataset_name
+    assert res.json['file_name'] == dataset_file_name
 
     # check get_all
     res = client.get('/api/dataset', follow_redirects=True)
@@ -76,3 +81,4 @@ def test_dataset_api(client):
     assert res.status_code == 200
     with app.app_context():
         assert Dataset.get(dataset_id) is None
+    assert not os.path.exists(dataset_path)

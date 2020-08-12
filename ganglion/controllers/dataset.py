@@ -3,13 +3,13 @@ import werkzeug
 import os
 import uuid
 import json
+import ganglion.config as config
 
 from flask import Blueprint, request, jsonify
 from sqlalchemy import desc
 from d3rlpy.dataset import MDPDataset
 from ..database import db
 from ..dataset import import_csv_as_mdp_dataset
-from ..config import UPLOAD_DIR, DATASET_DIR
 from ..models.dataset import Dataset, DatasetSchema
 
 dataset_route = Blueprint('dataset', __name__)
@@ -24,7 +24,7 @@ def upload_dataset():
     # save file
     file = request.files['dataset']
     file_name = werkzeug.utils.secure_filename(file.filename)
-    file_path = os.path.join(UPLOAD_DIR, file_name)
+    file_path = os.path.join(config.UPLOAD_DIR, file_name)
     file.save(file_path)
 
     # save as MDPDataset
@@ -34,8 +34,11 @@ def upload_dataset():
                                             image=is_image,
                                             discrete_action=is_discrete)
     dataset_name = str(uuid.uuid1()) + '.h5'
-    dataset_path = os.path.join(DATASET_DIR, dataset_name)
+    dataset_path = os.path.join(config.DATASET_DIR, dataset_name)
     mdp_dataset.dump(dataset_path)
+
+    # get dataset size
+    data_size = os.path.getsize(dataset_path)
 
     # compute statistics
     stats = mdp_dataset.compute_stats()
@@ -45,8 +48,8 @@ def upload_dataset():
     stats_json = json.dumps(jsonify(stats).json)
 
     # insert record
-    dataset = Dataset.create(file_name, dataset_name, is_image, is_discrete,
-                             stats_json)
+    dataset = Dataset.create(file_name, dataset_name, data_size, is_image,
+                             is_discrete, stats_json)
 
     # return json
     return jsonify(DatasetSchema().dump(dataset))

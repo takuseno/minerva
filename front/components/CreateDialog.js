@@ -8,7 +8,7 @@ import '../styles/dialog.scss'
 const modalStyles = {
   content: {
     width: '500px',
-    height: '250px',
+    height: '280px',
     top: '32%',
     left: '30%',
     right: 'auto',

@@ -101,6 +101,18 @@ function DatasetHeader (props) {
   }
 }
 
+function convertByteToString (size) {
+  if (size < Math.pow(2, 10)) {
+    return size.toString() + 'B'
+  } else if (size < Math.pow(2, 20)) {
+    return (size / Math.pow(2, 10)).toFixed(2).toString() + 'KiB'
+  } else if (size < Math.pow(2, 30)) {
+    return (size / Math.pow(2, 20)).toFixed(2).toString() + 'MiB'
+  } else {
+    return (size / Math.pow(2, 30)).toFixed(2).toString() + 'GiB'
+  }
+}
+
 function DatasetStatistics (props) {
   const dataset = props.dataset
   const stats = dataset.statistics
@@ -131,6 +143,10 @@ function DatasetStatistics (props) {
           <tr>
             <th>action size:</th>
             <td>{stats.action_size}</td>
+          </tr>
+          <tr>
+            <th>dataset size:</th>
+            <td>{convertByteToString(dataset.dataSize)}</td>
           </tr>
         </table>
       </div>
