@@ -62,6 +62,7 @@ function ProjectHeader (props) {
 
 function ProjectDetail (props) {
   const project = props.project
+  const dataset = props.dataset
   const algorithm = project.algorithm.toUpperCase().replace('_', ' ')
   return (
     <div className='project-detail'>
@@ -69,8 +70,8 @@ function ProjectDetail (props) {
         <tr>
           <th>DATASET</th>
           <td>
-            <Link to={`/datasets/${project.dataset.id}`}>
-              {project.dataset.name}
+            <Link to={`/datasets/${dataset.id}`}>
+              {dataset.name}
             </Link>
           </td>
         </tr>
@@ -86,7 +87,7 @@ function ProjectDetail (props) {
 function ExperimentList (props) {
   return (
     <div className='experiment-list'>
-      <ProjectDetail project={props.project} />
+      <ProjectDetail project={props.project} dataset={props.dataset} />
     </div>
   )
 }
@@ -100,12 +101,14 @@ function ProjectMetrics (props) {
 export function ProjectDashboard (props) {
   const { id } = useParams()
   const projects = props.projects
+  const datasets = props.datasets
   const project = projects.find((p) => p.id === Number(id))
+  const dataset = datasets.find((d) => d.id === Number(project.datasetId))
   return (
     <div className='dashboard'>
       <ProjectHeader project={project} />
       <div className='dashboard-body'>
-        <ExperimentList project={project} />
+        <ExperimentList project={project} dataset={dataset} />
         <ProjectMetrics />
       </div>
     </div>

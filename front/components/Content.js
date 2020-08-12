@@ -37,7 +37,10 @@ export function ProjectContent (props) {
               projects={props.projects}
               datasets={props.datasets}
             />
-            <ProjectDashboard projects={props.projects} />
+            <ProjectDashboard
+              projects={props.projects}
+              datasets={props.datasets}
+            />
           </Route>
           <Route exact path='/projects'>
             <Redirect to={`/projects/${props.projects.first().id}`} />
