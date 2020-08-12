@@ -8,6 +8,7 @@ from flask.json import JSONEncoder
 from ganglion.config import config, prepare_directory
 from ganglion.database import init_db, db, ma
 from ganglion.controllers import dataset_route
+from ganglion.controllers import project_route
 
 static_path = os.path.join(os.path.dirname(__file__), '..', 'dist')
 app = Flask(__name__, static_folder=static_path)
@@ -36,7 +37,8 @@ init_db(app)
 prepare_directory()
 
 # API endpoints
-app.register_blueprint(dataset_route, url_prefix='/api/dataset')
+app.register_blueprint(dataset_route, url_prefix='/api/datasets')
+app.register_blueprint(project_route, url_prefix='/api/projects')
 
 
 # proxy

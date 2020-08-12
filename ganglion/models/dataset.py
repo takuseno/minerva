@@ -5,10 +5,11 @@ from d3rlpy.dataset import MDPDataset
 from werkzeug.exceptions import NotFound
 from datetime import datetime
 from ..database import db, ma
+from .base import BaseModel
 from .project import Project
 
 
-class Dataset(db.Model):
+class Dataset(db.Model, BaseModel):
     __tablename__ = 'datasets'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -51,16 +52,7 @@ class Dataset(db.Model):
         path = os.path.join(config.DATASET_DIR, self.file_name)
         if os.path.exists(path):
             os.remove(path)
-        # remove database record
-        db.session.delete(self)
-        db.session.commit()
-
-    @classmethod
-    def get(cls, dataset_id, raise_404=False):
-        dataset = db.session.query(Dataset).get(dataset_id)
-        if not dataset and raise_404:
-            raise NotFound()
-        return dataset
+        super().delete()
 
     def load_mdp_dataset(self):
         path = os.path.join(config.DATASET_DIR, self.file_name)

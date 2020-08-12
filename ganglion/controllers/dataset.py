@@ -56,7 +56,7 @@ def upload_dataset():
 
 
 @dataset_route.route('/', methods=['GET'])
-def get_all_dataset():
+def get_all_datasets():
     datasets = db.session.query(Dataset)\
         .order_by(desc(Dataset.id))\
         .all()
