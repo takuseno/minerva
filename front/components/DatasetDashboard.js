@@ -4,7 +4,7 @@ import { GlobalContext } from '../context'
 import { Histogram } from './graphs'
 import { Button, TextForm } from './forms'
 import { ConfirmationDialog } from './ConfirmationDialog.js'
-import '../styles/dashboard.scss'
+import '../styles/dataset-dashboard.scss'
 
 function Card ({ children }) {
   return (
@@ -122,7 +122,7 @@ function DatasetStatistics (props) {
   const rewardHist = stats.reward.histogram
   const actionHist = stats.action.histogram
   return (
-    <div>
+    <div className='dataset-body'>
       <div className='dataset-section'>
         <span className='section-title'>Information</span>
       </div>
@@ -225,10 +225,4 @@ export function DatasetDashboard (props) {
       </div>
     )
   }
-}
-
-export function ProjectDashboard () {
-  return (
-    <div className='dashboard' />
-  )
 }

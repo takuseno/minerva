@@ -29,9 +29,45 @@ export function TextForm (props) {
       className='ganglion-form-text'
       type='text'
       value={props.value}
+      placeholder={props.placeholder}
       onChange={(e) => props.onChange(e.target.value)}
       ref={inputEl}
     />
+  )
+}
+
+export function TextFormUnderline (props) {
+  return (
+    <div className='ganglion-form-text-underline'>
+      <TextForm
+        value={props.value}
+        placeholder={props.placeholder}
+        onChange={props.onChange}
+        focus={props.focus}
+      />
+      <div className='ganglion-form-underline' />
+    </div>
+  )
+}
+
+export function SelectForm (props) {
+  return (
+    <select
+      className='ganglion-form-select'
+      onChange={(e) => props.onChange(e.target.value)}
+    >
+      <option value={-1} hidden>{props.placeholder}</option>
+      {props.options.map((option) => {
+        return (
+          <option
+            key={option.value}
+            value={option.value}
+          >
+            {option.text}
+          </option>
+        )
+      })}
+    </select>
   )
 }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { List } from 'immutable'
 import { Dataset } from './models/dataset'
+import { Project } from './models/project'
 
 export const GlobalContext = React.createContext({})
 
@@ -16,7 +17,10 @@ export function GlobalProvider ({ children }) {
       })
   }, [])
   useEffect(() => {
-    setProjects(List([{ id: 1, name: 'test_project' }]))
+    Project.getAll()
+      .then((projects) => {
+        setProjects(List(projects))
+      })
   }, [])
 
   // actions
@@ -40,6 +44,26 @@ export function GlobalProvider ({ children }) {
     return dataset.update()
   }
 
+  const createProject = (datasetId, name) => {
+    return Project.create(datasetId, name)
+      .then((project) => {
+        setProjects(projects.insert(0, project))
+        return project
+      })
+  }
+
+  const deleteProject = (project) => {
+    const newProjects = projects.filter((p) => p.id !== project.id)
+    setProjects(newProjects)
+    return project.delete()
+  }
+
+  const updateProject = (project) => {
+    const index = projects.findIndex((p) => p.id === project.id)
+    setProjects(projects.get(index, project))
+    return project.update()
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -49,7 +73,10 @@ export function GlobalProvider ({ children }) {
         setProjects,
         uploadDataset,
         deleteDataset,
-        updateDataset
+        updateDataset,
+        createProject,
+        updateProject,
+        deleteProject
       }}
     >
       {children}

@@ -1,0 +1,49 @@
+@import './colors';
+@import './font';
+
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: reletive;
+  width: 100%;
+
+  .project-header {
+    border-bottom: 1px solid $black-light;
+    box-sizing: border-box;
+    padding: 6px;
+    width: 100%;
+
+    .project-name {
+      font-size: 2em;
+      font-weight: $weight-200;
+    }
+
+    .ganglion-form-text {
+      border: 0;
+      font-size: 2em;
+      font-weight: $weight-200;
+      padding: 0;
+
+      &:focus {
+        border: 0;
+        outline: 0;
+      }
+    }
+
+    .edit-buttons {
+      float: right;
+
+      button {
+        margin: 6px;
+      }
+    }
+  }
+
+  .project-body {
+    flex-grow: 1;
+    overflow: auto;
+    padding: 16px;
+  }
+}

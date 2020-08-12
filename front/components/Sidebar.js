@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { DatasetUploadDialog } from './CreateDialog'
+import { DatasetUploadDialog } from './DatasetUploadDialog'
+import { ProjectCreateDialog } from './ProjectCreateDialog'
 import '../styles/sidebar.scss'
 
 export function DatasetSidebar (props) {
@@ -37,18 +38,24 @@ export function DatasetSidebar (props) {
 }
 
 export function ProjectSidebar (props) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const projects = props.projects
+  const { id } = useParams()
   return (
     <div className='sidebar'>
       <div className='list'>
         <p className='item add'>
-          <span className='option'>ADD PROJECT</span>
+          <span className='option' onClick={() => setIsDialogOpen(true)}>
+            ADD PROJECT
+          </span>
         </p>
         <ul>
           {projects.map((project) => {
+            const activeId = project.id
+            const itemClass = activeId === Number(id) ? 'item active' : 'item'
             return (
-              <li key={project.id} className='item'>
-                <Link className='option' to={`projects/${project.id}`}>
+              <li key={project.id} className={itemClass}>
+                <Link className='option' to={`/projects/${project.id}`}>
                   {project.name}
                 </Link>
               </li>
@@ -56,6 +63,11 @@ export function ProjectSidebar (props) {
           })}
         </ul>
       </div>
+      <ProjectCreateDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        datasets={props.datasets}
+      />
     </div>
   )
 }

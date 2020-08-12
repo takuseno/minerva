@@ -2,13 +2,19 @@ import React, { useState, useContext } from 'react'
 import Modal from 'react-modal'
 import { GlobalContext } from '../context'
 import { Line } from 'rc-progress'
-import { FormGroup, FormRow, Button, FileInput, Checkbox } from './forms.js'
+import {
+  FormGroup,
+  FormRow,
+  Button,
+  TextFormUnderline,
+  SelectForm
+} from './forms.js'
 import '../styles/dialog.scss'
 
 const modalStyles = {
   content: {
     width: '500px',
-    height: '280px',
+    height: '240px',
     top: '32%',
     left: '30%',
     right: 'auto',
@@ -20,63 +26,65 @@ const modalStyles = {
 
 Modal.setAppElement('#root')
 
-export function DatasetUploadDialog (props) {
+export function ProjectCreateDialog (props) {
   const [isUploading, setIsUploading] = useState(false)
-  const [isImage, setIsImage] = useState(false)
-  const [isDiscrete, setIsDiscrete] = useState(false)
-  const [file, setFile] = useState(null)
   const [uploadProgress, setUploadProgress] = useState(0)
-  const { uploadDataset } = useContext(GlobalContext)
+  const [projectName, setProjectName] = useState('')
+  const [datasetId, setDatasetId] = useState(-1)
+  const { createProject } = useContext(GlobalContext)
 
   const handleClose = () => {
-    setIsImage(false)
-    setIsDiscrete(false)
-    setFile(null)
     setUploadProgress(0)
+    setProjectName('')
+    setDatasetId(-1)
     props.onClose()
   }
 
   const handleSubmit = () => {
+    // quick validation
+    if (projectName === '' || datasetId === -1) {
+      return
+    }
+
     setIsUploading(true)
     const progressCallback = (e) => {
       const progress = Math.round(e.loaded * 100 / e.total)
       setUploadProgress(progress)
     }
-    uploadDataset(file, isImage, isDiscrete, progressCallback)
-      .then((dataset) => {
+
+    createProject(datasetId, projectName, progressCallback)
+      .then((project) => {
         setIsUploading(false)
         handleClose()
       })
   }
 
+  const datasetOptions = props.datasets.map((dataset) => {
+    return { value: dataset.id, text: dataset.name }
+  })
+
   return (
     <Modal
       isOpen={props.isOpen}
-      contentLabel='Upload dataset'
+      contentLabel='Create project'
       style={modalStyles}
       onRequestClose={handleClose}
     >
       <div>
-        <p className='dialog-title'>Upload dataset</p>
+        <p className='dialog-title'>Create project</p>
         <FormRow>
-          <FileInput
-            name='dataset'
-            text='UPLOAD'
-            onChange={(file) => setFile(file)}
+          <SelectForm
+            placeholder='CHOOSE DATASET'
+            options={datasetOptions}
+            onChange={(datasetId) => setDatasetId(datasetId)}
           />
         </FormRow>
         <FormRow>
-          <Checkbox
-            name='is_image'
-            text='image observation'
-            onChange={(checked) => setIsImage(checked)}
-          />
-        </FormRow>
-        <FormRow>
-          <Checkbox
-            name='is_discrete'
-            text='discrete control'
-            onChange={(checked) => setIsDiscrete(checked)}
+          <TextFormUnderline
+            name='projectName'
+            value={projectName}
+            placeholder='PROJECT NAME'
+            onChange={(name) => setProjectName(name)}
           />
         </FormRow>
         <FormGroup>

@@ -58,14 +58,15 @@
 }
 
 .dashboard {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
-  overflow: auto;
-  padding: 16px;
   position: reletive;
   width: 100%;
 
   .dataset-header {
     border-bottom: 1px solid $black-light;
+    box-sizing: border-box;
     padding: 6px;
     width: 100%;
 
@@ -93,5 +94,11 @@
         margin: 6px;
       }
     }
+  }
+
+  .dataset-body {
+    flex-grow: 1;
+    overflow: auto;
+    padding: 16px;
   }
 }

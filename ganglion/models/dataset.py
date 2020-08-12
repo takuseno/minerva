@@ -24,7 +24,7 @@ class Dataset(db.Model, BaseModel):
                            default=datetime.now,
                            onupdate=datetime.now)
 
-    projects = db.relationship(Project, backref='projects')
+    projects = db.relationship(Project, backref='dataset')
 
     def __init__(self, name, file_name, data_size, is_image, is_discrete,
                  statistics):

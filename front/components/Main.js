@@ -12,7 +12,7 @@ export default function Main () {
       <Header />
       <Switch>
         <Route path='/projects'>
-          <ProjectContent projects={projects} />
+          <ProjectContent projects={projects} datasets={datasets} />
         </Route>
         <Route path='/datasets'>
           <DatasetContent datasets={datasets} />

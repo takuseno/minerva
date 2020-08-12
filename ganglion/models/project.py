@@ -1,4 +1,5 @@
 from datetime import datetime
+from flask_marshmallow.fields import fields
 from .base import BaseModel
 from ..database import db, ma
 
@@ -34,9 +35,11 @@ class Project(db.Model, BaseModel):
 class ProjectSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Project
-        fields = ('id', 'dataset_id', 'name', 'algorithm'
-                  'dataset', 'created_at', 'updated_at')
 
+    id = ma.Integer(required=True)
+    dataset_id = ma.Integer(required=True)
+    name = ma.String(required=True)
+    algorithm = ma.String(required=True)
     dataset = ma.Nested('ganglion.models.dataset.DatasetSchema')
     created_at = ma.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
     updated_at = ma.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
