@@ -81,7 +81,7 @@ def update_dataset(dataset_id):
     dataset = Dataset.get(dataset_id, raise_404=True)
     json = request.get_json()
     dataset.name = json['name']
-    db.session.commit()
+    dataset.update()
     return jsonify(DatasetSchema().dump(dataset))
 
 

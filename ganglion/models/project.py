@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask_marshmallow.fields import fields
 from .base import BaseModel
+from .experiment import Experiment
 from ..database import db, ma
 
 
@@ -15,6 +16,8 @@ class Project(db.Model, BaseModel):
                            nullable=True,
                            default=datetime.now,
                            onupdate=datetime.now)
+
+    experiments = db.relationship(Experiment, backref='project')
 
     def __init__(self, dataset_id, name, algorithm):
         self.dataset_id = dataset_id

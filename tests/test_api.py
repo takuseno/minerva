@@ -1,6 +1,7 @@
 import pytest
 import os
 import json
+import time
 import ganglion.config as config
 
 from d3rlpy.datasets import get_cartpole
@@ -9,6 +10,7 @@ from ganglion.dataset import export_mdp_dataset_as_csv
 from ganglion.index import app, db
 from ganglion.models.dataset import Dataset
 from ganglion.models.project import Project
+from ganglion.models.experiment import Experiment
 
 
 @pytest.fixture(scope='session')
@@ -16,6 +18,7 @@ def client():
     config.ROOT_DIR = os.path.abspath('test_data')
     config.DATASET_DIR = os.path.join(config.ROOT_DIR, 'dataset')
     config.DATABASE_PATH = os.path.join(config.ROOT_DIR, 'database.db')
+    config.LOG_DIR = os.path.join(config.ROOT_DIR, 'train_logs')
     database_path = config.DATABASE_PATH
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///%s' % database_path
@@ -141,3 +144,59 @@ def test_project_api(client):
     assert res.status_code == 200
     with app.app_context():
         assert Project.get(project_id) is None
+
+
+def test_experiment_api(client):
+    # upload dataset
+    res, _ = _upload_dataset(client)
+
+    # create project
+    data = {'name': 'test_project', 'dataset_id': res.json['id']}
+    res = client.post('/api/projects',
+                      data=json.dumps(data),
+                      content_type='application/json',
+                      follow_redirects=True)
+    project_id = res.json['id']
+
+    # check create experiment
+    data = {'name': 'test_experiment', 'config': {'n_epochs': 1}}
+    res = client.post('/api/projects/%d/experiments' % project_id,
+                      data=json.dumps(data),
+                      content_type='application/json',
+                      follow_redirects=True)
+    assert res.status_code == 200
+    assert res.json['name'] == 'test_experiment'
+    assert res.json['is_active']
+    experiment_id = res.json['id']
+
+    time.sleep(20)
+
+    # check get experiment
+    url = '/api/projects/%d/experiments/%d' % (project_id, experiment_id)
+    while True:
+        res = client.get(url, follow_redirects=True)
+        assert res.status_code == 200
+        if not res.json['is_active']:
+            break
+        time.sleep(1)
+
+    # check get all experiments
+    res = client.get('/api/projects/%d/experiments' % project_id)
+    assert res.status_code == 200
+    assert len(res.json['experiments']) == 1
+
+    # check update
+    url = '/api/projects/%d/experiments/%d' % (project_id, experiment_id)
+    res = client.put(url,
+                     data=json.dumps({'name': 'updated'}),
+                     content_type='application/json',
+                     follow_redirects=True)
+    assert res.status_code == 200
+    assert res.json['name'] == 'updated'
+
+    # check delete
+    url = '/api/projects/%d/experiments/%d' % (project_id, experiment_id)
+    res = client.delete(url, follow_redirects=True)
+    assert res.status_code == 200
+    with app.app_context():
+        assert Experiment.get(experiment_id) is None

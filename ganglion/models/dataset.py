@@ -59,9 +59,12 @@ class Dataset(db.Model, BaseModel):
         super().delete()
 
     def load_mdp_dataset(self):
-        path = os.path.join(config.DATASET_DIR, self.file_name)
+        path = self.get_dataset_path()
         mdp_dataset = MDPDataset.load(path)
         return mdp_dataset
+
+    def get_dataset_path(self):
+        return os.path.join(config.DATASET_DIR, self.file_name)
 
 
 class DatasetSchema(ma.SQLAlchemySchema):

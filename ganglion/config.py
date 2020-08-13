@@ -7,6 +7,7 @@ else:
 
 DATASET_DIR = os.path.join(ROOT_DIR, 'dataset')
 DATABASE_PATH = os.path.join(ROOT_DIR, 'database.db')
+LOG_DIR = os.path.join(ROOT_DIR, 'train_logs')
 UPLOAD_DIR = '/tmp/ganglion'
 
 config = {
@@ -26,3 +27,6 @@ def prepare_directory():
 
     if not os.path.exists(UPLOAD_DIR):
         os.makedirs(UPLOAD_DIR)
+
+    if not os.path.exists(LOG_DIR):
+        os.makedirs(LOG_DIR)
