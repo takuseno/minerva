@@ -40,6 +40,7 @@ export function ProjectContent (props) {
             <ProjectDashboard
               projects={props.projects}
               datasets={props.datasets}
+              experiments={props.experiments}
             />
           </Route>
           <Route exact path='/projects'>

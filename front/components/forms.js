@@ -56,7 +56,8 @@ export function SelectForm (props) {
       className='ganglion-form-select'
       onChange={(e) => props.onChange(e.target.value)}
     >
-      <option value={-1} hidden>{props.placeholder}</option>
+      {props.placeholder &&
+        <option value={-1} hidden>{props.placeholder}</option>}
       {props.options.map((option) => {
         return (
           <option
@@ -68,6 +69,32 @@ export function SelectForm (props) {
         )
       })}
     </select>
+  )
+}
+
+export function MultiSelectForm (props) {
+  const handleChange = (check, value) => {
+    if (check) {
+      props.onChange(props.value.concat([value]))
+    } else {
+      props.onChange(props.value.filter((v) => v !== value))
+    }
+  }
+  return (
+    <div className='ganglion-form-multi-select'>
+      {props.options.map((option) => {
+        const value = props.value.indexOf(option.value) !== -1
+        return (
+          <div key={option.value} className='option'>
+            <Checkbox
+              text={option.text}
+              value={value}
+              onChange={(check) => handleChange(check, option.value)}
+            />
+          </div>
+        )
+      })}
+    </div>
   )
 }
 

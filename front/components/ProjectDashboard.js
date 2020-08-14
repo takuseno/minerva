@@ -1,15 +1,18 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link, useParams, useHistory } from 'react-router-dom'
 import { GlobalContext } from '../context'
 import { Button, TextForm } from './forms'
-import { ConfirmationDialog } from './ConfirmationDialog.js'
+import { ConfirmationDialog } from './ConfirmationDialog'
+import { ExperimentCreateDialog } from './ExperimentCreateDialog'
 import '../styles/project-dashboard.scss'
 
 function ProjectHeader (props) {
+  const dataset = props.dataset
   const project = props.project
   const [isEditing, setIsEditing] = useState(false)
   const [projectName, setProjectName] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isCreating, setIsCreating] = useState(false)
   const { updateProject, deleteProject } = useContext(GlobalContext)
   const history = useHistory()
 
@@ -42,7 +45,7 @@ function ProjectHeader (props) {
       <div className='project-header'>
         <span className='project-name'>{project.name}</span>
         <div className='edit-buttons'>
-          <Button text='RUN' onClick={() => {}} />
+          <Button text='RUN' onClick={() => setIsCreating(true)} />
           <Button text='EDIT' onClick={handleEdit} />
           <Button text='DELETE' onClick={() => setIsDeleting(true)} />
           <ConfirmationDialog
@@ -54,6 +57,13 @@ function ProjectHeader (props) {
             confirmText='DELETE'
             cancelText='CANCEL'
           />
+          {project &&
+            <ExperimentCreateDialog
+              isOpen={isCreating}
+              onClose={() => setIsCreating(false)}
+              project={project}
+              dataset={dataset}
+            />}
         </div>
       </div>
     )
@@ -84,10 +94,24 @@ function ProjectDetail (props) {
   )
 }
 
+function ExperimentDetail (props) {
+  const experiment = props.experiment
+  return (
+    <div className='experiment-detail'>
+      {experiment.name}
+    </div>
+  )
+}
+
 function ExperimentList (props) {
   return (
     <div className='experiment-list'>
       <ProjectDetail project={props.project} dataset={props.dataset} />
+      {props.experiments.map((experiment) => {
+        return (
+          <ExperimentDetail key={experiment.id} experiment={experiment} />
+        )
+      })}
     </div>
   )
 }
@@ -100,15 +124,29 @@ function ProjectMetrics (props) {
 
 export function ProjectDashboard (props) {
   const { id } = useParams()
+  const { fetchExperiments } = useContext(GlobalContext)
+
   const projects = props.projects
   const datasets = props.datasets
-  const project = projects.find((p) => p.id === Number(id))
-  const dataset = datasets.find((d) => d.id === Number(project.datasetId))
+  const experiments = props.experiments
+  const project = projects.find((p) => p.id === Number(id)) ?? {}
+  const datasetId = project.datasetId
+  const dataset = datasets.find((d) => d.id === Number(datasetId)) ?? {}
+
+  // fetch experiments
+  useEffect(() => {
+    fetchExperiments(id)
+  }, [id])
+
   return (
     <div className='dashboard'>
-      <ProjectHeader project={project} />
+      <ProjectHeader project={project} dataset={dataset} />
       <div className='dashboard-body'>
-        <ExperimentList project={project} dataset={dataset} />
+        <ExperimentList
+          project={project}
+          dataset={dataset}
+          experiments={experiments}
+        />
         <ProjectMetrics />
       </div>
     </div>

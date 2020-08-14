@@ -1,0 +1,18 @@
+@import './font';
+
+.advanced-config-button {
+  margin-bottom: 16px;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.form-table {
+  margin-top: 12px;
+  width: 100%;
+
+  th {
+    font-weight: $weight-300;
+    width: 200px;
+  }
+}
+

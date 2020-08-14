@@ -6,13 +6,17 @@ import { GlobalContext } from '../context'
 import '../styles/main.scss'
 
 export default function Main () {
-  const { datasets, projects } = useContext(GlobalContext)
+  const { datasets, projects, experiments } = useContext(GlobalContext)
   return (
     <div className='main'>
       <Header />
       <Switch>
         <Route path='/projects'>
-          <ProjectContent projects={projects} datasets={datasets} />
+          <ProjectContent
+            projects={projects}
+            datasets={datasets}
+            experiments={experiments}
+          />
         </Route>
         <Route path='/datasets'>
           <DatasetContent datasets={datasets} />
