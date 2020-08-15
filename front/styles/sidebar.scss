@@ -6,9 +6,11 @@
   border-right: thin solid $white-dark;
   height: 100%;
   overflow: auto;
+  position: relative;
   width: 240px;
 
   .list {
+    position: absolute;
     width: 100%;
 
     ul {

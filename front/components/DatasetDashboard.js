@@ -229,7 +229,9 @@ export function DatasetDashboard (props) {
     return (
       <div className='dashboard'>
         <DatasetHeader dataset={dataset} />
-        <DatasetStatistics dataset={dataset} />
+        <div className='dataset-body-wrapper'>
+          <DatasetStatistics dataset={dataset} />
+        </div>
       </div>
     )
   }
