@@ -66,16 +66,19 @@
   .dataset-header {
     border-bottom: 1px solid $black-light;
     box-sizing: border-box;
+    display: flex;
     padding: 6px;
     width: 100%;
 
     .dataset-name {
+      flex-grow: 1;
       font-size: 2em;
       font-weight: $weight-200;
     }
 
     .ganglion-form-text {
       border: 0;
+      flex-grow: 1;
       font-size: 2em;
       font-weight: $weight-200;
       padding: 0;
