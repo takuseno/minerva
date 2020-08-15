@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link, useParams, useHistory } from 'react-router-dom'
+import { Circle } from 'rc-progress'
 import { GlobalContext } from '../context'
 import { Button, TextForm } from './forms'
 import { ConfirmationDialog } from './ConfirmationDialog'
@@ -96,9 +97,39 @@ function ProjectDetail (props) {
 
 function ExperimentDetail (props) {
   const experiment = props.experiment
+  const isActive = experiment.isActive
+  const totalEpoch = experiment.config.n_epochs
+  const currentEpoch = experiment.metrics.td_error ? experiment.metrics.td_error.length : 0
+  let progress = currentEpoch / totalEpoch
+  let status = 'success'
+  let progressColor = '#2ecc71'
+  if (isActive) {
+    status = 'running'
+    progressColor = '#3498db'
+  } else if (progress !== 1.0) {
+    status = 'failed'
+    progressColor = 'e74c3c'
+    progress = 1.0
+  }
   return (
     <div className='experiment-detail'>
-      {experiment.name}
+      <div className='top-line'>
+        <Circle
+          percent={100.0 * progress}
+          strokeWidth='10'
+          strokeLinecap='round'
+          strokeColor={progressColor}
+        />
+        <span className='experiment-name'>
+          {experiment.name}
+        </span>
+        <span className={status}>
+          {status}
+        </span>
+      </div>
+      <div className='bottom-line'>
+        <Button text='DOWNLOAD' />
+      </div>
     </div>
   )
 }
@@ -107,11 +138,15 @@ function ExperimentList (props) {
   return (
     <div className='experiment-list'>
       <ProjectDetail project={props.project} dataset={props.dataset} />
-      {props.experiments.map((experiment) => {
-        return (
-          <ExperimentDetail key={experiment.id} experiment={experiment} />
-        )
-      })}
+      <ul className='experiments'>
+        {props.experiments.map((experiment) => {
+          return (
+            <li key={experiment.id}>
+              <ExperimentDetail experiment={experiment} />
+            </li>
+          )
+        })}
+      </ul>
     </div>
   )
 }
@@ -125,6 +160,7 @@ function ProjectMetrics (props) {
 export function ProjectDashboard (props) {
   const { id } = useParams()
   const { fetchExperiments } = useContext(GlobalContext)
+  const [time, setTime] = useState(Date.now())
 
   const projects = props.projects
   const datasets = props.datasets
@@ -138,16 +174,29 @@ export function ProjectDashboard (props) {
     fetchExperiments(id)
   }, [id])
 
+  // fetch experiments periodically
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setTime(Date.now())
+      fetchExperiments(id)
+    }, 10000) // 10 seconds
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [time])
+
   return (
     <div className='dashboard'>
       <ProjectHeader project={project} dataset={dataset} />
-      <div className='dashboard-body'>
-        <ExperimentList
-          project={project}
-          dataset={dataset}
-          experiments={experiments}
-        />
-        <ProjectMetrics />
+      <div className='dashboard-body-wrapper'>
+        <div className='dashboard-body'>
+          <ExperimentList
+            project={project}
+            dataset={dataset}
+            experiments={experiments}
+          />
+          <ProjectMetrics />
+        </div>
       </div>
     </div>
   )

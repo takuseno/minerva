@@ -68,7 +68,7 @@ export class Experiment extends ExperimentRecord {
       projectId: data.project_id,
       name: data.name,
       config: JSON.parse(data.config),
-      isActive: data.isActive,
+      isActive: data.is_active,
       createdAt: data.created_at,
       updatedAt: data.updated_at,
       metrics: data.metrics

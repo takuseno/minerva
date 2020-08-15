@@ -2,44 +2,104 @@
 @import './font';
 
 
-.dashboard-body {
-  display: flex;
+.dashboard-body-wrapper {
   height: 100%;
-  width: 100%;
 
-  .experiment-list {
-    border-right: 1px solid $white-dark;
+  .dashboard-body {
+    display: flex;
     height: 100%;
-    width: 300px;
+    max-height: 100%;
+    width: 100%;
 
-    .project-detail {
-      border-bottom: 1px solid $white-dark;
+    .experiment-list {
+      border-right: 1px solid $white-dark;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 300px;
 
-      table {
-        th {
-          font-size: 1.1em;
-          font-weight: $weight-300;
-          text-align: left;
+      .project-detail {
+        border-bottom: 1px solid $white-dark;
+
+        table {
+          th {
+            font-size: 1.1em;
+            font-weight: $weight-300;
+            text-align: left;
+          }
+
+          td {
+            font-size: 1.1em;
+            font-weight: $weight-400;
+            text-align: left;
+          }
         }
+      }
 
-        td {
-          font-size: 1.1em;
-          font-weight: $weight-400;
-          text-align: left;
+      .experiments {
+        flex-basis: 0;
+        flex-grow: 1;
+        list-style: none;
+        margin: 0;
+        overflow: auto;
+        padding: 0;
+
+        .experiment-detail {
+          border-bottom: 1px solid $white-dark;
+          box-sizing: border-box;
+          overflow: auto;
+          padding: 6px;
+
+          .top-line {
+            align-items: center;
+            display: flex;
+
+            .rc-progress-circle {
+              width: 30px;
+            }
+
+            .experiment-name {
+              font-size: 1em;
+              font-weight: $weight-300;
+              margin-left: 6px;
+            }
+
+            .success {
+              color: $green-dark;
+              font-size: .8em;
+              font-weight: $weight-400;
+              margin-left: auto;
+            }
+
+            .failed {
+              color: $red-dark;
+              font-size: .8em;
+              font-weight: $weight-400;
+              margin-left: auto;
+            }
+
+            .running {
+              color: $blue-dark;
+              font-size: .8em;
+              font-weight: $weight-400;
+              margin-left: auto;
+            }
+          }
+
+          .bottom-line {
+            .ganglion-form-button {
+              float: right;
+            }
+          }
         }
       }
     }
 
-    ul {
-
+    .project-metrics {
+      flex-grow: 1;
+      height: 100%;
       overflow: auto;
     }
-  }
-
-  .project-metrics {
-    flex-grow: 1;
-    height: 100%;
-    overflow: auto;
   }
 }
 

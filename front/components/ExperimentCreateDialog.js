@@ -105,7 +105,7 @@ function ConfigForm (props) {
     return (
       <TextFormUnderline
         value={props.value}
-        onChange={(newValue) => props.onChange(props.label, newValue)}
+        onChange={(newValue) => props.onChange(props.label, Number(newValue))}
       />
     )
   }
@@ -176,7 +176,7 @@ export function ExperimentCreateDialog (props) {
     }
 
     // concat basic configs and advanced configs
-    const config = Object.assign(basicConfig, advancedConfig)
+    const config = Object.assign(basicConfig.toJS(), advancedConfig.toJS())
 
     createExperiment(project.id, experimentName, config, progressCallback)
       .then((project) => {
