@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link, useParams, useHistory } from 'react-router-dom'
-import { Circle } from 'rc-progress'
+import { Progress } from 'react-sweet-progress'
 import { GlobalContext } from '../context'
 import { Button, TextForm } from './forms'
 import { ConfirmationDialog } from './ConfirmationDialog'
 import { ExperimentCreateDialog } from './ExperimentCreateDialog'
+import 'react-sweet-progress/lib/style.css'
 import '../styles/project-dashboard.scss'
 
 function ProjectHeader (props) {
@@ -99,26 +100,43 @@ function ExperimentDetail (props) {
   const experiment = props.experiment
   const isActive = experiment.isActive
   const totalEpoch = experiment.config.n_epochs
-  const currentEpoch = experiment.metrics.td_error ? experiment.metrics.td_error.length : 0
+  const metrics = experiment.metrics
+  const currentEpoch = metrics.td_error ? metrics.td_error.length : 0
   let progress = currentEpoch / totalEpoch
   let status = 'success'
+  let progressStatus = 'success'
   let progressColor = '#2ecc71'
   if (isActive) {
     status = 'running'
+    progressStatus = 'active'
     progressColor = '#3498db'
   } else if (progress !== 1.0) {
     status = 'failed'
-    progressColor = 'e74c3c'
+    progressStatus = 'error'
+    progressColor = '#e74c3c'
     progress = 1.0
   }
   return (
     <div className='experiment-detail'>
       <div className='top-line'>
-        <Circle
+        <Progress
+          type='circle'
           percent={100.0 * progress}
           strokeWidth='10'
-          strokeLinecap='round'
-          strokeColor={progressColor}
+          width='35'
+          status={progressStatus}
+          theme={{
+            error: {
+              color: progressColor
+            },
+            success: {
+              color: progressColor
+            },
+            active: {
+              symbol: Math.round(100.0 * progress).toString() + '%',
+              color: progressColor
+            }
+          }}
         />
         <span className='experiment-name'>
           {experiment.name}
@@ -164,21 +182,21 @@ export function ProjectDashboard (props) {
 
   const projects = props.projects
   const datasets = props.datasets
-  const experiments = props.experiments
+  const experiments = props.experiments.get(Number(id)) ?? []
   const project = projects.find((p) => p.id === Number(id)) ?? {}
   const datasetId = project.datasetId
   const dataset = datasets.find((d) => d.id === Number(datasetId)) ?? {}
 
   // fetch experiments
   useEffect(() => {
-    fetchExperiments(id)
+    fetchExperiments(Number(id))
   }, [id])
 
   // fetch experiments periodically
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setTime(Date.now())
-      fetchExperiments(id)
+      fetchExperiments(Number(id))
     }, 10000) // 10 seconds
     return () => {
       clearTimeout(timeoutId)

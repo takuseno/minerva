@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { List } from 'immutable'
+import { List, Map } from 'immutable'
 import { Dataset } from './models/dataset'
 import { Project } from './models/project'
 import { Experiment } from './models/experiment'
@@ -9,7 +9,7 @@ export const GlobalContext = React.createContext({})
 export function GlobalProvider ({ children }) {
   const [datasets, setDatasets] = useState(List([]))
   const [projects, setProjects] = useState(List([]))
-  const [experiments, setExperiments] = useState(List([]))
+  const [experiments, setExperiments] = useState(Map({}))
 
   // initialization
   useEffect(() => {
@@ -68,8 +68,8 @@ export function GlobalProvider ({ children }) {
 
   const fetchExperiments = (projectId) => {
     return Experiment.getAll(projectId)
-      .then((experiments) => {
-        setExperiments(List(experiments))
+      .then((newExperiments) => {
+        setExperiments(experiments.set(projectId, List(newExperiments)))
         return experiments
       })
   }
@@ -77,20 +77,24 @@ export function GlobalProvider ({ children }) {
   const createExperiment = (projectId, name, config, progressCallback) => {
     return Experiment.create(projectId, name, config, progressCallback)
       .then((experiment) => {
-        setExperiments(experiments.insert(0, experiment))
+        const newExperiments = experiments.get(projectId).insert(0, experiment)
+        setExperiments(experiments.set(projectId, newExperiments))
         return experiment
       })
   }
 
   const deleteExperiment = (experiment) => {
-    const newExperiments = experiments.filter((e) => e.id !== experiment.id)
-    setExperiments(newExperiments)
+    const target = experiments.get(experiment.projectId)
+    const newExperiments = target.filter((e) => e.id !== experiment.id)
+    setExperiments(experiments.set(experiment.projectId, newExperiments))
     return experiment.delete()
   }
 
   const updateExperiment = (experiment) => {
-    const index = experiments.findIndex((e) => e.id === experiment.id)
-    setExperiments(experiments.set(index, experiment))
+    const target = experiments.get(experiment.projectId)
+    const index = target.findIndex((e) => e.id === experiment.id)
+    const newExperiments = target.set(index, experiment)
+    setExperiments(experiments.set(experiment.projectId, newExperiments))
     return experiment.update()
   }
 

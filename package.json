@@ -17,6 +17,7 @@
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
     "react-router-dom": "^5.2.0",
+    "react-sweet-progress": "^1.1.2",
     "sass-lint": "^1.13.1"
   },
   "devDependencies": {
