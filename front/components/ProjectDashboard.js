@@ -98,11 +98,14 @@ function ProjectDetail (props) {
 }
 
 function ExperimentDetail (props) {
+  const { cancelExperiment } = useContext(GlobalContext)
+
   const experiment = props.experiment
   const isActive = experiment.isActive
   const totalEpoch = experiment.config.n_epochs
   const metrics = experiment.metrics
   const currentEpoch = metrics.td_error ? metrics.td_error.length : 0
+
   let progress = currentEpoch / totalEpoch
   let status = 'success'
   let progressStatus = 'success'
@@ -117,6 +120,7 @@ function ExperimentDetail (props) {
     progressColor = '#e74c3c'
     progress = 1.0
   }
+
   return (
     <div className='experiment-detail'>
       <div className='top-line'>
@@ -147,9 +151,12 @@ function ExperimentDetail (props) {
         </span>
       </div>
       <div className='bottom-line'>
-        {isActive &&
-          <Button text='CANCEL' />}
         <Button text='DOWNLOAD' />
+        {isActive &&
+          <Button
+            text='CANCEL'
+            onClick={() => cancelExperiment(experiment)}
+          />}
       </div>
     </div>
   )

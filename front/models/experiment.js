@@ -59,7 +59,12 @@ export class Experiment extends ExperimentRecord {
 
   update () {
     const url = `/api/projects/${this.projectId}/experiments/${this.id}`
-    return axios.put(url, this.toResponse())
+    return axios.put(url, this.toRequest())
+  }
+
+  cancel () {
+    const url = `/api/projects/${this.projectId}/experiments/${this.id}/cancel`
+    return axios.post(url, this.toRequest())
   }
 
   static fromResponse (data) {

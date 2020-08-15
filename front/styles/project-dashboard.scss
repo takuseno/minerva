@@ -90,6 +90,14 @@
           .bottom-line {
             .ganglion-form-button {
               float: right;
+              margin-left: 6px;
+
+              span {
+                font-size: .8em;
+                font-weight: $weight-400;
+                padding-left: 12px;
+                padding-right: 12px;
+              }
             }
           }
         }

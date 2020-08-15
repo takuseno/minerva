@@ -138,6 +138,15 @@ export function GlobalProvider ({ children }) {
     return experiment.update()
   }
 
+  const cancelExperiment = (experiment) => {
+    dispatch({
+      type: 'update',
+      projectId: experiment.projectId,
+      experiment: experiment.set('isActive', false)
+    })
+    return experiment.cancel()
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -155,7 +164,8 @@ export function GlobalProvider ({ children }) {
         fetchExperiments,
         createExperiment,
         deleteExperiment,
-        updateExperiment
+        updateExperiment,
+        cancelExperiment
       }}
     >
       {children}
