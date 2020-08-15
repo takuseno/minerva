@@ -200,6 +200,7 @@ function ProjectMetrics (props) {
                   titles={labels[title]}
                   xLabel='epoch'
                   yLabel='value'
+                  refresh={props.isLoadingNewData}
                 />
               </div>
             </li>
@@ -214,6 +215,7 @@ export function ProjectDashboard (props) {
   const { id } = useParams()
   const { fetchExperiments } = useContext(GlobalContext)
   const [time, setTime] = useState(Date.now())
+  const [isLoadingNewData, setIsLoadingNewData] = useState(false)
 
   const projects = props.projects
   const datasets = props.datasets
@@ -225,6 +227,7 @@ export function ProjectDashboard (props) {
   // fetch experiments
   useEffect(() => {
     fetchExperiments(Number(id))
+    setIsLoadingNewData(true)
   }, [id])
 
   // fetch experiments periodically
@@ -232,6 +235,7 @@ export function ProjectDashboard (props) {
     const timeoutId = setTimeout(() => {
       setTime(Date.now())
       fetchExperiments(Number(id))
+      setIsLoadingNewData(false)
     }, 10000) // 10 seconds
     return () => {
       clearTimeout(timeoutId)
@@ -248,7 +252,10 @@ export function ProjectDashboard (props) {
             dataset={dataset}
             experiments={experiments}
           />
-          <ProjectMetrics experiments={experiments} />
+          <ProjectMetrics
+            experiments={experiments}
+            isLoadingNewData={isLoadingNewData}
+          />
         </div>
       </div>
     </div>
