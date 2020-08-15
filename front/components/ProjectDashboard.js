@@ -3,6 +3,7 @@ import { Link, useParams, useHistory } from 'react-router-dom'
 import { Progress } from 'react-sweet-progress'
 import { GlobalContext } from '../context'
 import { Button, TextForm } from './forms'
+import { Line } from './graphs'
 import { ConfirmationDialog } from './ConfirmationDialog'
 import { ExperimentCreateDialog } from './ExperimentCreateDialog'
 import 'react-sweet-progress/lib/style.css'
@@ -146,6 +147,8 @@ function ExperimentDetail (props) {
         </span>
       </div>
       <div className='bottom-line'>
+        {isActive &&
+          <Button text='CANCEL' />}
         <Button text='DOWNLOAD' />
       </div>
     </div>
@@ -170,8 +173,40 @@ function ExperimentList (props) {
 }
 
 function ProjectMetrics (props) {
+  const experiments = props.experiments
+  const metrics = {}
+  const labels = {}
+  experiments.forEach((experiment) => {
+    Object.entries(experiment.metrics).forEach(([key, values]) => {
+      if (!(key in metrics)) {
+        metrics[key] = []
+        labels[key] = []
+      }
+      metrics[key].push(values)
+      labels[key].push(experiment.name)
+    })
+  })
   return (
-    <div className='project-metrics' />
+    <div className='project-metrics'>
+      <ul className='metrics-list'>
+        {Object.entries(metrics).map(([title, values]) => {
+          const graphTitle = title.toUpperCase().replace(/_/g, ' ')
+          return (
+            <li key={title}>
+              <div className='graph-item'>
+                <p className='graph-title'>{graphTitle}</p>
+                <Line
+                  values={values}
+                  titles={labels[title]}
+                  xLabel='epoch'
+                  yLabel='value'
+                />
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
   )
 }
 
@@ -213,7 +248,7 @@ export function ProjectDashboard (props) {
             dataset={dataset}
             experiments={experiments}
           />
-          <ProjectMetrics />
+          <ProjectMetrics experiments={experiments} />
         </div>
       </div>
     </div>

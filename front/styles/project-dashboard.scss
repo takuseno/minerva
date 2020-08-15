@@ -97,9 +97,32 @@
     }
 
     .project-metrics {
+      flex-basis: 0;
       flex-grow: 1;
-      height: 100%;
       overflow: auto;
+      position: relative;
+
+      .metrics-list {
+        list-style: none;
+        margin: 0;
+        overflow: auto;
+        padding: 0;
+        position: absolute;
+        width: 100%;
+
+        .graph-item {
+          box-sizing: border-box;
+          padding: 12px;
+          width: 100%;
+
+          .graph-title {
+            font-size: 1em;
+            font-weight: $weight-300;
+            text-align: center;
+            width: 100%;
+          }
+        }
+      }
     }
   }
 }

@@ -33,3 +33,37 @@ export function Histogram (props) {
     <C3Chart data={data} axis={axis} transition={transition} legend={legend} />
   )
 }
+
+export function Line (props) {
+  const data = {
+    columns: props.values.map((value, i) => [props.titles[i]].concat(value))
+  }
+  const axis = {
+    y: {
+      label: {
+        text: props.yLabel,
+        position: 'outer-middle'
+      },
+      tick: {
+        format: (v) => v.toFixed(2)
+      }
+    },
+    x: {
+      label: {
+        text: props.xLabel,
+        position: 'outer-center'
+      }
+    }
+  }
+  const transition = {
+    duration: 1000
+  }
+  return (
+    <C3Chart
+      data={data}
+      axis={axis}
+      transition={transition}
+      unloadBeforeLoad
+    />
+  )
+}

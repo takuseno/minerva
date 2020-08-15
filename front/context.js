@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useReducer } from 'react'
 import { List, Map } from 'immutable'
 import { Dataset } from './models/dataset'
 import { Project } from './models/project'
@@ -6,10 +6,40 @@ import { Experiment } from './models/experiment'
 
 export const GlobalContext = React.createContext({})
 
+function experimentReducer (experiments, action) {
+  switch (action.type) {
+    case 'fetch': {
+      return experiments.set(action.projectId, List(action.experiments))
+    }
+    case 'create': {
+      if (!experiments.has(action.projectId)) {
+        return experiments.set(action.projectId, List([action.experiment]))
+      } else {
+        const target = experiments.get(action.projectId)
+        const newExperiments = target.insert(0, action.experiment)
+        return experiments.set(action.projectId, newExperiments)
+      }
+    }
+    case 'update': {
+      const experiment = action.experiment
+      const target = experiments.get(action.projectId)
+      const index = target.findIndex((e) => e.id === experiment.id)
+      const newExperiments = target.set(index, experiment)
+      return experiments.set(action.projectId, newExperiments)
+    }
+    case 'delete': {
+      const experiment = action.experiment
+      const target = experiments.get(action.projectId)
+      const newExperiments = target.filter((e) => e.id !== experiment.id)
+      return experiments.set(action.projectId, newExperiments)
+    }
+  }
+}
+
 export function GlobalProvider ({ children }) {
   const [datasets, setDatasets] = useState(List([]))
   const [projects, setProjects] = useState(List([]))
-  const [experiments, setExperiments] = useState(Map({}))
+  const [experiments, dispatch] = useReducer(experimentReducer, Map({}))
 
   // initialization
   useEffect(() => {
@@ -69,32 +99,42 @@ export function GlobalProvider ({ children }) {
   const fetchExperiments = (projectId) => {
     return Experiment.getAll(projectId)
       .then((newExperiments) => {
-        setExperiments(experiments.set(projectId, List(newExperiments)))
-        return experiments
+        dispatch({
+          type: 'fetch',
+          projectId: projectId,
+          experiments: newExperiments
+        })
+        return newExperiments
       })
   }
 
   const createExperiment = (projectId, name, config, progressCallback) => {
     return Experiment.create(projectId, name, config, progressCallback)
       .then((experiment) => {
-        const newExperiments = experiments.get(projectId).insert(0, experiment)
-        setExperiments(experiments.set(projectId, newExperiments))
+        dispatch({
+          type: 'create',
+          projectId: projectId,
+          experiment: experiment
+        })
         return experiment
       })
   }
 
   const deleteExperiment = (experiment) => {
-    const target = experiments.get(experiment.projectId)
-    const newExperiments = target.filter((e) => e.id !== experiment.id)
-    setExperiments(experiments.set(experiment.projectId, newExperiments))
+    dispatch({
+      type: 'delete',
+      projectId: experiment.projectId,
+      experiment: experiment
+    })
     return experiment.delete()
   }
 
   const updateExperiment = (experiment) => {
-    const target = experiments.get(experiment.projectId)
-    const index = target.findIndex((e) => e.id === experiment.id)
-    const newExperiments = target.set(index, experiment)
-    setExperiments(experiments.set(experiment.projectId, newExperiments))
+    dispatch({
+      type: 'update',
+      projectId: experiment.projectId,
+      experiment: experiment
+    })
     return experiment.update()
   }
 
@@ -106,7 +146,6 @@ export function GlobalProvider ({ children }) {
         projects,
         setProjects,
         experiments,
-        setExperiments,
         uploadDataset,
         deleteDataset,
         updateDataset,

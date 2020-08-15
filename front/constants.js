@@ -53,7 +53,7 @@ export const CONTINUOUS_CONFIGS = {
 
 export const DISCRETE_CONFIGS = {
   cql: {
-    base_config: {
+    basic_config: {
       n_epochs: 100,
       q_func_type: 'mean',
       scaler: null,
