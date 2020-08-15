@@ -220,6 +220,13 @@ export function ExperimentCreateDialog (props) {
             />
           </div>}
         {isShowingAdvancedConfig &&
+          <div className='advanced-config-button'>
+            <Button
+              text='HIDE ADVANCED CONFIGURATIONS'
+              onClick={() => setIsShowingAdvancedConfig(false)}
+            />
+          </div>}
+        {isShowingAdvancedConfig &&
           <ConfigForms
             config={advancedConfig.toJS()}
             onChange={handleAdvancedConfigChange}
