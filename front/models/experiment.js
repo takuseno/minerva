@@ -67,6 +67,13 @@ export class Experiment extends ExperimentRecord {
     return axios.post(url, this.toRequest())
   }
 
+  downloadPolicy (epoch) {
+    const projectId = this.projectId
+    const id = this.id
+    const url = `/api/projects/${projectId}/experiments/${id}/download`
+    window.location.href = url + `?epoch=${epoch}`
+  }
+
   static fromResponse (data) {
     const experiment = new Experiment({
       id: data.id,

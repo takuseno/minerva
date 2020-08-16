@@ -169,8 +169,7 @@ def download_policy(project_id, experiment_id):
 
     # save greedy-policy as TorchScript
     save_path = os.path.join(config.TMP_DIR, 'policy.pt')
-    if not experiment.save_torch_script_policy(save_path, epoch):
-        return NotFound()
+    experiment.save_torch_script_policy(save_path, epoch)
 
     return send_file(save_path,
                      as_attachment=True,

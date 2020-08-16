@@ -80,7 +80,7 @@ class Experiment(db.Model, BaseModel):
         model_path = os.path.join(self.get_log_path(), 'model_%d.pt' % epoch)
 
         if not os.path.exists(model_path):
-            return False
+            raise ValueError('%s does not exist.' % model_path)
 
         # initialize algorithm from json file
         if self.project.algorithm == 'cql':
@@ -96,8 +96,6 @@ class Experiment(db.Model, BaseModel):
 
         # save TorchScript policy
         algo.save_policy(path)
-
-        return True
 
 
 class ExperimentSchema(ma.SQLAlchemySchema):

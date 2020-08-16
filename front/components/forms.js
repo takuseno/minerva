@@ -63,6 +63,7 @@ export function SelectForm (props) {
           <option
             key={option.value}
             value={option.value}
+            selected={option.value === props.value}
           >
             {option.text}
           </option>

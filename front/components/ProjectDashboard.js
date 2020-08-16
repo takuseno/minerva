@@ -6,6 +6,7 @@ import { Button, TextForm } from './forms'
 import { Line } from './graphs'
 import { ConfirmationDialog } from './ConfirmationDialog'
 import { ExperimentCreateDialog } from './ExperimentCreateDialog'
+import { DownloadPolicyDialog } from './DownloadPolicyDialog'
 import 'react-sweet-progress/lib/style.css'
 import '../styles/project-dashboard.scss'
 
@@ -99,6 +100,7 @@ function ProjectDetail (props) {
 
 function ExperimentDetail (props) {
   const { cancelExperiment } = useContext(GlobalContext)
+  const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false)
 
   const experiment = props.experiment
   const isActive = experiment.isActive
@@ -151,13 +153,22 @@ function ExperimentDetail (props) {
         </span>
       </div>
       <div className='bottom-line'>
-        <Button text='DOWNLOAD' />
+        <Button
+          text='DOWNLOAD'
+          onClick={() => setIsDownloadDialogOpen(true)}
+        />
         {isActive &&
           <Button
             text='CANCEL'
             onClick={() => cancelExperiment(experiment)}
           />}
       </div>
+      <DownloadPolicyDialog
+        isOpen={isDownloadDialogOpen}
+        totalEpoch={currentEpoch}
+        experiment={experiment}
+        onClose={() => setIsDownloadDialogOpen(false)}
+      />
     </div>
   )
 }

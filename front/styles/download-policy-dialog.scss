@@ -1,0 +1,22 @@
+@import './font';
+
+.experiment-title {
+  font-size: 1.2em;
+  font-weight: $weight-300;
+}
+
+.epoch-select {
+  margin-bottom: 6px;
+  margin-top: 6px;
+  text-align: center;
+
+  .label {
+    font-size: 1em;
+    font-weight: $weight-300;
+  }
+
+  .ganglion-form-select {
+    margin-left: 16px;
+    width: 260px;
+  }
+}
