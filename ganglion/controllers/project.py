@@ -1,7 +1,9 @@
 import json
 import uuid
+import os
+import ganglion.config as config
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file
 from werkzeug.exceptions import NotFound
 from sqlalchemy import desc
 from ..database import db
@@ -154,3 +156,23 @@ def cancel_experiment(project_id, experiment_id):
     _process_metrics(experiment, data)
 
     return jsonify(data)
+
+
+@project_route.route('/<project_id>/experiments/<experiment_id>/download',
+                     methods=['GET'])
+def download_policy(project_id, experiment_id):
+    experiment = Experiment.get(experiment_id, raise_404=True)
+    if experiment.project_id != int(project_id):
+        return NotFound()
+
+    epoch = int(request.args.get('epoch'))
+
+    # save greedy-policy as TorchScript
+    save_path = os.path.join(config.TMP_DIR, 'policy.pt')
+    if not experiment.save_torch_script_policy(save_path, epoch):
+        return NotFound()
+
+    return send_file(save_path,
+                     as_attachment=True,
+                     attachment_filename='policy.pt',
+                     mimetype='application/octet-stream')

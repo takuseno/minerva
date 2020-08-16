@@ -8,6 +8,7 @@ else:
 DATASET_DIR = os.path.join(ROOT_DIR, 'dataset')
 DATABASE_PATH = os.path.join(ROOT_DIR, 'database.db')
 LOG_DIR = os.path.join(ROOT_DIR, 'train_logs')
+TMP_DIR = '/tmp/ganglion'
 UPLOAD_DIR = '/tmp/ganglion'
 
 config = {

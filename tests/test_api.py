@@ -194,6 +194,12 @@ def test_experiment_api(client):
     assert res.status_code == 200
     assert res.json['name'] == 'updated'
 
+    # check download
+    url = '/api/projects/%d/experiments/%d/download?epoch=0' % (project_id,
+                                                                experiment_id)
+    res = client.get(url)
+    assert res.status_code == 200
+
     # check delete
     url = '/api/projects/%d/experiments/%d' % (project_id, experiment_id)
     res = client.delete(url, follow_redirects=True)

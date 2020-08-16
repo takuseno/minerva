@@ -4,6 +4,7 @@ import os
 import re
 import json
 
+from d3rlpy.algos import CQL, DiscreteCQL
 from datetime import datetime
 from .base import BaseModel
 from ..database import db, ma
@@ -73,6 +74,30 @@ class Experiment(db.Model, BaseModel):
 
     def get_log_path(self):
         return os.path.join(config.LOG_DIR, self.log_name)
+
+    def save_torch_script_policy(self, path, epoch):
+        params_path = os.path.join(self.get_log_path(), 'params.json')
+        model_path = os.path.join(self.get_log_path(), 'model_%d.pt' % epoch)
+
+        if not os.path.exists(model_path):
+            return False
+
+        # initialize algorithm from json file
+        if self.project.algorithm == 'cql':
+            if self.project.dataset.is_discrete:
+                algo = DiscreteCQL.from_json(params_path)
+            else:
+                algo = CQL.from_json(params_path)
+        else:
+            raise ValueError('unsupported algorithm.')
+
+        # load model parameters
+        algo.load_model(model_path)
+
+        # save TorchScript policy
+        algo.save_policy(path)
+
+        return True
 
 
 class ExperimentSchema(ma.SQLAlchemySchema):
