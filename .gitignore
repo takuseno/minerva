@@ -4,6 +4,7 @@ d3rlpy_data
 test_data
 *.csv
 *.xml
+*.pt
 .python-version
 .node-version
 .coverage
