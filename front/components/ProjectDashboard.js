@@ -254,7 +254,7 @@ export function ProjectDashboard (props) {
       setTime(Date.now())
       fetchExperiments(Number(id))
       setIsLoadingNewData(false)
-    }, 10000) // 10 seconds
+    }, 5000) // 5 seconds
     return () => {
       clearTimeout(timeoutId)
     }
