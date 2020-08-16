@@ -9,7 +9,7 @@ else
 fi
 
 # format Python
-yapf -r -vv $YAPF_ARG ganglion tests
+yapf -r -vv $YAPF_ARG ganglion tests examples
 
 # format JavaScript
 npx standard $STANDARD_ARG front 'front/**/*.js' 'front/*.js' '*.js'
