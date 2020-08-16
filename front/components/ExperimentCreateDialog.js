@@ -138,8 +138,8 @@ export function ExperimentCreateDialog (props) {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [experimentName, setExperimentName] = useState('')
-  const [basicConfig, setBasicConfig] = useState(Record({}))
-  const [advancedConfig, setAdvancedConfig] = useState(Record({}))
+  const [basicConfig, setBasicConfig] = useState(Record({})())
+  const [advancedConfig, setAdvancedConfig] = useState(Record({})())
   const [isShowingAdvancedConfig, setIsShowingAdvancedConfig] = useState(false)
   const { createExperiment } = useContext(GlobalContext)
 
@@ -150,14 +150,19 @@ export function ExperimentCreateDialog (props) {
 
   useEffect(() => {
     setExperimentName(algorithm.toUpperCase() + '_' + getTimestamp())
-    setBasicConfig(Record(configs[algorithm].basic_config))
-    setAdvancedConfig(Record(configs[algorithm].advanced_config))
+
+    // default scaling option based on observation type
+    const scaler = dataset.isImage ? 'pixel' : 'standard'
+    const basicConfig = Record(configs[algorithm].basic_config)()
+    setBasicConfig(basicConfig.set('scaler', scaler))
+
+    setAdvancedConfig(Record(configs[algorithm].advanced_config)())
   }, [props.isOpen])
 
   const handleClose = () => {
     setUploadProgress(0)
-    setBasicConfig(Record({}))
-    setAdvancedConfig(Record({}))
+    setBasicConfig(Record({})())
+    setAdvancedConfig(Record({})())
     setExperimentName('')
     setIsShowingAdvancedConfig(false)
     props.onClose()

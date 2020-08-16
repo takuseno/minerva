@@ -7,6 +7,7 @@ import { Line } from './graphs'
 import { ConfirmationDialog } from './ConfirmationDialog'
 import { ExperimentCreateDialog } from './ExperimentCreateDialog'
 import { DownloadPolicyDialog } from './DownloadPolicyDialog'
+import { Q_FUNC_TYPE_OPTIONS, SCALER_OPTIONS } from '../constants'
 import 'react-sweet-progress/lib/style.css'
 import '../styles/project-dashboard.scss'
 
@@ -151,6 +152,22 @@ function ExperimentDetail (props) {
         <span className={status}>
           {status}
         </span>
+      </div>
+      <div className='middle-line'>
+        <table>
+          <tr>
+            <th>EPOCH</th>
+            <td>{currentEpoch}/{totalEpoch}</td>
+          </tr>
+          <tr>
+            <th>Q FUNCTION</th>
+            <td>{Q_FUNC_TYPE_OPTIONS[experiment.config.q_func_type]}</td>
+          </tr>
+          <tr>
+            <th>SCALER</th>
+            <td>{SCALER_OPTIONS[experiment.config.scaler]}</td>
+          </tr>
+        </table>
       </div>
       <div className='bottom-line'>
         <Button

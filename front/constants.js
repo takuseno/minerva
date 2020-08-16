@@ -57,10 +57,10 @@ export const DISCRETE_CONFIGS = {
       n_epochs: 100,
       q_func_type: 'mean',
       scaler: null,
-      n_critics: 1,
       batch_size: 32
     },
     advanced_config: {
+      n_critics: 1,
       bootstrap: false,
       augmentation: [],
       n_augmentations: 1,

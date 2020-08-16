@@ -87,6 +87,24 @@
             }
           }
 
+          .middle-line {
+            table {
+              box-sizing: border-box;
+              font-size: .8em;
+              padding: 6px;
+              width: 100%;
+
+              th {
+                font-weight: $weight-300;
+                width: 100px;
+              }
+
+              td {
+                font-weight: $weight-400;
+              }
+            }
+          }
+
           .bottom-line {
             .ganglion-form-button {
               float: right;
