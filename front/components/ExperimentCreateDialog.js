@@ -74,7 +74,9 @@ function ConfigForm (props) {
       <SelectForm
         options={options}
         value={props.value}
-        onChange={(newValue) => props.onChange(props.label, newValue)}
+        onChange={(newValue) => {
+          props.onChange(props.label, newValue === 'null' ? null : newValue)
+        }}
       />
     )
   } else if (props.label === 'augmentation') {
@@ -152,7 +154,7 @@ export function ExperimentCreateDialog (props) {
     setExperimentName(algorithm.toUpperCase() + '_' + getTimestamp())
 
     // default scaling option based on observation type
-    const scaler = dataset.isImage ? 'pixel' : 'standard'
+    const scaler = dataset.isImage ? 'pixel' : null
     const basicConfig = Record(configs[algorithm].basic_config)()
     setBasicConfig(basicConfig.set('scaler', scaler))
 
