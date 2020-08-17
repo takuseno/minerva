@@ -106,7 +106,7 @@
           }
 
           .bottom-line {
-            .ganglion-form-button {
+            .minerva-form-button {
               float: right;
               margin-left: 6px;
 
@@ -139,12 +139,12 @@
         .graph-item {
           box-sizing: border-box;
           height: 500px;
-          padding: 12px;
+          padding: 24px;
           width: 100%;
 
           .graph-title {
-            font-size: 1em;
-            font-weight: $weight-300;
+            font-size: 1.2em;
+            font-weight: $weight-400;
             text-align: center;
             width: 100%;
           }
@@ -174,7 +174,7 @@
       font-weight: $weight-200;
     }
 
-    .ganglion-form-text {
+    .minerva-form-text {
       border: 0;
       flex-grow: 1;
       font-size: 2em;

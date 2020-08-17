@@ -1,8 +1,8 @@
 import numpy as np
 
 from d3rlpy.datasets import get_cartpole, get_pendulum
-from ganglion.dataset import export_mdp_dataset_as_csv
-from ganglion.dataset import import_csv_as_mdp_dataset
+from minerva.dataset import export_mdp_dataset_as_csv
+from minerva.dataset import import_csv_as_mdp_dataset
 
 
 def test_vector_dataset_with_discrete_action():

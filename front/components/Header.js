@@ -7,7 +7,7 @@ export function Header () {
   return (
     <div className='header'>
       <div className='logo'>
-        <span>GANGLION</span>
+        <span>MINERVA</span>
       </div>
       <div className='links'>
         {['projects', 'datasets'].map((link) => {

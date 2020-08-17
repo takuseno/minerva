@@ -1,5 +1,5 @@
 import numpy as np
-import ganglion.config as config
+import minerva.config as config
 import os
 import re
 import json

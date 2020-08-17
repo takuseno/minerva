@@ -2,15 +2,15 @@ import pytest
 import os
 import json
 import time
-import ganglion.config as config
+import minerva.config as config
 
 from d3rlpy.datasets import get_cartpole
 from werkzeug.datastructures import FileStorage
-from ganglion.dataset import export_mdp_dataset_as_csv
-from ganglion.index import app, db
-from ganglion.models.dataset import Dataset
-from ganglion.models.project import Project
-from ganglion.models.experiment import Experiment
+from minerva.dataset import export_mdp_dataset_as_csv
+from minerva.index import app, db
+from minerva.models.dataset import Dataset
+from minerva.models.project import Project
+from minerva.models.experiment import Experiment
 
 
 @pytest.fixture(scope='session')

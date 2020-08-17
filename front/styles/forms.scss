@@ -1,32 +1,32 @@
 @import './colors';
 @import './font';
 
-.ganglion-form-text {
+.minerva-form-text {
   font-size: 1em;
   font-weight: $weight-300;
 }
 
-.ganglion-form-text-underline {
+.minerva-form-text-underline {
   box-sizing: border-box;
   width: 100%;
 
-  .ganglion-form-text {
+  .minerva-form-text {
     border: 0;
     outline: 0;
     width: 100%;
 
-    &:focus + .ganglion-form-underline {
+    &:focus + .minerva-form-underline {
       border-top: 1px solid $blue-light;
     }
   }
 
-  .ganglion-form-underline {
+  .minerva-form-underline {
     border-top: 1px solid $black-dark;
     position: relative;
   }
 }
 
-.ganglion-form-select {
+.minerva-form-select {
   border: 1px solid $black-dark;
   border-radius: 2px;
   box-sizing: border-box;
@@ -42,19 +42,19 @@
   }
 }
 
-.ganglion-form-multi-select {
+.minerva-form-multi-select {
   .option {
     margin-bottom: -6px;
     margin-top: -6px;
   }
 }
 
-.ganglion-form-file {
+.minerva-form-file {
   input {
     display: none;
   }
 
-  .ganglion-form-file-button {
+  .minerva-form-file-button {
     background: $white;
     border: 1px solid $black-dark;
     border-radius: 2px;
@@ -80,7 +80,7 @@
   }
 }
 
-.ganglion-form-group {
+.minerva-form-group {
   text-align: center;
 
   input {
@@ -92,7 +92,7 @@
   }
 }
 
-.ganglion-form-row {
+.minerva-form-row {
   input {
     margin-bottom: 12px;
     margin-top: 12px;
@@ -108,7 +108,7 @@
   }
 }
 
-.ganglion-form-button {
+.minerva-form-button {
   background-color: $white;
   border: 1px solid $black-dark;
   border-radius: 2px;
@@ -132,7 +132,7 @@
   }
 }
 
-.ganglion-form-checkbox {
+.minerva-form-checkbox {
   span {
     font-size: 1em;
     font-weight: $weight-300;

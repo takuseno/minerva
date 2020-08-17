@@ -1,14 +1,14 @@
 import numpy as np
 import click
 import os
-import ganglion.models
+import minerva.models
 
 from flask import Flask, Blueprint, redirect, url_for
 from flask.json import JSONEncoder
-from ganglion.config import config, prepare_directory
-from ganglion.database import init_db, db, ma
-from ganglion.controllers import dataset_route
-from ganglion.controllers import project_route
+from minerva.config import config, prepare_directory
+from minerva.database import init_db, db, ma
+from minerva.controllers import dataset_route
+from minerva.controllers import project_route
 
 static_path = os.path.join(os.path.dirname(__file__), '..', 'dist')
 app = Flask(__name__, static_folder=static_path)
@@ -34,7 +34,7 @@ app.json_encoder = CustomJSONEncoder
 # initialize database
 init_db(app)
 
-# create ganglion directory
+# create minerva directory
 prepare_directory()
 
 # API endpoints

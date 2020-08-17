@@ -1,15 +1,15 @@
 import os
 
-if os.getenv('GANGLION_DIR'):
-    ROOT_DIR = os.getenv('GANGLION_DIR')
+if os.getenv('MINERVA_DIR'):
+    ROOT_DIR = os.getenv('MINERVA_DIR')
 else:
-    ROOT_DIR = os.path.join(os.getenv('HOME'), '.ganglion')
+    ROOT_DIR = os.path.join(os.getenv('HOME'), '.minerva')
 
 DATASET_DIR = os.path.join(ROOT_DIR, 'dataset')
 DATABASE_PATH = os.path.join(ROOT_DIR, 'database.db')
 LOG_DIR = os.path.join(ROOT_DIR, 'train_logs')
-TMP_DIR = '/tmp/ganglion'
-UPLOAD_DIR = '/tmp/ganglion'
+TMP_DIR = '/tmp/minerva'
+UPLOAD_DIR = '/tmp/minerva'
 
 config = {
     'SQLALCHEMY_DATABASE_URI': 'sqlite:///%s' % DATABASE_PATH,

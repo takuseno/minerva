@@ -1,5 +1,5 @@
 {
-  "name": "ganglion",
+  "name": "minerva",
   "version": "1.0.0",
   "description": "Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement Learning",
   "main": "index.js",
@@ -42,12 +42,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/takuseno/ganglion.git"
+    "url": "git+https://github.com/takuseno/minerva.git"
   },
   "author": "takuseno",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/takuseno/ganglion/issues"
+    "url": "https://github.com/takuseno/minerva/issues"
   },
-  "homepage": "https://github.com/takuseno/ganglion#readme"
+  "homepage": "https://github.com/takuseno/minerva#readme"
 }

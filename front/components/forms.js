@@ -3,7 +3,7 @@ import '../styles/forms.scss'
 
 export function FormGroup ({ children }) {
   return (
-    <div className='ganglion-form-group'>
+    <div className='minerva-form-group'>
       {children}
     </div>
   )
@@ -11,7 +11,7 @@ export function FormGroup ({ children }) {
 
 export function FormRow ({ children }) {
   return (
-    <div className='ganglion-form-row'>
+    <div className='minerva-form-row'>
       {children}
     </div>
   )
@@ -26,7 +26,7 @@ export function TextForm (props) {
   }, [])
   return (
     <input
-      className='ganglion-form-text'
+      className='minerva-form-text'
       type='text'
       value={props.value}
       placeholder={props.placeholder}
@@ -38,14 +38,14 @@ export function TextForm (props) {
 
 export function TextFormUnderline (props) {
   return (
-    <div className='ganglion-form-text-underline'>
+    <div className='minerva-form-text-underline'>
       <TextForm
         value={props.value}
         placeholder={props.placeholder}
         onChange={props.onChange}
         focus={props.focus}
       />
-      <div className='ganglion-form-underline' />
+      <div className='minerva-form-underline' />
     </div>
   )
 }
@@ -53,7 +53,7 @@ export function TextFormUnderline (props) {
 export function SelectForm (props) {
   return (
     <select
-      className='ganglion-form-select'
+      className='minerva-form-select'
       onChange={(e) => props.onChange(e.target.value)}
     >
       {props.placeholder &&
@@ -82,7 +82,7 @@ export function MultiSelectForm (props) {
     }
   }
   return (
-    <div className='ganglion-form-multi-select'>
+    <div className='minerva-form-multi-select'>
       {props.options.map((option) => {
         const value = props.value.indexOf(option.value) !== -1
         return (
@@ -102,7 +102,7 @@ export function MultiSelectForm (props) {
 export function Button (props) {
   return (
     <button
-      className='ganglion-form-button'
+      className='minerva-form-button'
       onClick={props.onClick}
     >
       <span>{props.text}</span>
@@ -131,10 +131,10 @@ export function FileInput (props) {
   }
   const wrappedName = wrapText(fileName, 20)
   return (
-    <label className='ganglion-form-file'>
+    <label className='minerva-form-file'>
       <input type='file' name={props.name} onChange={handleChange} />
-      <span className='ganglion-form-file-button'>{props.text}</span>
-      <span className='ganglion-form-file-name'>{wrappedName}</span>
+      <span className='minerva-form-file-button'>{props.text}</span>
+      <span className='minerva-form-file-name'>{wrappedName}</span>
     </label>
   )
 }
@@ -147,7 +147,7 @@ FileInput.defaultProps = {
 export function Checkbox (props) {
   const handleChange = (e) => { props.onChange(e.target.checked) }
   return (
-    <label className='ganglion-form-checkbox'>
+    <label className='minerva-form-checkbox'>
       <input type='checkbox' name={props.name} onChange={handleChange} />
       <span>{props.text}</span>
     </label>

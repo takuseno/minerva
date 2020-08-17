@@ -43,6 +43,6 @@ class ProjectSchema(ma.SQLAlchemySchema):
     dataset_id = ma.Integer(required=True)
     name = ma.String(required=True)
     algorithm = ma.String(required=True)
-    dataset = ma.Nested('ganglion.models.dataset.DatasetSchema')
+    dataset = ma.Nested('minerva.models.dataset.DatasetSchema')
     created_at = ma.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
     updated_at = ma.DateTime('%Y-%m-%dT%H:%M:%S+09:00')

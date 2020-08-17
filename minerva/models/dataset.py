@@ -1,5 +1,5 @@
 import os
-import ganglion.config as config
+import minerva.config as config
 
 from d3rlpy.dataset import MDPDataset
 from werkzeug.exceptions import NotFound

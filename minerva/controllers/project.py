@@ -1,7 +1,7 @@
 import json
 import uuid
 import os
-import ganglion.config as config
+import minerva.config as config
 
 from flask import Blueprint, request, jsonify, send_file
 from werkzeug.exceptions import NotFound

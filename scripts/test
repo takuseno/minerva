@@ -6,7 +6,7 @@ mkdir -p test_data
 
 # run tests
 echo "Run unit tests"
-pytest --cov-report=xml --cov=ganglion tests -p no:warnings -v
+pytest --cov-report=xml --cov=minerva tests -p no:warnings -v
 
 # clean up
 rm -r test_data

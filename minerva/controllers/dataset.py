@@ -3,7 +3,7 @@ import werkzeug
 import os
 import uuid
 import json
-import ganglion.config as config
+import minerva.config as config
 
 from flask import Blueprint, request, jsonify
 from sqlalchemy import desc
