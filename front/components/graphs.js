@@ -63,7 +63,6 @@ export function Line (props) {
       data={data}
       axis={axis}
       transition={transition}
-      unloadBeforeLoad={props.refresh}
     />
   )
 }

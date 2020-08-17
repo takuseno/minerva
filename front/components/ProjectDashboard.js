@@ -227,7 +227,7 @@ function ProjectMetrics (props) {
         {Object.entries(metrics).map(([title, values]) => {
           const graphTitle = title.toUpperCase().replace(/_/g, ' ')
           return (
-            <li key={title}>
+            <li key={title + experiments.first().projectId.toString()}>
               <div className='graph-item'>
                 <p className='graph-title'>{graphTitle}</p>
                 <Line
@@ -235,7 +235,6 @@ function ProjectMetrics (props) {
                   titles={labels[title]}
                   xLabel='epoch'
                   yLabel='value'
-                  refresh={props.isLoadingNewData}
                 />
               </div>
             </li>
@@ -250,7 +249,6 @@ export function ProjectDashboard (props) {
   const { id } = useParams()
   const { fetchExperiments } = useContext(GlobalContext)
   const [time, setTime] = useState(Date.now())
-  const [isLoadingNewData, setIsLoadingNewData] = useState(false)
 
   const projects = props.projects
   const datasets = props.datasets
@@ -262,7 +260,6 @@ export function ProjectDashboard (props) {
   // fetch experiments
   useEffect(() => {
     fetchExperiments(Number(id))
-    setIsLoadingNewData(true)
   }, [id])
 
   // fetch experiments periodically
@@ -270,7 +267,6 @@ export function ProjectDashboard (props) {
     const timeoutId = setTimeout(() => {
       setTime(Date.now())
       fetchExperiments(Number(id))
-      setIsLoadingNewData(false)
     }, 5000) // 5 seconds
     return () => {
       clearTimeout(timeoutId)
@@ -287,10 +283,7 @@ export function ProjectDashboard (props) {
             dataset={dataset}
             experiments={experiments}
           />
-          <ProjectMetrics
-            experiments={experiments}
-            isLoadingNewData={isLoadingNewData}
-          />
+          <ProjectMetrics experiments={experiments} />
         </div>
       </div>
     </div>
