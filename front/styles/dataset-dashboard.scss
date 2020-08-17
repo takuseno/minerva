@@ -51,9 +51,17 @@
 }
 
 .card {
+  box-sizing: border-box;
   margin: 12px;
   padding: 24px;
   text-align: center;
+  width: 100%;
+
+  .graph {
+    box-sizing: border-box;
+    margin-top: 12px;
+    width: 100%;
+  }
 }
 
 .dashboard {

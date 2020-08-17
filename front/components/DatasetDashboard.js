@@ -36,13 +36,15 @@ function StatisticsCard (props) {
           <td>{props.min.toFixed(2)}</td>
         </tr>
       </table>
-      <Histogram
-        title={props.graphTitle}
-        values={props.values}
-        labels={props.labels}
-        xLabel={props.xLabel}
-        yLabel={props.yLabel}
-      />
+      <div className='graph'>
+        <Histogram
+          title={props.graphTitle}
+          values={props.values}
+          labels={props.labels}
+          xLabel={props.xLabel}
+          yLabel={props.yLabel}
+        />
+      </div>
     </Card>
   )
 }
@@ -194,6 +196,7 @@ function DatasetStatistics (props) {
             labels={actionHist[1]}
             xLabel='action id'
             yLabel='number of steps'
+            discrete
           />
         </Card>}
       {!dataset.isDiscrete &&
