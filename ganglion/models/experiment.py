@@ -43,6 +43,9 @@ class Experiment(db.Model, BaseModel):
         return experiment
 
     def get_metrics(self):
+        if not os.path.exists(self.get_log_path()):
+            return {}
+
         metrics = {}
         csv_pattern = re.compile('^.*.csv$')
         for file_name in os.listdir(self.get_log_path()):
@@ -52,6 +55,7 @@ class Experiment(db.Model, BaseModel):
                 data = np.loadtxt(path, delimiter=',')
                 if len(data.shape) == 1:
                     data = data.reshape((1, -1))
+                data[np.isnan(data)] = 0.0
                 metrics[name] = data[:, 2]
         return metrics
 
