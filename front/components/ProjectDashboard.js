@@ -100,8 +100,9 @@ function ProjectDetail (props) {
 }
 
 function ExperimentDetail (props) {
-  const { cancelExperiment } = useContext(GlobalContext)
+  const { cancelExperiment, deleteExperiment } = useContext(GlobalContext)
   const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const experiment = props.experiment
   const isActive = experiment.isActive
@@ -179,12 +180,26 @@ function ExperimentDetail (props) {
             text='CANCEL'
             onClick={() => cancelExperiment(experiment)}
           />}
+        {!isActive &&
+          <Button
+            text='DELETE'
+            onClick={() => setIsDeleting(true)}
+          />}
       </div>
       <DownloadPolicyDialog
         isOpen={isDownloadDialogOpen}
         totalEpoch={currentEpoch}
         experiment={experiment}
         onClose={() => setIsDownloadDialogOpen(false)}
+      />
+      <ConfirmationDialog
+        title={`Deleting ${experiment.name}.`}
+        message='Are you sure to delete this experiment?'
+        isOpen={isDeleting}
+        onClose={() => setIsDeleting(false)}
+        onConfirm={() => deleteExperiment(experiment)}
+        confirmText='DELETE'
+        cancelText='CANCEL'
       />
     </div>
   )

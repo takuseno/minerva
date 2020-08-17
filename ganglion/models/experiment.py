@@ -3,6 +3,7 @@ import ganglion.config as config
 import os
 import re
 import json
+import shutil
 
 from d3rlpy.algos import CQL, DiscreteCQL
 from datetime import datetime
@@ -41,6 +42,12 @@ class Experiment(db.Model, BaseModel):
         db.session.add(experiment)
         db.session.commit()
         return experiment
+
+    def delete(self):
+        super().delete()
+        # remove log directory
+        if os.path.exists(self.get_log_path()):
+            shutil.rmtree(self.get_log_path())
 
     def get_metrics(self):
         if not os.path.exists(self.get_log_path()):
