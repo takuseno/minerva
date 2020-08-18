@@ -23,7 +23,7 @@ $ pip install minerva
 ## usage
 ### run server
 At the first time, `~/.minerva` will be automatically created to store
-database, ploaded datasets and training metrics.
+database, uploaded datasets and training metrics.
 ```
 $ minerva run
 ```
@@ -32,6 +32,7 @@ respectively.
 
 
 ### delete data
+You can delete entire data (`~/.minerva`) as follows:
 ```
 $ minerva clean
 ```
