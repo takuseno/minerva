@@ -206,3 +206,12 @@ def test_experiment_api(client):
     assert res.status_code == 200
     with app.app_context():
         assert Experiment.get(experiment_id) is None
+
+
+def test_system_api(client):
+    # check status
+    res = client.get('/api/system/status')
+    assert res.status_code == 200
+    assert res.json['gpu']['total'] == 0
+    assert res.json['gpu']['jobs'] == {}
+    assert res.json['cpu']['jobs'] == []

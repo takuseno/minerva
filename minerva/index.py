@@ -10,6 +10,7 @@ from minerva.config import config, prepare_directory
 from minerva.database import init_db, db, ma
 from minerva.controllers import dataset_route
 from minerva.controllers import project_route
+from minerva.controllers import system_route
 
 static_path = os.path.join(os.path.dirname(__file__), '..', 'dist')
 app = Flask(__name__, static_folder=static_path)
@@ -41,6 +42,7 @@ prepare_directory()
 # API endpoints
 app.register_blueprint(dataset_route, url_prefix='/api/datasets')
 app.register_blueprint(project_route, url_prefix='/api/projects')
+app.register_blueprint(system_route, url_prefix='/api/system')
 
 
 # proxy
