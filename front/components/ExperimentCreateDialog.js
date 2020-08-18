@@ -93,6 +93,22 @@ function ConfigForm (props) {
         />
       </FormRow>
     )
+  } else if (props.label === 'use_gpu') {
+    const options = [{ text: 'CPU', value: null }]
+    if (props.status.gpu !== undefined) {
+      for (let i = 0; i < props.status.gpu.total; ++i) {
+        options.push({ text: `GPU:${i}`, value: i })
+      }
+    }
+    return (
+      <SelectForm
+        options={options}
+        value={props.value}
+        onChange={(newValue) => {
+          props.onChange(props.label, newValue === 'null' ? null : newValue)
+        }}
+      />
+    )
   } else if ((typeof props.value) === 'boolean') {
     return (
       <FormRow>
@@ -117,14 +133,20 @@ function ConfigForms (props) {
   return (
     <table className='form-table'>
       {Object.entries(props.config).map(([key, value]) => {
+        // handle special labels
+        let label = convertSnakeToUpper(key)
+        if (key === 'use_gpu') {
+          label = 'DEVICE'
+        }
         return (
           <tr key={key}>
-            <th>{convertSnakeToUpper(key)}</th>
+            <th>{label}</th>
             <td>
               <ConfigForm
                 label={key}
                 value={value}
                 onChange={props.onChange}
+                status={props.status}
               />
             </td>
           </tr>
@@ -143,7 +165,7 @@ export function ExperimentCreateDialog (props) {
   const [basicConfig, setBasicConfig] = useState(Record({})())
   const [advancedConfig, setAdvancedConfig] = useState(Record({})())
   const [isShowingAdvancedConfig, setIsShowingAdvancedConfig] = useState(false)
-  const { createExperiment } = useContext(GlobalContext)
+  const { status, createExperiment } = useContext(GlobalContext)
 
   const dataset = props.dataset
   const project = props.project
@@ -217,6 +239,7 @@ export function ExperimentCreateDialog (props) {
         </FormRow>
         <ConfigForms
           config={basicConfig.toJS()}
+          status={status}
           onChange={handleBasicConfigChange}
         />
         {!isShowingAdvancedConfig &&
@@ -236,6 +259,7 @@ export function ExperimentCreateDialog (props) {
         {isShowingAdvancedConfig &&
           <ConfigForms
             config={advancedConfig.toJS()}
+            status={status}
             onChange={handleAdvancedConfigChange}
           />}
         <FormGroup>

@@ -1,3 +1,5 @@
+import json
+
 from d3rlpy.gpu import get_gpu_count
 from flask import Blueprint, jsonify
 from ..database import db
@@ -17,13 +19,14 @@ def get_system_status():
     gpu_jobs = {}
     cpu_jobs = []
     for experiment in experiments:
-        device_id = experiment.statistics['use_gpu']
-        if device_id == False:
-            cpu_jobs.append(ExperimentSchema.dump(experiment))
+        config = json.loads(experiment.config)
+        device_id = config['use_gpu'] if 'use_gpu' in config else None
+        if device_id:
+            if device_id not in gpu_jobs:
+                gpu_jobs[device_id] = []
+            gpu_jobs[device_id].append(ExperimentSchema().dump(experiment))
         else:
-            if device_id not in used_gpus:
-                used_gpus[device_id] = []
-            used_gpus[device_id].append(ExperimentSchema.dump(experiment))
+            cpu_jobs.append(ExperimentSchema().dump(experiment))
 
     res = {
         'gpu': {

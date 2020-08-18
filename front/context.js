@@ -3,6 +3,7 @@ import { List, Map } from 'immutable'
 import { Dataset } from './models/dataset'
 import { Project } from './models/project'
 import { Experiment } from './models/experiment'
+import { Status } from './models/status'
 
 export const GlobalContext = React.createContext({})
 
@@ -40,6 +41,8 @@ export function GlobalProvider ({ children }) {
   const [datasets, setDatasets] = useState(List([]))
   const [projects, setProjects] = useState(List([]))
   const [experiments, dispatch] = useReducer(experimentReducer, Map({}))
+  const [status, setStatus] = useState({})
+  const [statusTime, setStatusTime] = useState(Date.now())
 
   // initialization
   useEffect(() => {
@@ -54,6 +57,17 @@ export function GlobalProvider ({ children }) {
         setProjects(List(projects))
       })
   }, [])
+
+  // periodical API calls
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setStatusTime(Date.now())
+      Status.get().then((status) => setStatus(status))
+    }, 5000) // 5 seconds
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [statusTime])
 
   // actions
   const uploadDataset = (file, isImage, isDiscrete, progressCallback) => {
@@ -151,10 +165,9 @@ export function GlobalProvider ({ children }) {
     <GlobalContext.Provider
       value={{
         datasets,
-        setDatasets,
         projects,
-        setProjects,
         experiments,
+        status,
         uploadDataset,
         deleteDataset,
         updateDataset,
