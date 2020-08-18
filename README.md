@@ -11,9 +11,8 @@ learning as a tool.
 
 <div align="center"><img src="assets/screenshot1.jpg" width="800"/></div>
 
-The powerful reinforcement learning algorithms are provided by
-[d3rlpy](https://github.com/takuseno/d3rlpy) which enables users to achieve
-great performance potentially beyond the existing papers.
+MINERVA is powered by [d3rlpy](https://github.com/takuseno/d3rlpy) to provide
+extremely powerful algorithms in an out-of-the-box way.
 
 ## installation
 ```
