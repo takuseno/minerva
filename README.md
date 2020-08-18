@@ -1,6 +1,6 @@
 <div align="center"><img src="assets/logo.jpg" width="800"/></div>
 
-# MINERVA: Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement Learning
+# MINERVA: An out-of-the-box GUI tool for data-driven deep reinforcement learning
 ![test](https://github.com/takuseno/minerva/workflows/test/badge.svg)
 ![format check](https://github.com/takuseno/minerva/workflows/format%20check/badge.svg)
 ![MIT](https://img.shields.io/badge/license-MIT-blue)
