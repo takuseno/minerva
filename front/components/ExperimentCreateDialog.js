@@ -105,7 +105,8 @@ function ConfigForm (props) {
         options={options}
         value={props.value}
         onChange={(newValue) => {
-          props.onChange(props.label, newValue === 'null' ? null : newValue)
+          const value = newValue === 'null' ? null : Number(newValue)
+          props.onChange(props.label, value)
         }}
       />
     )
