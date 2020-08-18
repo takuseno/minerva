@@ -5,6 +5,7 @@ test_data
 *.csv
 *.xml
 *.pt
+*.egg-info
 .python-version
 .node-version
 .coverage
