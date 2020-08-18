@@ -2,6 +2,7 @@
 *__pycache__
 d3rlpy_data
 test_data
+.DS_Store
 *.csv
 *.xml
 *.pt

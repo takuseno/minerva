@@ -8,6 +8,8 @@ MINERVA is an Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement
 Learning, designed for everyone including non-programmers to do reinforcement
 learning as a tool.
 
+<div align="center"><img src="assets/screenshot1.jpg" width="800"/></div>
+
 The powerful reinforcement learning algorithms are provided by
 [d3rlpy](https://github.com/takuseno/d3rlpy) which enables users to achieve
 great performance potentially beyond the existing papers.
