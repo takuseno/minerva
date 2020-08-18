@@ -20,6 +20,22 @@ great performance potentially beyond the existing papers.
 $ pip install minerva
 ```
 
+## usage
+### run server
+At the first time, `~/.minerva` will be automatically created to store
+database, ploaded datasets and training metrics.
+```
+$ minerva run
+```
+You can change the host and port with `--host` and `--port` arguments
+respectively.
+
+
+### delete data
+```
+$ minerva clean
+```
+
 ## contributions
 ### build
 ```

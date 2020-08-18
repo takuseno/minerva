@@ -1,6 +1,7 @@
 import numpy as np
 import click
 import os
+import shutil
 import minerva.models
 
 from flask import Flask, Blueprint, redirect, url_for
@@ -75,6 +76,12 @@ def run(host, port):
 def create_db():
     with app.app_context():
         db.create_all()
+
+
+@cli.command()
+def clean():
+    from minerva.config import ROOT_DIR
+    shutil.rmtree(ROOT_DIR)
 
 
 if __name__ == '__main__':
