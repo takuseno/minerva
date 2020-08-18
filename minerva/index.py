@@ -62,6 +62,12 @@ def cli():
 @click.option('--host', '-h', default='0.0.0.0')
 @click.option('--port', '-p', default=9000)
 def run(host, port):
+    # create databse if not exists
+    from minerva.config import DATABASE_PATH
+    if not os.path.exists(DATABASE_PATH):
+        create_db()
+
+    # start server
     app.run(debug=True, host=host, port=int(port))
 
 
