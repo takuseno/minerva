@@ -1,4 +1,4 @@
-<div align="center"><img src="https://raw.githubusercontent.com/takuseno/minerva/master/assets/logo.jpg" width="800"/></div>
+<div align="center"><img src="assets/logo.jpg" width="800"/></div>
 
 # MINERVA: Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement Learning
 ![test](https://github.com/takuseno/minerva/workflows/test/badge.svg)
