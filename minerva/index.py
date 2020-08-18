@@ -66,7 +66,8 @@ def run(host, port):
     # create databse if not exists
     from minerva.config import DATABASE_PATH
     if not os.path.exists(DATABASE_PATH):
-        create_db()
+        with app.app_context():
+            db.create_all()
 
     # start server
     app.run(debug=True, host=host, port=int(port))
