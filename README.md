@@ -67,3 +67,8 @@ You can run the entire tests as follows:
 ```
 $ ./scripts/test
 ```
+
+## acknowledgement
+This work is supported by Information-technology Promotion Agency, Japan
+(IPA), Exploratory IT Human Resources Project (MITOU Program) in the fiscal
+year 2020.
