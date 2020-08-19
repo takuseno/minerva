@@ -131,6 +131,7 @@ function ConfigForm (props) {
 }
 
 function ConfigForms (props) {
+  const dataset = props.dataset
   return (
     <table className='form-table'>
       {Object.entries(props.config).map(([key, value]) => {
@@ -138,6 +139,12 @@ function ConfigForms (props) {
         let label = convertSnakeToUpper(key)
         if (key === 'use_gpu') {
           label = 'DEVICE'
+        } else if (key === 'augmentation' && !dataset.IsImage) {
+          // this option is only available with image dataset
+          return
+        } else if (key === 'n_augmentations' && !dataset.IsImage) {
+          // this option is only available with image dataset
+          return
         }
         return (
           <tr key={key}>
@@ -242,6 +249,7 @@ export function ExperimentCreateDialog (props) {
           config={basicConfig.toJS()}
           status={status}
           onChange={handleBasicConfigChange}
+          dataset={dataset}
         />
         {!isShowingAdvancedConfig &&
           <div className='advanced-config-button'>
@@ -262,6 +270,7 @@ export function ExperimentCreateDialog (props) {
             config={advancedConfig.toJS()}
             status={status}
             onChange={handleAdvancedConfigChange}
+            dataset={props.dataset}
           />}
         <FormGroup>
           <Button text='SUBMIT' onClick={handleSubmit} />
