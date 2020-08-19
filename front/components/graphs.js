@@ -118,8 +118,8 @@ export function Line (props) {
               strokeOpacity={opacity}
               stroke={colors[i % colors.length]}
               fill={colors[i % colors.length]}
-              dot={{ stroke: colors[i % colors.length], strokeWidth: 1 }}
-              isAnimationActive={false}
+              dot={false}
+              isAnimationActive
             />
           )
         })}
