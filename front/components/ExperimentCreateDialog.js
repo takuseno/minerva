@@ -15,7 +15,8 @@ import {
 import {
   Q_FUNC_TYPE_OPTIONS,
   SCALER_OPTIONS,
-  AUGMENTATION_OPTIONS,
+  IMAGE_AUGMENTATION_OPTIONS,
+  VECTOR_AUGMENTATION_OPTIONS,
   CONTINUOUS_CONFIGS,
   DISCRETE_CONFIGS
 } from '../constants'
@@ -53,6 +54,8 @@ function getTimestamp () {
 }
 
 function ConfigForm (props) {
+  const dataset = props.dataset
+
   if (props.label === 'q_func_type') {
     const options = Object.entries(Q_FUNC_TYPE_OPTIONS)
       .map(([key, value]) => {
@@ -80,7 +83,9 @@ function ConfigForm (props) {
       />
     )
   } else if (props.label === 'augmentation') {
-    const options = Object.entries(AUGMENTATION_OPTIONS)
+    const augmentations = dataset.isImage ? IMAGE_AUGMENTATION_OPTIONS
+      : VECTOR_AUGMENTATION_OPTIONS
+    const options = Object.entries(augmentations)
       .map(([key, value]) => {
         return { text: value, value: key }
       })
@@ -139,12 +144,6 @@ function ConfigForms (props) {
         let label = convertSnakeToUpper(key)
         if (key === 'use_gpu') {
           label = 'DEVICE'
-        } else if (key === 'augmentation' && !dataset.IsImage) {
-          // this option is only available with image dataset
-          return
-        } else if (key === 'n_augmentations' && !dataset.IsImage) {
-          // this option is only available with image dataset
-          return
         }
         return (
           <tr key={key}>
@@ -155,6 +154,7 @@ function ConfigForms (props) {
                 value={value}
                 onChange={props.onChange}
                 status={props.status}
+                dataset={dataset}
               />
             </td>
           </tr>

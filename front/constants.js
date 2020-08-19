@@ -11,13 +11,18 @@ export const SCALER_OPTIONS = {
   pixel: 'PIXEL'
 }
 
-export const AUGMENTATION_OPTIONS = {
+export const IMAGE_AUGMENTATION_OPTIONS = {
   random_shift: 'RANDOM SHIFT',
   random_rotation: 'RANDOM ROTATION',
   cutout: 'CUTOUT',
   horizontal_flip: 'HORIZONTAL FLIP',
   vertical_flip: 'VERTICAL FLIP',
   intensity: 'INTENSITY'
+}
+
+export const VECTOR_AUGMENTATION_OPTIONS = {
+  single_amplitude_scaling: 'SINGLE AMPLITUDE SCALING',
+  multiple_amplitude_scaling: 'MULTIPLE AMPLITUDE SCALING'
 }
 
 export const CONTINUOUS_CONFIGS = {
