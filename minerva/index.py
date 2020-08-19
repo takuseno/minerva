@@ -51,7 +51,9 @@ app.register_blueprint(system_route, url_prefix='/api/system')
 def send_file(path):
     if path == '' or path == '/':
         return redirect('/projects')
-    if path.find('.js') == -1:
+    if path.find('favicon.ico') > -1:
+        path = 'favicon.ico'
+    elif path.find('.js') == -1:
         path = 'index.html'
     return app.send_static_file(path)
 
