@@ -46,16 +46,9 @@ export function GlobalProvider ({ children }) {
 
   // initialization
   useEffect(() => {
-    Dataset.getAll()
-      .then((datasets) => {
-        setDatasets(List(datasets))
-      })
-  }, [])
-  useEffect(() => {
-    Project.getAll()
-      .then((projects) => {
-        setProjects(List(projects))
-      })
+    Dataset.getAll().then((datasets) => setDatasets(List(datasets)))
+    Project.getAll().then((projects) => setProjects(List(projects)))
+    Status.get().then((status) => setStatus(status))
   }, [])
 
   // periodical API calls

@@ -56,6 +56,7 @@ def train(algo_name,
              with_timestamp=False,
              logdir=logdir,
              save_interval=1,
+             show_progress=False,
              tensorboard=False)
 
     return True

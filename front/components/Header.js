@@ -1,8 +1,98 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { Progress } from 'react-sweet-progress'
+import { Range } from 'immutable'
+import { CpuIcon } from '@primer/octicons-react'
+import { GlobalContext } from '../context'
+import 'react-sweet-progress/lib/style.css'
 import '../styles/header.scss'
 
+function JobItem (props) {
+  const experiment = props.experiment
+  const project = props.project
+
+  const metrics = experiment.metrics
+  const totalEpoch = experiment.config.n_epochs
+  const currentEpoch = metrics.td_error ? metrics.td_error.length : 0
+  const progress = currentEpoch / totalEpoch
+
+  return (
+    <div className='job-item'>
+      <div className='job-progress'>
+        <Progress
+          type='circle'
+          percent={100.0 * progress}
+          strokeWidth='10'
+          width='35'
+          status='active'
+          theme={{
+            active: {
+              symbol: Math.round(100.0 * progress).toString() + '%',
+              color: '#3498db'
+            }
+          }}
+        />
+      </div>
+      <div className='job-description'>
+        <p className='project-name'>Project: {project.name}</p>
+        <p className='experiment-name'>{experiment.name}</p>
+      </div>
+    </div>
+  )
+}
+
+function JobList (props) {
+  const projects = props.projects
+  const cpuJobs = props.status.cpu.jobs
+  const totalGPU = props.status.gpu.total
+  const gpuJobs = props.status.gpu.jobs
+  return (
+    <div className='job-list'>
+      <div className='jobs'>
+        <p className='device-name'>CPU</p>
+        {cpuJobs.length === 0 &&
+          <p className='empty-message'>No Jobs</p>}
+        {cpuJobs.length > 0 &&
+          <ul>
+            {cpuJobs.map((experiment) => {
+              const projectId = experiment.projectId
+              const project = projects.find((p) => p.id === projectId)
+              return (
+                <li key={experiment.id}>
+                  <JobItem experiment={experiment} project={project} />
+                </li>
+              )
+            })}
+          </ul>}
+      </div>
+      {Range(0, totalGPU).toJS().map((i) => {
+        return (
+          <div key={i} className='jobs'>
+            <p className='device-name'>GPU:{i}</p>
+            {gpuJobs[i].length === 0 &&
+              <p className='empty-message'>No Jobs</p>}
+            {gpuJobs[i].length > 0 &&
+              <ul>
+                {gpuJobs[i].map((experiment) => {
+                  const projectId = experiment.projectId
+                  const project = projects.find((p) => p.id === projectId)
+                  return (
+                    <li key={experiment.id}>
+                      <JobItem experiment={experiment} project={project} />
+                    </li>
+                  )
+                })}
+              </ul>}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 export function Header () {
+  const { status, projects } = useContext(GlobalContext)
+  const [isJobListOpen, setIsJobListOpen] = useState(false)
   const location = useLocation()
   return (
     <div className='header'>
@@ -20,6 +110,15 @@ export function Header () {
             </Link>
           )
         })}
+      </div>
+      <div className='popups'>
+        <div className='button'>
+          <div onClick={() => setIsJobListOpen(!isJobListOpen)}>
+            <CpuIcon size='large' />
+          </div>
+          {isJobListOpen && status.cpu !== undefined &&
+            <JobList status={status} projects={projects} />}
+        </div>
       </div>
     </div>
   )

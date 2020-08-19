@@ -4,6 +4,7 @@ from d3rlpy.gpu import get_gpu_count
 from flask import Blueprint, jsonify
 from ..database import db
 from ..models.experiment import Experiment, ExperimentSchema
+from .project import _process_metrics
 
 system_route = Blueprint('system', __name__)
 
@@ -19,14 +20,21 @@ def get_system_status():
     gpu_jobs = {}
     cpu_jobs = []
     for experiment in experiments:
+        # identify device
         config = json.loads(experiment.config)
         device_id = config['use_gpu'] if 'use_gpu' in config else None
+
+        # make response data
+        data = ExperimentSchema().dump(experiment)
+        # update status
+        _process_metrics(experiment, data)
+
         if device_id:
             if device_id not in gpu_jobs:
                 gpu_jobs[device_id] = []
-            gpu_jobs[device_id].append(ExperimentSchema().dump(experiment))
+            gpu_jobs[device_id].append(data)
         else:
-            cpu_jobs.append(ExperimentSchema().dump(experiment))
+            cpu_jobs.append(data)
 
     res = {
         'gpu': {

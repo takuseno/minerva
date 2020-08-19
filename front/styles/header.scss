@@ -38,4 +38,108 @@
       }
     }
   }
+
+  .popups {
+    margin: 0 0 0 auto;
+    margin-right: 28px;
+    position: relative;
+
+    .button {
+      color: $white-light;
+      line-height: 60px;
+
+      .octicon {
+        cursor: pointer;
+        height: 28px;
+        width: 28px;
+      }
+
+      &:hover {
+        color: $white-dark;
+      }
+
+      .job-list {
+        background-color: $white;
+        border: 1px solid $white-dark;
+        border-radius: 6px;
+        box-shadow: 10px 10px 20px 20px $shadow-black;
+        color: $black-light;
+        cursor: default;
+        padding: 6px;
+        position: absolute;
+        right: -16px;
+        width: 300px;
+        z-index: 2;
+
+        &::before {
+          border: 15px solid transparent;
+          border-bottom: 15px solid $white;
+          content: '';
+          position: absolute;
+          right: 14px;
+          top: -30px;
+        }
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
+
+        .jobs {
+          .device-name {
+            border-bottom: 1px solid $white-dark;
+            height: 36px;
+            line-height: 36px;
+            padding-left: 6px;
+          }
+
+          .empty-message {
+            color: $white-dark;
+            height: 46px;
+            line-height: 46px;
+            text-align: center;
+          }
+
+          ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+              .job-item {
+                align-items: center;
+                display: flex;
+
+                .job-progress {
+                  .react-sweet-progress-circle-outer {
+                    height: 35px;
+                    width: 35px;
+                  }
+                }
+
+                .job-description {
+                  flex-grow: 1;
+                  margin-left: 6px;
+
+                  .project-name {
+                    font-size: .8em;
+                    font-weight: $weight-300;
+                    height: 18px;
+                    line-height: 18px;
+                  }
+
+                  .experiment-name {
+                    font-size: 1em;
+                    font-weight: $weight-400;
+                    height: 24px;
+                    line-height: 24px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

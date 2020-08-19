@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Record } from 'immutable'
+import { Experiment } from './experiment'
 
 const StatusRecord = Record({
   gpu: {},
@@ -19,9 +20,18 @@ export class Status extends StatusRecord {
   }
 
   static fromResponse (data) {
+    const gpuJobs = {}
+    Object.entries(data.gpu.jobs).forEach((deviceId, jobs) => {
+      gpuJobs[deviceId] = jobs.map(Experiment.fromResponse)
+    })
     const status = new Status({
-      gpu: data.gpu,
-      cpu: data.cpu
+      gpu: {
+        total: data.gpu.total,
+        jobs: gpuJobs
+      },
+      cpu: {
+        jobs: data.cpu.jobs.map(Experiment.fromResponse)
+      }
     })
     return status
   }
