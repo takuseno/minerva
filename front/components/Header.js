@@ -69,9 +69,9 @@ function JobList (props) {
         return (
           <div key={i} className='jobs'>
             <p className='device-name'>GPU:{i}</p>
-            {gpuJobs[i].length === 0 &&
+            {(gpuJobs[i] === undefined || gpuJobs[i].length === 0) &&
               <p className='empty-message'>No Jobs</p>}
-            {gpuJobs[i].length > 0 &&
+            {gpuJobs[i] !== undefined && gpuJobs[i].length > 0 &&
               <ul>
                 {gpuJobs[i].map((experiment) => {
                   const projectId = experiment.projectId

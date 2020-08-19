@@ -45,17 +45,17 @@
     position: relative;
 
     .button {
-      color: $white-light;
       line-height: 60px;
 
       .octicon {
+        color: $white-light;
         cursor: pointer;
         height: 28px;
         width: 28px;
-      }
 
-      &:hover {
-        color: $white-dark;
+        &:hover {
+          color: $white-dark;
+        }
       }
 
       .job-list {

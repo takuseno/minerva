@@ -21,7 +21,7 @@ export class Status extends StatusRecord {
 
   static fromResponse (data) {
     const gpuJobs = {}
-    Object.entries(data.gpu.jobs).forEach((deviceId, jobs) => {
+    Object.entries(data.gpu.jobs).forEach(([deviceId, jobs]) => {
       gpuJobs[deviceId] = jobs.map(Experiment.fromResponse)
     })
     const status = new Status({

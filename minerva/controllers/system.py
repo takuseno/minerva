@@ -29,7 +29,7 @@ def get_system_status():
         # update status
         _process_metrics(experiment, data)
 
-        if device_id:
+        if type(device_id) == int:
             if device_id not in gpu_jobs:
                 gpu_jobs[device_id] = []
             gpu_jobs[device_id].append(data)
