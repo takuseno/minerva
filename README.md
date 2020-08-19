@@ -11,8 +11,17 @@ learning as a tool.
 
 <div align="center"><img src="assets/screenshot1.jpg" width="800"/></div>
 
+## key features
+### :zap: All You Need Is Dataset
+MINERVA only requires datasets to start data-driven deep reinforcement learning.
+
+### :beginner: Intuitive GUI
+MINERVA provides intuitive GUI to let any users leverage extremely powerful algorithms.
+
+### :rocket: Powerful Algorithm
 MINERVA is powered by [d3rlpy](https://github.com/takuseno/d3rlpy) to provide
 extremely powerful algorithms in an out-of-the-box way.
+The trained policy can be exported as [TorchScript](https://pytorch.org/docs/stable/jit.html).
 
 ## installation
 ```
