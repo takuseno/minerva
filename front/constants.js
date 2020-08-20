@@ -17,7 +17,8 @@ export const IMAGE_AUGMENTATION_OPTIONS = {
   cutout: 'CUTOUT',
   horizontal_flip: 'HORIZONTAL FLIP',
   vertical_flip: 'VERTICAL FLIP',
-  intensity: 'INTENSITY'
+  intensity: 'INTENSITY',
+  color_jitter: 'COLOR JITTER'
 }
 
 export const VECTOR_AUGMENTATION_OPTIONS = {
