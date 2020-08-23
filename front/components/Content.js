@@ -5,6 +5,16 @@ import { DatasetDashboard } from './DatasetDashboard'
 import { ProjectDashboard } from './ProjectDashboard'
 import '../styles/content.scss'
 
+function EmptyContent (props) {
+  return (
+    <div className='empty'>
+      <div className='label'>
+        <span>{props.label}</span>
+      </div>
+    </div>
+  )
+}
+
 export function DatasetContent (props) {
   // TODO: show empty page
   return (
@@ -22,6 +32,7 @@ export function DatasetContent (props) {
       {props.datasets.size === 0 &&
         <Route path='/datasets'>
           <DatasetSidebar datasets={props.datasets} />
+          <EmptyContent label='NO DATASETS' />
         </Route>}
     </div>
   )
@@ -53,6 +64,7 @@ export function ProjectContent (props) {
             projects={props.projects}
             datasets={props.datasets}
           />
+          <EmptyContent label='NO PROJECTS' />
         </Route>}
     </div>
   )

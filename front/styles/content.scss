@@ -1,5 +1,21 @@
+@import './colors';
+@import './font';
+
 .content {
   display: flex;
   height: 100%;
   width: 100%;
+
+  .empty {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    .label {
+      color: $white-dark;
+      font-size: 2em;
+      font-weight: $weight-400;
+    }
+  }
 }
