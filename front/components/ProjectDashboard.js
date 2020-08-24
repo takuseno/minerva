@@ -309,6 +309,7 @@ function MetricsGraph (props) {
   return (
     <div className='graph'>
       <SelectForm
+        value={activeGraphIndex}
         options={graphOptions}
         onChange={(value) => setActiveGraphIndex(value)}
       />

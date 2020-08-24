@@ -111,7 +111,7 @@ export function Line (props) {
           }
           return (
             <RechartsLine
-              strokeWidth={1}
+              strokeWidth={2}
               key={title}
               type='monotone'
               dataKey={title}
@@ -120,6 +120,7 @@ export function Line (props) {
               fill={colors[i % colors.length]}
               dot={false}
               isAnimationActive
+              animationDuration={500}
             />
           )
         })}
