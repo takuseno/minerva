@@ -33,7 +33,7 @@ export function Histogram (props) {
           label={{
             value: props.xLabel,
             position: 'insideBottom',
-            offset: -10
+            offset: -20
           }}
         />
         <YAxis

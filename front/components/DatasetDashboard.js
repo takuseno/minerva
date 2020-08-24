@@ -6,17 +6,9 @@ import { Button, TextForm } from './forms'
 import { ConfirmationDialog } from './ConfirmationDialog.js'
 import '../styles/dataset-dashboard.scss'
 
-function Card ({ children }) {
+function StatisticsItem (props) {
   return (
-    <div className='card'>
-      {children}
-    </div>
-  )
-}
-
-function StatisticsCard (props) {
-  return (
-    <Card>
+    <div className='statistics-item'>
       <p className='statistics-title'>{props.title}</p>
       <table className='statistics-table'>
         <tr>
@@ -45,7 +37,7 @@ function StatisticsCard (props) {
           yLabel={props.yLabel}
         />
       </div>
-    </Card>
+    </div>
   )
 }
 
@@ -163,7 +155,7 @@ function DatasetStatistics (props) {
       <div className='dataset-section'>
         <span className='section-title'>Statistics</span>
       </div>
-      <StatisticsCard
+      <StatisticsItem
         title='Return Statistics'
         mean={stats.return.mean}
         std={stats.return.std}
@@ -175,7 +167,7 @@ function DatasetStatistics (props) {
         xLabel='return'
         yLabel='number of episodes'
       />
-      <StatisticsCard
+      <StatisticsItem
         title='Reward Statistics'
         mean={stats.reward.mean}
         std={stats.reward.std}
@@ -188,7 +180,7 @@ function DatasetStatistics (props) {
         yLabel='number of steps'
       />
       {dataset.isDiscrete &&
-        <Card>
+        <div className='statistics-item'>
           <p className='statistics-title'>Action Statistics</p>
           <Histogram
             title='histogram'
@@ -198,11 +190,11 @@ function DatasetStatistics (props) {
             yLabel='number of steps'
             discrete
           />
-        </Card>}
+        </div>}
       {!dataset.isDiscrete &&
         actionHist.map((hist, i) => {
           return (
-            <StatisticsCard
+            <StatisticsItem
               key={i}
               title={`Action Statistics (dim=${i})`}
               mean={stats.action.mean[i]}
