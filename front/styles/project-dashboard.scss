@@ -130,30 +130,109 @@
     }
 
     .project-metrics {
+      display: flex;
       flex-basis: 0;
+      flex-direction: column;
       flex-grow: 1;
       overflow: auto;
       position: relative;
 
-      .metrics-list {
-        list-style: none;
-        margin: 0;
-        overflow: auto;
-        padding: 0;
-        position: absolute;
-        width: 100%;
+      .graph {
+        box-sizing: border-box;
+        padding: 6px;
+
+        .minerva-select-form {
+          font-size: 1.2em;
+        }
 
         .graph-item {
           box-sizing: border-box;
-          height: 500px;
+          height: 450px;
           padding: 24px;
           width: 100%;
+        }
+      }
 
-          .graph-title {
-            font-size: 1.2em;
-            font-weight: $weight-400;
-            text-align: center;
-            width: 100%;
+      .params-list {
+        flex-grow: 1;
+        position: relative;
+        width: 100%;
+
+        .parameter-table {
+          border-collapse: collapse;
+          border-spacing: 0;
+          border-top: 1px solid $black-light;
+          box-sizing: border-box;
+          display: block;
+          height: 100%;
+          overflow: auto;
+          position: absolute;
+          table-layout: fixed;
+          white-space: nowrap;
+          width: 100%;
+
+          tr {
+            box-sizing: border-box;
+
+            th {
+              background: $white;
+              box-sizing: border-box;
+              font-size: 1em;
+              font-weight: $weight-300;
+              padding-bottom: 6px;
+              padding-left: 12px;
+              padding-right: 12px;
+              padding-top: 6px;
+            }
+
+            td {
+              background: $white;
+              box-sizing: border-box;
+              font-size: 1em;
+              font-weight: $weight-200;
+              padding-bottom: 6px;
+              padding-left: 12px;
+              padding-right: 12px;
+              padding-top: 6px;
+            }
+          }
+
+          .table-header {
+            th {
+              background: $white;
+              position: sticky;
+              top: 0;
+
+              &::before {
+                border-bottom: 2px solid $white-dark;
+                content: '';
+                height: 100%;
+                left: -1px;
+                position: absolute;
+                top: -1px;
+                width: 100%;
+              }
+            }
+
+            .name {
+              z-index: 1;
+            }
+          }
+
+          .name {
+            box-sizing: border-box;
+            left: 0;
+            position: sticky;
+
+            &::before {
+              border-right: 1px solid $white-dark;
+              content: '';
+              height: 100%;
+              left: -1px;
+              position: absolute;
+              top: -1px;
+              width: 100%;
+            }
           }
         }
       }

@@ -3,7 +3,7 @@ import { Link, useParams, useHistory } from 'react-router-dom'
 import { Progress } from 'react-sweet-progress'
 import { List, Map } from 'immutable'
 import { GlobalContext } from '../context'
-import { Button, TextForm } from './forms'
+import { Button, TextForm, SelectForm } from './forms'
 import { Line } from './graphs'
 import { ConfirmationDialog } from './ConfirmationDialog'
 import { ExperimentCreateDialog } from './ExperimentCreateDialog'
@@ -228,8 +228,106 @@ function ExperimentList (props) {
   )
 }
 
+function ParamsList (props) {
+  const experiments = props.experiments
+  const paramKeys = []
+
+  experiments.forEach((experiment) => {
+    Object.keys(experiment.config).forEach((key) => {
+      if (!paramKeys.includes(key)) {
+        paramKeys.push(key)
+      }
+    })
+  })
+
+  // sort parameters in alphabetical order
+  paramKeys.sort()
+
+  return (
+    <div className='params-list'>
+      <table className='parameter-table'>
+        <tr className='table-header'>
+          <th className='name'>NAME</th>
+          {paramKeys.map((key) => {
+            return (
+              <th key={key}>{key.toUpperCase().replace(/_/g, ' ')}</th>
+            )
+          })}
+        </tr>
+        {experiments.map((experiment) => {
+          return (
+            <tr key={experiment.id} className='table-body'>
+              <th className='name'>{experiment.name}</th>
+              {paramKeys.map((key) => {
+                let value = experiment.config[key]
+                if ((typeof value) === 'boolean') {
+                  value = value ? 'true' : 'false'
+                } else if ((typeof value) === 'object') {
+                  if (value === null) {
+                    value = 'none'
+                  } else if (Array.isArray(value)) {
+                    if (value.length === 0) {
+                      value = 'none'
+                    } else {
+                      value = value.join(', ')
+                    }
+                  }
+                }
+                return (
+                  <td key={key}>{value}</td>
+                )
+              })}
+            </tr>
+          )
+        })}
+      </table>
+    </div>
+  )
+}
+
+function MetricsGraph (props) {
+  const [activeGraphIndex, setActiveGraphIndex] = useState(0)
+  const project = props.project
+  const metrics = props.metrics
+  const labels = props.labels
+  const graphOptions = []
+
+  useEffect(() => {
+    setActiveGraphIndex(0)
+  }, [project])
+
+  Object.keys(metrics).forEach((key) => {
+    graphOptions.push({
+      key: key,
+      text: key.toUpperCase().replace(/_/g, ' '),
+      value: graphOptions.length
+    })
+  })
+
+  const graphKey = graphOptions[activeGraphIndex].key
+
+  return (
+    <div className='graph'>
+      <SelectForm
+        options={graphOptions}
+        onChange={(value) => setActiveGraphIndex(value)}
+      />
+      <div className='graph-item'>
+        <Line
+          values={metrics[graphKey]}
+          titles={labels[graphKey]}
+          xLabel='epoch'
+          yLabel='value'
+        />
+      </div>
+    </div>
+  )
+}
+
 function ProjectMetrics (props) {
   const experiments = props.experiments
+  const project = props.project
+
   const metrics = {}
   const labels = {}
   experiments.forEach((experiment) => {
@@ -242,6 +340,7 @@ function ProjectMetrics (props) {
       labels[key].push(experiment.name)
     })
   })
+
   return (
     <div className='project-metrics'>
       {Object.keys(metrics).length === 0 &&
@@ -249,24 +348,8 @@ function ProjectMetrics (props) {
           <span>NO METRICS</span>
         </div>}
       {Object.keys(metrics).length > 0 &&
-        <ul className='metrics-list'>
-          {Object.entries(metrics).map(([title, values]) => {
-            const graphTitle = title.toUpperCase().replace(/_/g, ' ')
-            return (
-              <li key={title + experiments.first().projectId.toString()}>
-                <div className='graph-item'>
-                  <p className='graph-title'>{graphTitle}</p>
-                  <Line
-                    values={values}
-                    titles={labels[title]}
-                    xLabel='epoch'
-                    yLabel='value'
-                  />
-                </div>
-              </li>
-            )
-          })}
-        </ul>}
+        <MetricsGraph metrics={metrics} labels={labels} project={project} />}
+      <ParamsList experiments={experiments} />
     </div>
   )
 }
@@ -309,7 +392,7 @@ export function ProjectDashboard (props) {
             dataset={dataset}
             experiments={experiments}
           />
-          <ProjectMetrics experiments={experiments} />
+          <ProjectMetrics experiments={experiments} project={project} />
         </div>
       </div>
     </div>
