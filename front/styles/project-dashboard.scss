@@ -120,6 +120,13 @@
           }
         }
       }
+
+      .empty {
+        color: $white-dark;
+        flex-grow: 1;
+        font-size: 1em;
+        font-weight: $weight-400;
+      }
     }
 
     .project-metrics {
@@ -149,6 +156,13 @@
             width: 100%;
           }
         }
+      }
+
+      .empty {
+        color: $white-dark;
+        font-size: 1em;
+        font-weight: $weight-400;
+        height: 100%;
       }
     }
   }

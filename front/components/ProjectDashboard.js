@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link, useParams, useHistory } from 'react-router-dom'
 import { Progress } from 'react-sweet-progress'
+import { List, Map } from 'immutable'
 import { GlobalContext } from '../context'
 import { Button, TextForm } from './forms'
 import { Line } from './graphs'
@@ -209,15 +210,20 @@ function ExperimentList (props) {
   return (
     <div className='experiment-list'>
       <ProjectDetail project={props.project} dataset={props.dataset} />
-      <ul className='experiments'>
-        {props.experiments.map((experiment) => {
-          return (
-            <li key={experiment.id}>
-              <ExperimentDetail experiment={experiment} />
-            </li>
-          )
-        })}
-      </ul>
+      {props.experiments.size === 0 &&
+        <div className='empty'>
+          <span>NO EXPERIMENTS</span>
+        </div>}
+      {props.experiments.size > 0 &&
+        <ul className='experiments'>
+          {props.experiments.map((experiment) => {
+            return (
+              <li key={experiment.id}>
+                <ExperimentDetail experiment={experiment} />
+              </li>
+            )
+          })}
+        </ul>}
     </div>
   )
 }
@@ -238,24 +244,29 @@ function ProjectMetrics (props) {
   })
   return (
     <div className='project-metrics'>
-      <ul className='metrics-list'>
-        {Object.entries(metrics).map(([title, values]) => {
-          const graphTitle = title.toUpperCase().replace(/_/g, ' ')
-          return (
-            <li key={title + experiments.first().projectId.toString()}>
-              <div className='graph-item'>
-                <p className='graph-title'>{graphTitle}</p>
-                <Line
-                  values={values}
-                  titles={labels[title]}
-                  xLabel='epoch'
-                  yLabel='value'
-                />
-              </div>
-            </li>
-          )
-        })}
-      </ul>
+      {Object.keys(metrics).length === 0 &&
+        <div className='empty'>
+          <span>NO METRICS</span>
+        </div>}
+      {Object.keys(metrics).length > 0 &&
+        <ul className='metrics-list'>
+          {Object.entries(metrics).map(([title, values]) => {
+            const graphTitle = title.toUpperCase().replace(/_/g, ' ')
+            return (
+              <li key={title + experiments.first().projectId.toString()}>
+                <div className='graph-item'>
+                  <p className='graph-title'>{graphTitle}</p>
+                  <Line
+                    values={values}
+                    titles={labels[title]}
+                    xLabel='epoch'
+                    yLabel='value'
+                  />
+                </div>
+              </li>
+            )
+          })}
+        </ul>}
     </div>
   )
 }
@@ -267,10 +278,10 @@ export function ProjectDashboard (props) {
 
   const projects = props.projects
   const datasets = props.datasets
-  const experiments = props.experiments.get(Number(id)) ?? []
-  const project = projects.find((p) => p.id === Number(id)) ?? {}
+  const experiments = props.experiments.get(Number(id)) ?? List([])
+  const project = projects.find((p) => p.id === Number(id)) ?? Map({})
   const datasetId = project.datasetId
-  const dataset = datasets.find((d) => d.id === Number(datasetId)) ?? {}
+  const dataset = datasets.find((d) => d.id === Number(datasetId)) ?? Map({})
 
   // fetch experiments
   useEffect(() => {
