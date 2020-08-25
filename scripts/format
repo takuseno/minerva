@@ -11,14 +11,5 @@ fi
 # format Python
 yapf -r -vv $YAPF_ARG minerva tests examples
 
-# PyLint check
-pylint minerva --exit-zero
-
 # format JavaScript
 npx standard $STANDARD_ARG front 'front/**/*.js' 'front/*.js' '*.js'
-
-# check SCSS format
-npx sass-lint 'front/styles/*.scss' -v -q
-
-# ESLint check
-npm run lint

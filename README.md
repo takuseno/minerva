@@ -61,6 +61,14 @@ You can format the entire scripts as follows:
 $ ./scripts/format
 ```
 
+### lint
+This repository is fully analyzed with [Pylint](https://github.com/PyCQA/pylint),
+[ESLint](https://github.com/eslint/eslint) and [sass-lint](https://github.com/sasstools/sass-lint).
+You can run analysis as follows:
+```
+$ ./scripts/lint
+```
+
 ### test
 The unit tests are provided as much as possible.
 This repository is using `pytest-cov` instead of `pytest`.
