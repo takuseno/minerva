@@ -23,17 +23,6 @@ def _get_scorers(discrete_action):
     return scorers
 
 
-def _evaluate(algo, episodes, discrete_action):
-    # evaluate
-    scores = {}
-    for k, scorer in _get_scorers(discrete_action).items():
-        score = scorer(algo, episodes)
-        if scorer in NEGATED_SCORER:
-            score *= -1
-        scores[k] = score
-    return scores
-
-
 def train(algo_name,
           params,
           dataset_path,
