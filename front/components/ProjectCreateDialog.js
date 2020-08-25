@@ -1,15 +1,15 @@
-import React, { useState, useContext } from 'react'
-import Modal from 'react-modal'
-import { GlobalContext } from '../context'
-import { Line } from 'rc-progress'
+import '../styles/dialog.scss'
 import {
+  Button,
   FormGroup,
   FormRow,
-  Button,
-  TextFormUnderline,
-  SelectForm
+  SelectForm,
+  TextFormUnderline
 } from './forms.js'
-import '../styles/dialog.scss'
+import React, { useContext, useState } from 'react'
+import { GlobalContext } from '../context'
+import { Line } from 'rc-progress'
+import Modal from 'react-modal'
 
 const modalStyles = {
   content: {
@@ -27,12 +27,12 @@ const modalStyles = {
 
 Modal.setAppElement('#root')
 
-export function ProjectCreateDialog (props) {
+export const ProjectCreateDialog = (props) => {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [projectName, setProjectName] = useState('')
   const [datasetId, setDatasetId] = useState(-1)
-  const { createProject } = useContext(GlobalContext)
+  const { createProject, showErrorToast } = useContext(GlobalContext)
 
   const handleClose = () => {
     setUploadProgress(0)
@@ -42,7 +42,7 @@ export function ProjectCreateDialog (props) {
   }
 
   const handleSubmit = () => {
-    // quick validation
+    // Quick validation
     if (projectName === '' || datasetId === -1) {
       return
     }
@@ -57,12 +57,14 @@ export function ProjectCreateDialog (props) {
       .then((project) => {
         setIsUploading(false)
         handleClose()
+        return project
       })
+      .catch(() => showErrorToast('Failed to create project.'))
   }
 
-  const datasetOptions = props.datasets.map((dataset) => {
-    return { value: dataset.id, text: dataset.name }
-  })
+  const datasetOptions = props.datasets.map((dataset) => (
+    { value: dataset.id, text: dataset.name }
+  ))
 
   return (
     <Modal
@@ -77,7 +79,7 @@ export function ProjectCreateDialog (props) {
           <SelectForm
             placeholder='CHOOSE DATASET'
             options={datasetOptions}
-            onChange={(datasetId) => setDatasetId(datasetId)}
+            onChange={(value) => setDatasetId(value)}
           />
         </FormRow>
         <FormRow>

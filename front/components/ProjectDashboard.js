@@ -1,20 +1,23 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Link, useParams, useHistory } from 'react-router-dom'
-import { Progress } from 'react-sweet-progress'
-import { List, Map } from 'immutable'
-import { GlobalContext } from '../context'
-import { Button, TextForm, SelectForm } from './forms'
-import { Line } from './graphs'
-import { ConfirmationDialog } from './ConfirmationDialog'
-import { ExperimentCreateDialog } from './ExperimentCreateDialog'
-import { DownloadPolicyDialog } from './DownloadPolicyDialog'
-import { Q_FUNC_TYPE_OPTIONS, SCALER_OPTIONS } from '../constants'
 import 'react-sweet-progress/lib/style.css'
 import '../styles/project-dashboard.scss'
+import { Button, SelectForm, TextForm } from './forms'
+import {
+  FETCH_EXPERIMENTS_INTERVAL,
+  Q_FUNC_TYPE_OPTIONS,
+  SCALER_OPTIONS
+} from '../constants'
+import { Link, useHistory, useParams } from 'react-router-dom'
+import { List, Map } from 'immutable'
+import React, { useContext, useEffect, useState } from 'react'
+import { ConfirmationDialog } from './ConfirmationDialog'
+import { DownloadPolicyDialog } from './DownloadPolicyDialog'
+import { ExperimentCreateDialog } from './ExperimentCreateDialog'
+import { GlobalContext } from '../context'
+import { Line } from './graphs'
+import { Progress } from 'react-sweet-progress'
 
-function ProjectHeader (props) {
-  const dataset = props.dataset
-  const project = props.project
+const ProjectHeader = (props) => {
+  const { dataset, project } = props
   const [isEditing, setIsEditing] = useState(false)
   const [projectName, setProjectName] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
@@ -46,39 +49,37 @@ function ProjectHeader (props) {
         </div>
       </div>
     )
-  } else {
-    return (
-      <div className='project-header'>
-        <span className='project-name'>{project.name}</span>
-        <div className='edit-buttons'>
-          <Button text='RUN' onClick={() => setIsCreating(true)} />
-          <Button text='EDIT' onClick={handleEdit} />
-          <Button text='DELETE' onClick={() => setIsDeleting(true)} />
-          <ConfirmationDialog
-            title={`Deleting ${project.name}.`}
-            message='Are you sure to delete this project?'
-            isOpen={isDeleting}
-            onClose={() => setIsDeleting(false)}
-            onConfirm={handleDelete}
-            confirmText='DELETE'
-            cancelText='CANCEL'
-          />
-          {project &&
-            <ExperimentCreateDialog
-              isOpen={isCreating}
-              onClose={() => setIsCreating(false)}
-              project={project}
-              dataset={dataset}
-            />}
-        </div>
-      </div>
-    )
   }
+  return (
+    <div className='project-header'>
+      <span className='project-name'>{project.name}</span>
+      <div className='edit-buttons'>
+        <Button text='RUN' onClick={() => setIsCreating(true)} />
+        <Button text='EDIT' onClick={handleEdit} />
+        <Button text='DELETE' onClick={() => setIsDeleting(true)} />
+        <ConfirmationDialog
+          title={`Deleting ${project.name}.`}
+          message='Are you sure to delete this project?'
+          isOpen={isDeleting}
+          onClose={() => setIsDeleting(false)}
+          onConfirm={handleDelete}
+          confirmText='DELETE'
+          cancelText='CANCEL'
+        />
+        {project &&
+          <ExperimentCreateDialog
+            isOpen={isCreating}
+            onClose={() => setIsCreating(false)}
+            project={project}
+            dataset={dataset}
+          />}
+      </div>
+    </div>
+  )
 }
 
-function ProjectDetail (props) {
-  const project = props.project
-  const dataset = props.dataset
+const ProjectDetail = (props) => {
+  const { dataset, project } = props
   const algorithm = project.algorithm.toUpperCase().replace('_', ' ')
   return (
     <div className='project-detail'>
@@ -100,15 +101,14 @@ function ProjectDetail (props) {
   )
 }
 
-function ExperimentDetail (props) {
+const ExperimentDetail = (props) => {
   const { cancelExperiment, deleteExperiment } = useContext(GlobalContext)
   const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const experiment = props.experiment
-  const isActive = experiment.isActive
+  const { experiment } = props
+  const { metrics, isActive } = experiment
   const totalEpoch = experiment.config.n_epochs
-  const metrics = experiment.metrics
   const currentEpoch = metrics.td_error ? metrics.td_error.length : 0
 
   let progress = currentEpoch / totalEpoch
@@ -143,7 +143,7 @@ function ExperimentDetail (props) {
               color: progressColor
             },
             active: {
-              symbol: Math.round(100.0 * progress).toString() + '%',
+              symbol: `${Math.round(100.0 * progress).toString()}%`,
               color: progressColor
             }
           }}
@@ -206,30 +206,26 @@ function ExperimentDetail (props) {
   )
 }
 
-function ExperimentList (props) {
-  return (
-    <div className='experiment-list'>
-      <ProjectDetail project={props.project} dataset={props.dataset} />
-      {props.experiments.size === 0 &&
-        <div className='empty'>
-          <span>NO EXPERIMENTS</span>
-        </div>}
-      {props.experiments.size > 0 &&
-        <ul className='experiments'>
-          {props.experiments.map((experiment) => {
-            return (
-              <li key={experiment.id}>
-                <ExperimentDetail experiment={experiment} />
-              </li>
-            )
-          })}
-        </ul>}
-    </div>
-  )
-}
+const ExperimentList = (props) => (
+  <div className='experiment-list'>
+    <ProjectDetail project={props.project} dataset={props.dataset} />
+    {props.experiments.size === 0 &&
+      <div className='empty'>
+        <span>NO EXPERIMENTS</span>
+      </div>}
+    {props.experiments.size > 0 &&
+      <ul className='experiments'>
+        {props.experiments.map((experiment) => (
+          <li key={experiment.id}>
+            <ExperimentDetail experiment={experiment} />
+          </li>
+        ))}
+      </ul>}
+  </div>
+)
 
-function ParamsList (props) {
-  const experiments = props.experiments
+const ParamsList = (props) => {
+  const { experiments } = props
   const paramKeys = []
 
   experiments.forEach((experiment) => {
@@ -240,7 +236,7 @@ function ParamsList (props) {
     })
   })
 
-  // sort parameters in alphabetical order
+  // Sort parameters in alphabetical order
   paramKeys.sort()
 
   return (
@@ -248,48 +244,42 @@ function ParamsList (props) {
       <table className='parameter-table'>
         <tr className='table-header'>
           <th className='name'>NAME</th>
-          {paramKeys.map((key) => {
-            return (
-              <th key={key}>{key.toUpperCase().replace(/_/g, ' ')}</th>
-            )
-          })}
+          {paramKeys.map((key) => (
+            <th key={key}>{key.toUpperCase().replace(/_/gu, ' ')}</th>
+          ))}
         </tr>
-        {experiments.map((experiment) => {
-          return (
-            <tr key={experiment.id} className='table-body'>
-              <th className='name'>{experiment.name}</th>
-              {paramKeys.map((key) => {
-                let value = experiment.config[key]
-                if ((typeof value) === 'boolean') {
-                  value = value ? 'true' : 'false'
-                } else if ((typeof value) === 'object') {
-                  if (value === null) {
+        {experiments.map((experiment) => (
+          <tr key={experiment.id} className='table-body'>
+            <th className='name'>{experiment.name}</th>
+            {paramKeys.map((key) => {
+              let value = experiment.config[key]
+              if ((typeof value) === 'boolean') {
+                value = value ? 'true' : 'false'
+              } else if ((typeof value) === 'object') {
+                if (value === null) {
+                  value = 'none'
+                } else if (Array.isArray(value)) {
+                  if (value.length === 0) {
                     value = 'none'
-                  } else if (Array.isArray(value)) {
-                    if (value.length === 0) {
-                      value = 'none'
-                    } else {
-                      value = value.join(', ')
-                    }
+                  } else {
+                    value = value.join(', ')
                   }
                 }
-                return (
-                  <td key={key}>{value}</td>
-                )
-              })}
-            </tr>
-          )
-        })}
+              }
+              return (
+                <td key={key}>{value}</td>
+              )
+            })}
+          </tr>
+        ))}
       </table>
     </div>
   )
 }
 
-function MetricsGraph (props) {
+const MetricsGraph = (props) => {
   const [activeGraphIndex, setActiveGraphIndex] = useState(0)
-  const project = props.project
-  const metrics = props.metrics
-  const labels = props.labels
+  const { metrics, labels, project } = props
   const graphOptions = []
 
   useEffect(() => {
@@ -299,7 +289,7 @@ function MetricsGraph (props) {
   Object.keys(metrics).forEach((key) => {
     graphOptions.push({
       key: key,
-      text: key.toUpperCase().replace(/_/g, ' '),
+      text: key.toUpperCase().replace(/_/gu, ' '),
       value: graphOptions.length
     })
   })
@@ -325,9 +315,8 @@ function MetricsGraph (props) {
   )
 }
 
-function ProjectMetrics (props) {
-  const experiments = props.experiments
-  const project = props.project
+const ProjectMetrics = (props) => {
+  const { experiments, project } = props
 
   const metrics = {}
   const labels = {}
@@ -355,29 +344,28 @@ function ProjectMetrics (props) {
   )
 }
 
-export function ProjectDashboard (props) {
+export const ProjectDashboard = (props) => {
   const { id } = useParams()
   const { fetchExperiments } = useContext(GlobalContext)
   const [time, setTime] = useState(Date.now())
 
-  const projects = props.projects
-  const datasets = props.datasets
+  const { datasets, projects } = props
   const experiments = props.experiments.get(Number(id)) ?? List([])
   const project = projects.find((p) => p.id === Number(id)) ?? Map({})
-  const datasetId = project.datasetId
+  const { datasetId } = project
   const dataset = datasets.find((d) => d.id === Number(datasetId)) ?? Map({})
 
-  // fetch experiments
+  // Fetch experiments
   useEffect(() => {
     fetchExperiments(Number(id))
   }, [id])
 
-  // fetch experiments periodically
+  // Fetch experiments periodically
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setTime(Date.now())
       fetchExperiments(Number(id))
-    }, 5000) // 5 seconds
+    }, FETCH_EXPERIMENTS_INTERVAL)
     return () => {
       clearTimeout(timeoutId)
     }

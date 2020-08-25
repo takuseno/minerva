@@ -1,7 +1,7 @@
 /* global FormData */
 
-import axios from 'axios'
 import { Record } from 'immutable'
+import axios from 'axios'
 
 const DatasetRecord = Record({
   id: 0,
@@ -23,6 +23,7 @@ export class Dataset extends DatasetRecord {
         .then((res) => {
           const dataset = Dataset.fromResponse(res.data)
           resolve(dataset)
+          return dataset
         })
         .catch((err) => reject(err))
     })
@@ -34,6 +35,7 @@ export class Dataset extends DatasetRecord {
         .then((res) => {
           const datasets = res.data.datasets.map(Dataset.fromResponse)
           resolve(datasets)
+          return datasets
         })
         .catch((err) => reject(err))
     })
@@ -53,6 +55,7 @@ export class Dataset extends DatasetRecord {
         .then((res) => {
           const dataset = Dataset.fromResponse(res.data)
           resolve(dataset)
+          return dataset
         })
         .catch((err) => reject(err))
     })

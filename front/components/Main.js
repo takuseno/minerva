@@ -1,9 +1,11 @@
-import React, { useContext } from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom'
-import { DatasetContent, ProjectContent } from './Content'
-import { Header } from './Header'
-import { GlobalContext } from '../context'
 import '../styles/main.scss'
+import 'react-toastify/dist/ReactToastify.css'
+import { DatasetContent, ProjectContent } from './Content'
+import React, { useContext } from 'react'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import { GlobalContext } from '../context'
+import { Header } from './Header'
+import { ToastContainer } from 'react-toastify'
 
 export default function Main () {
   const { datasets, projects, experiments } = useContext(GlobalContext)
@@ -25,6 +27,7 @@ export default function Main () {
           <Redirect to='/projects' />
         </Route>
       </Switch>
+      <ToastContainer />
     </div>
   )
 }

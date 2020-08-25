@@ -1,23 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react'
 import '../styles/forms.scss'
+import React, { useEffect, useRef, useState } from 'react'
 
-export function FormGroup ({ children }) {
-  return (
-    <div className='minerva-form-group'>
-      {children}
-    </div>
-  )
-}
+export const FormGroup = ({ children }) => (
+  <div className='minerva-form-group'>
+    {children}
+  </div>
+)
 
-export function FormRow ({ children }) {
-  return (
-    <div className='minerva-form-row'>
-      {children}
-    </div>
-  )
-}
+export const FormRow = ({ children }) => (
+  <div className='minerva-form-row'>
+    {children}
+  </div>
+)
 
-export function TextForm (props) {
+export const TextForm = (props) => {
   const inputEl = useRef(null)
   useEffect(() => {
     if (props.focus) {
@@ -36,44 +32,38 @@ export function TextForm (props) {
   )
 }
 
-export function TextFormUnderline (props) {
-  return (
-    <div className='minerva-form-text-underline'>
-      <TextForm
-        value={props.value}
-        placeholder={props.placeholder}
-        onChange={props.onChange}
-        focus={props.focus}
-      />
-      <div className='minerva-form-underline' />
-    </div>
-  )
-}
+export const TextFormUnderline = (props) => (
+  <div className='minerva-form-text-underline'>
+    <TextForm
+      value={props.value}
+      placeholder={props.placeholder}
+      onChange={props.onChange}
+      focus={props.focus}
+    />
+    <div className='minerva-form-underline' />
+  </div>
+)
 
-export function SelectForm (props) {
-  return (
-    <select
-      className='minerva-form-select'
-      onChange={(e) => props.onChange(e.target.value)}
-    >
-      {props.placeholder &&
-        <option value={-1} hidden>{props.placeholder}</option>}
-      {props.options.map((option) => {
-        return (
-          <option
-            key={option.value}
-            value={option.value}
-            selected={option.value === props.value}
-          >
-            {option.text}
-          </option>
-        )
-      })}
-    </select>
-  )
-}
+export const SelectForm = (props) => (
+  <select
+    className='minerva-form-select'
+    onChange={(e) => props.onChange(e.target.value)}
+  >
+    {props.placeholder &&
+      <option value={-1} hidden>{props.placeholder}</option>}
+    {props.options.map((option) => (
+      <option
+        key={option.value}
+        value={option.value}
+        selected={option.value === props.value}
+      >
+        {option.text}
+      </option>
+    ))}
+  </select>
+)
 
-export function MultiSelectForm (props) {
+export const MultiSelectForm = (props) => {
   const handleChange = (check, value) => {
     if (check) {
       props.onChange(props.value.concat([value]))
@@ -84,12 +74,12 @@ export function MultiSelectForm (props) {
   return (
     <div className='minerva-form-multi-select'>
       {props.options.map((option) => {
-        const value = props.value.indexOf(option.value) !== -1
+        const checked = props.value.includes(option.value)
         return (
           <div key={option.value} className='option'>
             <Checkbox
               text={option.text}
-              value={value}
+              value={checked}
               onChange={(check) => handleChange(check, option.value)}
             />
           </div>
@@ -99,31 +89,25 @@ export function MultiSelectForm (props) {
   )
 }
 
-export function Button (props) {
-  return (
-    <button
-      className='minerva-form-button'
-      onClick={props.onClick}
-    >
-      <span>{props.text}</span>
-    </button>
-  )
-}
+export const Button = (props) => (
+  <button className='minerva-form-button' onClick={props.onClick}>
+    <span>{props.text}</span>
+  </button>
+)
 
 Button.defaultProps = {
   onClick: () => {},
   text: 'BUTTON'
 }
 
-function wrapText (text, limit) {
+const wrapText = (text, limit) => {
   if (text.length > limit) {
-    return (text.substr(0, limit) + '...')
-  } else {
-    return text
+    return `${text.substr(0, limit)}...`
   }
+  return text
 }
 
-export function FileInput (props) {
+export const FileInput = (props) => {
   const [fileName, setFileName] = useState('')
   const handleChange = (e) => {
     props.onChange(e.target.files[0])
@@ -144,8 +128,10 @@ FileInput.defaultProps = {
   onChange: () => {}
 }
 
-export function Checkbox (props) {
-  const handleChange = (e) => { props.onChange(e.target.checked) }
+export const Checkbox = (props) => {
+  const handleChange = (e) => {
+    props.onChange(e.target.checked)
+  }
   return (
     <label className='minerva-form-checkbox'>
       <input type='checkbox' name={props.name} onChange={handleChange} />

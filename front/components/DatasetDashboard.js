@@ -1,53 +1,53 @@
-import React, { useState, useContext } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import '../styles/dataset-dashboard.scss'
+import { Button, TextForm } from './forms'
+import React, { useContext, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import { ConfirmationDialog } from './ConfirmationDialog.js'
 import { GlobalContext } from '../context'
 import { Histogram } from './graphs'
-import { Button, TextForm } from './forms'
-import { ConfirmationDialog } from './ConfirmationDialog.js'
-import '../styles/dataset-dashboard.scss'
 
-function StatisticsItem (props) {
-  return (
-    <div className='statistics-item'>
-      <p className='statistics-title'>{props.title}</p>
-      <table className='statistics-table'>
-        <tr>
-          <th>mean</th>
-          <td>{props.mean.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <th>standard deviation</th>
-          <td>{props.std.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <th>maximum value</th>
-          <td>{props.max.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <th>minimum value</th>
-          <td>{props.min.toFixed(2)}</td>
-        </tr>
-      </table>
-      <div className='graph'>
-        <Histogram
-          title={props.graphTitle}
-          values={props.values}
-          labels={props.labels}
-          xLabel={props.xLabel}
-          yLabel={props.yLabel}
-        />
-      </div>
+const StatisticsItem = (props) => (
+  <div className='statistics-item'>
+    <p className='statistics-title'>{props.title}</p>
+    <table className='statistics-table'>
+      <tr>
+        <th>mean</th>
+        <td>{props.mean.toFixed(2)}</td>
+      </tr>
+      <tr>
+        <th>standard deviation</th>
+        <td>{props.std.toFixed(2)}</td>
+      </tr>
+      <tr>
+        <th>maximum value</th>
+        <td>{props.max.toFixed(2)}</td>
+      </tr>
+      <tr>
+        <th>minimum value</th>
+        <td>{props.min.toFixed(2)}</td>
+      </tr>
+    </table>
+    <div className='graph'>
+      <Histogram
+        title={props.graphTitle}
+        values={props.values}
+        labels={props.labels}
+        xLabel={props.xLabel}
+        yLabel={props.yLabel}
+        discrete={props.discrete}
+      />
     </div>
-  )
-}
+  </div>
+)
 
-function DatasetHeader (props) {
-  const dataset = props.dataset
+const DatasetHeader = (props) => {
   const [isEditing, setIsEditing] = useState(false)
   const [datasetName, setDatasetName] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
   const { updateDataset, deleteDataset } = useContext(GlobalContext)
   const history = useHistory()
+
+  const { dataset } = props
 
   const handleEdit = () => {
     setDatasetName(dataset.name)
@@ -73,42 +73,40 @@ function DatasetHeader (props) {
         </div>
       </div>
     )
-  } else {
-    return (
-      <div className='dataset-header'>
-        <span className='dataset-name'>{dataset.name}</span>
-        <div className='edit-buttons'>
-          <Button text='EDIT' onClick={handleEdit} />
-          <Button text='DELETE' onClick={() => setIsDeleting(true)} />
-          <ConfirmationDialog
-            title={`Deleting ${dataset.name}.`}
-            message='Are you sure to delete this dataset?'
-            isOpen={isDeleting}
-            onClose={() => setIsDeleting(false)}
-            onConfirm={handleDelete}
-            confirmText='DELETE'
-            cancelText='CANCEL'
-          />
-        </div>
+  }
+  return (
+    <div className='dataset-header'>
+      <span className='dataset-name'>{dataset.name}</span>
+      <div className='edit-buttons'>
+        <Button text='EDIT' onClick={handleEdit} />
+        <Button text='DELETE' onClick={() => setIsDeleting(true)} />
+        <ConfirmationDialog
+          title={`Deleting ${dataset.name}.`}
+          message='Are you sure to delete this dataset?'
+          isOpen={isDeleting}
+          onClose={() => setIsDeleting(false)}
+          onConfirm={handleDelete}
+          confirmText='DELETE'
+          cancelText='CANCEL'
+        />
       </div>
-    )
-  }
+    </div>
+  )
 }
 
-function convertByteToString (size) {
-  if (size < Math.pow(2, 10)) {
-    return size.toString() + 'B'
-  } else if (size < Math.pow(2, 20)) {
-    return (size / Math.pow(2, 10)).toFixed(2).toString() + 'KiB'
-  } else if (size < Math.pow(2, 30)) {
-    return (size / Math.pow(2, 20)).toFixed(2).toString() + 'MiB'
-  } else {
-    return (size / Math.pow(2, 30)).toFixed(2).toString() + 'GiB'
+const convertByteToString = (size) => {
+  if (size < 2 ** 10) {
+    return `${size.toString()}B`
+  } else if (size < 2 ** 20) {
+    return `${(size / (2 ** 10)).toFixed(2).toString()}KiB`
+  } else if (size < 2 ** 30) {
+    return `${(size / (2 ** 20)).toFixed(2).toString()}MiB`
   }
+  return `${(size / (2 ** 30)).toFixed(2).toString()}GiB`
 }
 
-function DatasetStatistics (props) {
-  const dataset = props.dataset
+const DatasetStatistics = (props) => {
+  const { dataset } = props
   const stats = dataset.statistics
   const actionSpace = dataset.isDiscrete ? 'discrete' : 'continuous'
   const observationSpace = dataset.isImage ? 'image' : 'vector'
@@ -192,42 +190,39 @@ function DatasetStatistics (props) {
           />
         </div>}
       {!dataset.isDiscrete &&
-        actionHist.map((hist, i) => {
-          return (
-            <StatisticsItem
-              key={i}
-              title={`Action Statistics (dim=${i})`}
-              mean={stats.action.mean[i]}
-              std={stats.action.std[i]}
-              max={stats.action.max[i]}
-              min={stats.action.min[i]}
-              graphTitle='histogram'
-              values={hist[0]}
-              labels={hist[1]}
-              xLabel={`action (dim=${i})`}
-              yLabel='number of steps'
-            />
-          )
-        })}
+        actionHist.map((hist, i) => (
+          <StatisticsItem
+            key={i}
+            title={`Action Statistics (dim=${i})`}
+            mean={stats.action.mean[i]}
+            std={stats.action.std[i]}
+            max={stats.action.max[i]}
+            min={stats.action.min[i]}
+            graphTitle='histogram'
+            values={hist[0]}
+            labels={hist[1]}
+            xLabel={`action (dim=${i})`}
+            yLabel='number of steps'
+          />
+        ))}
     </div>
   )
 }
 
-export function DatasetDashboard (props) {
+export const DatasetDashboard = (props) => {
   const { id } = useParams()
-  const datasets = props.datasets
+  const { datasets } = props
   const dataset = datasets.find((d) => d.id === Number(id))
   if (dataset === undefined) {
     // TODO: show error page
     return (<div className='dashboard' />)
-  } else {
-    return (
-      <div className='dashboard'>
-        <DatasetHeader dataset={dataset} />
-        <div className='dataset-body-wrapper'>
-          <DatasetStatistics dataset={dataset} />
-        </div>
-      </div>
-    )
   }
+  return (
+    <div className='dashboard'>
+      <DatasetHeader dataset={dataset} />
+      <div className='dataset-body-wrapper'>
+        <DatasetStatistics dataset={dataset} />
+      </div>
+    </div>
+  )
 }

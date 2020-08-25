@@ -1,6 +1,6 @@
-import axios from 'axios'
-import { Record } from 'immutable'
 import { Dataset } from './dataset'
+import { Record } from 'immutable'
+import axios from 'axios'
 
 const ProjectRecord = Record({
   id: 0,
@@ -19,6 +19,7 @@ export class Project extends ProjectRecord {
         .then((res) => {
           const project = Project.fromResponse(res.data)
           resolve(project)
+          return project
         })
         .catch((err) => reject(err))
     })
@@ -30,6 +31,7 @@ export class Project extends ProjectRecord {
         .then((res) => {
           const projects = res.data.projects.map(Project.fromResponse)
           resolve(projects)
+          return projects
         })
         .catch((err) => reject(err))
     })
@@ -43,6 +45,7 @@ export class Project extends ProjectRecord {
         .then((res) => {
           const project = Project.fromResponse(res.data)
           resolve(project)
+          return project
         })
         .catch((err) => reject(err))
     })

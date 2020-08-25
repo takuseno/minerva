@@ -1,17 +1,15 @@
-import React, { useState, useContext } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Progress } from 'react-sweet-progress'
-import { Range } from 'immutable'
-import { CpuIcon } from '@primer/octicons-react'
-import { GlobalContext } from '../context'
 import 'react-sweet-progress/lib/style.css'
 import '../styles/header.scss'
+import { Link, useLocation } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { CpuIcon } from '@primer/octicons-react'
+import { GlobalContext } from '../context'
+import { Progress } from 'react-sweet-progress'
+import { Range } from 'immutable'
 
-function JobItem (props) {
-  const experiment = props.experiment
-  const project = props.project
+const JobItem = (props) => {
+  const { experiment, metrics, project } = props
 
-  const metrics = experiment.metrics
   const totalEpoch = experiment.config.n_epochs
   const currentEpoch = metrics.td_error ? metrics.td_error.length : 0
   const progress = currentEpoch / totalEpoch
@@ -27,7 +25,7 @@ function JobItem (props) {
           status='active'
           theme={{
             active: {
-              symbol: Math.round(100.0 * progress).toString() + '%',
+              symbol: `${Math.round(100.0 * progress).toString()}%`,
               color: '#3498db'
             }
           }}
@@ -41,8 +39,8 @@ function JobItem (props) {
   )
 }
 
-function JobList (props) {
-  const projects = props.projects
+const JobList = (props) => {
+  const { projects } = props.projects
   const cpuJobs = props.status.cpu.jobs
   const totalGPU = props.status.gpu.total
   const gpuJobs = props.status.gpu.jobs
@@ -55,7 +53,7 @@ function JobList (props) {
         {cpuJobs.length > 0 &&
           <ul>
             {cpuJobs.map((experiment) => {
-              const projectId = experiment.projectId
+              const { projectId } = experiment
               const project = projects.find((p) => p.id === projectId)
               return (
                 <li key={experiment.id}>
@@ -65,32 +63,30 @@ function JobList (props) {
             })}
           </ul>}
       </div>
-      {Range(0, totalGPU).toJS().map((i) => {
-        return (
-          <div key={i} className='jobs'>
-            <p className='device-name'>GPU:{i}</p>
-            {(gpuJobs[i] === undefined || gpuJobs[i].length === 0) &&
-              <p className='empty-message'>No Jobs</p>}
-            {gpuJobs[i] !== undefined && gpuJobs[i].length > 0 &&
-              <ul>
-                {gpuJobs[i].map((experiment) => {
-                  const projectId = experiment.projectId
-                  const project = projects.find((p) => p.id === projectId)
-                  return (
-                    <li key={experiment.id}>
-                      <JobItem experiment={experiment} project={project} />
-                    </li>
-                  )
-                })}
-              </ul>}
-          </div>
-        )
-      })}
+      {Range(0, totalGPU).toJS().map((i) => (
+        <div key={i} className='jobs'>
+          <p className='device-name'>GPU:{i}</p>
+          {(gpuJobs[i] === undefined || gpuJobs[i].length === 0) &&
+            <p className='empty-message'>No Jobs</p>}
+          {gpuJobs[i] !== undefined && gpuJobs[i].length > 0 &&
+            <ul>
+              {gpuJobs[i].map((experiment) => {
+                const { projectId } = experiment
+                const project = projects.find((p) => p.id === projectId)
+                return (
+                  <li key={experiment.id}>
+                    <JobItem experiment={experiment} project={project} />
+                  </li>
+                )
+              })}
+            </ul>}
+        </div>
+      ))}
     </div>
   )
 }
 
-export function Header () {
+export const Header = () => {
   const { status, projects } = useContext(GlobalContext)
   const [isJobListOpen, setIsJobListOpen] = useState(false)
   const location = useLocation()
@@ -103,7 +99,7 @@ export function Header () {
         {['projects', 'datasets'].map((link) => {
           const isActive = location.pathname.split('/')[1] === link
           const className = isActive ? 'link active' : 'link'
-          const to = '/' + link
+          const to = `/${link}`
           return (
             <Link key={link} to={to} className={className}>
               <span>{link.toUpperCase()}</span>

@@ -16,3 +16,6 @@ npx standard $STANDARD_ARG front 'front/**/*.js' 'front/*.js' '*.js'
 
 # check SCSS format
 npx sass-lint 'front/styles/*.scss' -v -q
+
+# ESLint check
+npm run lint

@@ -1,13 +1,13 @@
+import '../styles/dialog.scss'
+import '../styles/download-policy-dialog.scss'
+import {
+  Button,
+  FormGroup,
+  SelectForm
+} from './forms.js'
 import React, { useState } from 'react'
 import Modal from 'react-modal'
 import { Range } from 'immutable'
-import {
-  FormGroup,
-  Button,
-  SelectForm
-} from './forms.js'
-import '../styles/dialog.scss'
-import '../styles/download-policy-dialog.scss'
 
 const modalStyles = {
   content: {
@@ -25,10 +25,10 @@ const modalStyles = {
 
 Modal.setAppElement('#root')
 
-export function DownloadPolicyDialog (props) {
+export const DownloadPolicyDialog = (props) => {
   const [epoch, setEpoch] = useState(-1)
 
-  const experiment = props.experiment
+  const { experiment } = props
 
   const handleClose = () => {
     setEpoch(-1)
@@ -36,7 +36,7 @@ export function DownloadPolicyDialog (props) {
   }
 
   const handleSubmit = () => {
-    // quick validation
+    // Quick validation
     if (epoch === -1) {
       return
     }
@@ -44,9 +44,9 @@ export function DownloadPolicyDialog (props) {
     props.onClose()
   }
 
-  const epochOptions = Range(0, props.totalEpoch).map((i) => {
-    return { value: i, text: i }
-  })
+  const epochOptions = Range(0, props.totalEpoch).map((i) => (
+    { value: i, text: i }
+  ))
 
   return (
     <Modal

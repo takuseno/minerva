@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react'
-import Modal from 'react-modal'
+import '../styles/dialog.scss'
+import { Button, Checkbox, FileInput, FormGroup, FormRow } from './forms.js'
+import React, { useContext, useState } from 'react'
 import { GlobalContext } from '../context'
 import { Line } from 'rc-progress'
-import { FormGroup, FormRow, Button, FileInput, Checkbox } from './forms.js'
-import '../styles/dialog.scss'
+import Modal from 'react-modal'
 
 const modalStyles = {
   content: {
@@ -21,13 +21,13 @@ const modalStyles = {
 
 Modal.setAppElement('#root')
 
-export function DatasetUploadDialog (props) {
+export const DatasetUploadDialog = (props) => {
   const [isUploading, setIsUploading] = useState(false)
   const [isImage, setIsImage] = useState(false)
   const [isDiscrete, setIsDiscrete] = useState(false)
   const [file, setFile] = useState(null)
   const [uploadProgress, setUploadProgress] = useState(0)
-  const { uploadDataset } = useContext(GlobalContext)
+  const { uploadDataset, showErrorToast } = useContext(GlobalContext)
 
   const handleClose = () => {
     setIsImage(false)
@@ -38,7 +38,7 @@ export function DatasetUploadDialog (props) {
   }
 
   const handleSubmit = () => {
-    // quick validation
+    // Quick validation
     if (file === null) {
       return
     }
@@ -52,7 +52,9 @@ export function DatasetUploadDialog (props) {
       .then((dataset) => {
         setIsUploading(false)
         handleClose()
+        return dataset
       })
+      .catch(() => showErrorToast('Failed to upload dataset'))
   }
 
   return (
@@ -68,7 +70,7 @@ export function DatasetUploadDialog (props) {
           <FileInput
             name='dataset'
             text='UPLOAD'
-            onChange={(file) => setFile(file)}
+            onChange={(newFile) => setFile(newFile)}
           />
         </FormRow>
         <FormRow>

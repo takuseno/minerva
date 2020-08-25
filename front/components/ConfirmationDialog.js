@@ -1,7 +1,7 @@
-import React from 'react'
-import Modal from 'react-modal'
-import { FormGroup, Button } from './forms.js'
 import '../styles/dialog.scss'
+import { Button, FormGroup } from './forms.js'
+import Modal from 'react-modal'
+import React from 'react'
 
 const modalStyles = {
   content: {
@@ -17,22 +17,20 @@ const modalStyles = {
   }
 }
 
-export function ConfirmationDialog (props) {
-  return (
-    <Modal
-      isOpen={props.isOpen}
-      contentLabel={props.title}
-      style={modalStyles}
-      onRequestClose={props.onClose}
-    >
-      <div>
-        <p className='dialog-title'>{props.title}</p>
-        <p className='dialog-message'>{props.message}</p>
-        <FormGroup>
-          <Button text={props.confirmText} onClick={props.onConfirm} />
-          <Button text={props.cancelText} onClick={props.onClose} />
-        </FormGroup>
-      </div>
-    </Modal>
-  )
-}
+export const ConfirmationDialog = (props) => (
+  <Modal
+    isOpen={props.isOpen}
+    contentLabel={props.title}
+    style={modalStyles}
+    onRequestClose={props.onClose}
+  >
+    <div>
+      <p className='dialog-title'>{props.title}</p>
+      <p className='dialog-message'>{props.message}</p>
+      <FormGroup>
+        <Button text={props.confirmText} onClick={props.onConfirm} />
+        <Button text={props.cancelText} onClick={props.onClose} />
+      </FormGroup>
+    </div>
+  </Modal>
+)

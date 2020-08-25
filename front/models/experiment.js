@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { Record } from 'immutable'
+import axios from 'axios'
 
 const ExperimentRecord = Record({
   id: 0,
@@ -19,6 +19,7 @@ export class Experiment extends ExperimentRecord {
         .then((res) => {
           const experiment = Experiment.fromResponse(res.data)
           resolve(experiment)
+          return experiment
         })
         .catch((err) => reject(err))
     })
@@ -30,23 +31,25 @@ export class Experiment extends ExperimentRecord {
         .then((res) => {
           const experiments = res.data.experiments.map(Experiment.fromResponse)
           resolve(experiments)
+          return experiments
         })
         .catch((err) => reject(err))
     })
   }
 
-  static create (projectId, name, experimentConfig, progressCallback = () => {}) {
-    const config = { onUploadProgress: progressCallback }
+  static create (projectId, name, config, progressCallback = () => {}) {
+    const axiosConfig = { onUploadProgress: progressCallback }
     const data = {
       project_id: projectId,
       name: name,
-      config: experimentConfig
+      config: config
     }
     return new Promise((resolve, reject) => {
-      axios.post(`/api/projects/${projectId}/experiments`, data, config)
+      axios.post(`/api/projects/${projectId}/experiments`, data, axiosConfig)
         .then((res) => {
           const experiment = Experiment.fromResponse(res.data)
           resolve(experiment)
+          return experiment
         })
         .catch((err) => reject(err))
     })
@@ -68,10 +71,9 @@ export class Experiment extends ExperimentRecord {
   }
 
   downloadPolicy (epoch) {
-    const projectId = this.projectId
-    const id = this.id
+    const { projectId, id } = this
     const url = `/api/projects/${projectId}/experiments/${id}/download`
-    window.location.href = url + `?epoch=${epoch}`
+    window.location.href = `${url}?epoch=${epoch}`
   }
 
   static fromResponse (data) {

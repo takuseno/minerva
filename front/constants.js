@@ -81,3 +81,9 @@ export const DISCRETE_CONFIGS = {
     }
   }
 }
+
+// Scalar values
+export const STATUS_API_CALL_INTERVAL = 5000
+export const FETCH_EXPERIMENTS_INTERVAL = 5000
+export const DISPLAY_DECIMAL_LENGTH = 2
+export const GRAPH_DIMMED_OPACITY = 0.1

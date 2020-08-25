@@ -1,27 +1,27 @@
-import React, { useState, useContext, useEffect } from 'react'
-import Modal from 'react-modal'
-import { GlobalContext } from '../context'
-import { Line } from 'rc-progress'
-import { Record } from 'immutable'
+import '../styles/create-experiment-dialog.scss'
+import '../styles/dialog.scss'
 import {
-  FormGroup,
-  FormRow,
   Button,
   Checkbox,
-  TextFormUnderline,
+  FormGroup,
+  FormRow,
+  MultiSelectForm,
   SelectForm,
-  MultiSelectForm
+  TextFormUnderline
 } from './forms.js'
 import {
+  CONTINUOUS_CONFIGS,
+  DISCRETE_CONFIGS,
+  IMAGE_AUGMENTATION_OPTIONS,
   Q_FUNC_TYPE_OPTIONS,
   SCALER_OPTIONS,
-  IMAGE_AUGMENTATION_OPTIONS,
-  VECTOR_AUGMENTATION_OPTIONS,
-  CONTINUOUS_CONFIGS,
-  DISCRETE_CONFIGS
+  VECTOR_AUGMENTATION_OPTIONS
 } from '../constants'
-import '../styles/dialog.scss'
-import '../styles/create-experiment-dialog.scss'
+import React, { useContext, useEffect, useState } from 'react'
+import { GlobalContext } from '../context'
+import { Line } from 'rc-progress'
+import Modal from 'react-modal'
+import { Record } from 'immutable'
 
 const modalStyles = {
   content: {
@@ -37,11 +37,9 @@ const modalStyles = {
   }
 }
 
-function convertSnakeToUpper (text) {
-  return text.toUpperCase().replace(/_/g, ' ')
-}
+const convertSnakeToUpper = (text) => text.toUpperCase().replace(/_/gu, ' ')
 
-function getTimestamp () {
+const getTimestamp = () => {
   const date = new Date()
   return [
     date.getFullYear(),
@@ -53,14 +51,12 @@ function getTimestamp () {
   ].join('')
 }
 
-function ConfigForm (props) {
-  const dataset = props.dataset
+const ConfigForm = (props) => {
+  const { dataset } = props
 
   if (props.label === 'q_func_type') {
     const options = Object.entries(Q_FUNC_TYPE_OPTIONS)
-      .map(([key, value]) => {
-        return { text: value, value: key }
-      })
+      .map(([key, value]) => ({ text: value, value: key }))
     return (
       <SelectForm
         options={options}
@@ -70,9 +66,7 @@ function ConfigForm (props) {
     )
   } else if (props.label === 'scaler') {
     const options = Object.entries(SCALER_OPTIONS)
-      .map(([key, value]) => {
-        return { text: value, value: key }
-      })
+      .map(([key, value]) => ({ text: value, value: key }))
     return (
       <SelectForm
         options={options}
@@ -86,9 +80,7 @@ function ConfigForm (props) {
     const augmentations = dataset.isImage ? IMAGE_AUGMENTATION_OPTIONS
       : VECTOR_AUGMENTATION_OPTIONS
     const options = Object.entries(augmentations)
-      .map(([key, value]) => {
-        return { text: value, value: key }
-      })
+      .map(([key, value]) => ({ text: value, value: key }))
     return (
       <FormRow>
         <MultiSelectForm
@@ -125,22 +117,21 @@ function ConfigForm (props) {
         />
       </FormRow>
     )
-  } else {
-    return (
-      <TextFormUnderline
-        value={props.value}
-        onChange={(newValue) => props.onChange(props.label, Number(newValue))}
-      />
-    )
   }
+  return (
+    <TextFormUnderline
+      value={props.value}
+      onChange={(newValue) => props.onChange(props.label, Number(newValue))}
+    />
+  )
 }
 
-function ConfigForms (props) {
-  const dataset = props.dataset
+const ConfigForms = (props) => {
+  const { dataset } = props
   return (
     <table className='form-table'>
       {Object.entries(props.config).map(([key, value]) => {
-        // handle special labels
+        // Handle special labels
         let label = convertSnakeToUpper(key)
         if (key === 'use_gpu') {
           label = 'DEVICE'
@@ -166,27 +157,29 @@ function ConfigForms (props) {
 
 Modal.setAppElement('#root')
 
-export function ExperimentCreateDialog (props) {
+export const ExperimentCreateDialog = (props) => {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [experimentName, setExperimentName] = useState('')
   const [basicConfig, setBasicConfig] = useState(Record({})())
   const [advancedConfig, setAdvancedConfig] = useState(Record({})())
   const [isShowingAdvancedConfig, setIsShowingAdvancedConfig] = useState(false)
-  const { status, createExperiment } = useContext(GlobalContext)
+  const {
+    status,
+    createExperiment,
+    showErrorToast
+  } = useContext(GlobalContext)
 
-  const dataset = props.dataset
-  const project = props.project
-  const algorithm = project.algorithm
+  const { dataset, project } = props
+  const { algorithm } = project
   const configs = dataset.isDiscrete ? DISCRETE_CONFIGS : CONTINUOUS_CONFIGS
 
   useEffect(() => {
-    setExperimentName(algorithm.toUpperCase() + '_' + getTimestamp())
+    setExperimentName(`${algorithm.toUpperCase()}_${getTimestamp()}`)
 
-    // default scaling option based on observation type
+    // Default scaling option based on observation type
     const scaler = dataset.isImage ? 'pixel' : null
-    const basicConfig = Record(configs[algorithm].basic_config)()
-    setBasicConfig(basicConfig.set('scaler', scaler))
+    setBasicConfig(Record(configs[algorithm].basic_config)({ scaler: scaler }))
 
     setAdvancedConfig(Record(configs[algorithm].advanced_config)())
   }, [props.isOpen])
@@ -201,7 +194,7 @@ export function ExperimentCreateDialog (props) {
   }
 
   const handleSubmit = () => {
-    // quick validation
+    // Quick validation
     if (experimentName === '') {
       return
     }
@@ -212,14 +205,16 @@ export function ExperimentCreateDialog (props) {
       setUploadProgress(progress)
     }
 
-    // concat basic configs and advanced configs
+    // Concat basic configs and advanced configs
     const config = Object.assign(basicConfig.toJS(), advancedConfig.toJS())
 
     createExperiment(project.id, experimentName, config, progressCallback)
-      .then((project) => {
+      .then((experiment) => {
         setIsUploading(false)
         handleClose()
+        return experiment
       })
+      .catch(() => showErrorToast('Failed to create experiment.'))
   }
 
   const handleBasicConfigChange = (key, value) => {

@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import '../styles/sidebar.scss'
 import { Link, useParams } from 'react-router-dom'
+import React, { useState } from 'react'
 import { DatasetUploadDialog } from './DatasetUploadDialog'
 import { ProjectCreateDialog } from './ProjectCreateDialog'
-import '../styles/sidebar.scss'
 
-export function DatasetSidebar (props) {
+export const DatasetSidebar = (props) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const datasets = props.datasets
+  const { datasets } = props
   const { id } = useParams()
   return (
     <div className='sidebar'>
@@ -37,9 +37,9 @@ export function DatasetSidebar (props) {
   )
 }
 
-export function ProjectSidebar (props) {
+export const ProjectSidebar = (props) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const projects = props.projects
+  const { projects } = props
   const { id } = useParams()
   return (
     <div className='sidebar'>

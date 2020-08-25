@@ -1,110 +1,144 @@
-import React, { useEffect, useState, useReducer } from 'react'
 import { List, Map } from 'immutable'
+import React, { useEffect, useReducer, useState } from 'react'
 import { Dataset } from './models/dataset'
-import { Project } from './models/project'
 import { Experiment } from './models/experiment'
+import { Project } from './models/project'
+import { STATUS_API_CALL_INTERVAL } from './constants'
 import { Status } from './models/status'
+import { toast } from 'react-toastify'
 
 export const GlobalContext = React.createContext({})
 
-function experimentReducer (experiments, action) {
-  switch (action.type) {
-    case 'fetch': {
-      return experiments.set(action.projectId, List(action.experiments))
-    }
-    case 'create': {
-      if (!experiments.has(action.projectId)) {
-        return experiments.set(action.projectId, List([action.experiment]))
-      } else {
+// Reducers
+const experimentReducer = (experiments, action) => {
+  const actions = {
+    fetch: () => experiments.set(action.projectId, List(action.experiments)),
+    create: () => {
+      if (experiments.has(action.projectId)) {
         const target = experiments.get(action.projectId)
-        const newExperiments = target.insert(0, action.experiment)
+        const newExperiments = target.unshift(action.experiment)
         return experiments.set(action.projectId, newExperiments)
       }
-    }
-    case 'update': {
-      const experiment = action.experiment
+      return experiments.set(action.projectId, List([action.experiment]))
+    },
+    update: () => {
+      const { experiment } = action
       const target = experiments.get(action.projectId)
-      const index = target.findIndex((e) => e.id === experiment.id)
+      const index = target.findIndex((ex) => ex.id === experiment.id)
       const newExperiments = target.set(index, experiment)
       return experiments.set(action.projectId, newExperiments)
-    }
-    case 'delete': {
-      const experiment = action.experiment
+    },
+    delete: () => {
+      const { experiment } = action
       const target = experiments.get(action.projectId)
-      const newExperiments = target.filter((e) => e.id !== experiment.id)
+      const newExperiments = target.filter((ex) => ex.id !== experiment.id)
       return experiments.set(action.projectId, newExperiments)
     }
   }
+  return actions[action.type]()
 }
 
-export function GlobalProvider ({ children }) {
+export const GlobalProvider = ({ children }) => {
   const [datasets, setDatasets] = useState(List([]))
   const [projects, setProjects] = useState(List([]))
   const [experiments, dispatch] = useReducer(experimentReducer, Map({}))
   const [status, setStatus] = useState({})
   const [statusTime, setStatusTime] = useState(Date.now())
 
-  // initialization
+  // Initialization
   useEffect(() => {
-    Dataset.getAll().then((datasets) => setDatasets(List(datasets)))
-    Project.getAll().then((projects) => setProjects(List(projects)))
-    Status.get().then((status) => setStatus(status))
+    Dataset.getAll()
+      .then((newDatasets) => setDatasets(List(newDatasets)))
+      .catch((err) => showNetworkErrorToast(err))
+
+    Project.getAll()
+      .then((newProjects) => setProjects(List(newProjects)))
+      .catch((err) => showNetworkErrorToast(err))
+
+    Status.get()
+      .then((newStatus) => setStatus(newStatus))
+      .catch((err) => showNetworkErrorToast(err))
   }, [])
 
-  // periodical API calls
+  // Periodical API calls
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setStatusTime(Date.now())
-      Status.get().then((status) => setStatus(status))
-    }, 5000) // 5 seconds
+      Status.get()
+        .then((newStatus) => setStatus(newStatus))
+        .catch((err) => showNetworkErrorToast(err))
+    }, STATUS_API_CALL_INTERVAL)
     return () => {
       clearTimeout(timeoutId)
     }
   }, [statusTime])
 
-  // actions
-  const uploadDataset = (file, isImage, isDiscrete, progressCallback) => {
-    return Dataset.upload(file, isImage, isDiscrete, progressCallback)
+  // Actions
+
+  const showErrorToast = (message) => {
+    toast.error(message, {
+      position: 'bottom-center',
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: false
+    })
+  }
+
+  const showNetworkErrorToast = (err) => {
+    const { url, method } = err.config
+    let message = `${method.toUpperCase()}: ${url} "${err.message}"`
+    if (err.response) {
+      message = `${method.toUpperCase()}: ${url} "${err.status}: ${err.data}"`
+    }
+    showErrorToast(message)
+  }
+
+  const uploadDataset = (file, isImage, isDiscrete, progressCallback) => (
+    Dataset.upload(file, isImage, isDiscrete, progressCallback)
       .then((dataset) => {
-        setDatasets(datasets.insert(0, dataset))
+        setDatasets(datasets.unshift(dataset))
         return dataset
       })
-  }
+      .catch((err) => showNetworkErrorToast(err))
+  )
 
   const deleteDataset = (dataset) => {
     const newDatasets = datasets.filter((d) => d.id !== dataset.id)
     setDatasets(newDatasets)
-    return dataset.delete()
+    return dataset.delete().catch((err) => showNetworkErrorToast(err))
   }
 
   const updateDataset = (dataset) => {
     const index = datasets.findIndex((d) => d.id === dataset.id)
     setDatasets(datasets.set(index, dataset))
-    return dataset.update()
+    return dataset.update().catch((err) => showNetworkErrorToast(err))
   }
 
-  const createProject = (datasetId, name, progressCallback) => {
-    return Project.create(datasetId, name, progressCallback)
+  const createProject = (datasetId, name, progressCallback) => (
+    Project.create(datasetId, name, progressCallback)
       .then((project) => {
-        setProjects(projects.insert(0, project))
+        setProjects(projects.unshift(project))
         return project
       })
-  }
+      .catch((err) => showNetworkErrorToast(err))
+  )
 
   const deleteProject = (project) => {
     const newProjects = projects.filter((p) => p.id !== project.id)
     setProjects(newProjects)
-    return project.delete()
+    return project.delete().catch((err) => showNetworkErrorToast(err))
   }
 
   const updateProject = (project) => {
     const index = projects.findIndex((p) => p.id === project.id)
     setProjects(projects.set(index, project))
-    return project.update()
+    return project.update().catch((err) => showNetworkErrorToast(err))
   }
 
-  const fetchExperiments = (projectId) => {
-    return Experiment.getAll(projectId)
+  const fetchExperiments = (projectId) => (
+    Experiment.getAll(projectId)
       .then((newExperiments) => {
         dispatch({
           type: 'fetch',
@@ -113,10 +147,11 @@ export function GlobalProvider ({ children }) {
         })
         return newExperiments
       })
-  }
+      .catch((err) => showNetworkErrorToast(err))
+  )
 
-  const createExperiment = (projectId, name, config, progressCallback) => {
-    return Experiment.create(projectId, name, config, progressCallback)
+  const createExperiment = (projectId, name, config, progressCallback) => (
+    Experiment.create(projectId, name, config, progressCallback)
       .then((experiment) => {
         dispatch({
           type: 'create',
@@ -125,7 +160,8 @@ export function GlobalProvider ({ children }) {
         })
         return experiment
       })
-  }
+      .catch((err) => showNetworkErrorToast(err))
+  )
 
   const deleteExperiment = (experiment) => {
     dispatch({
@@ -133,7 +169,7 @@ export function GlobalProvider ({ children }) {
       projectId: experiment.projectId,
       experiment: experiment
     })
-    return experiment.delete()
+    return experiment.delete().catch((err) => showNetworkErrorToast(err))
   }
 
   const updateExperiment = (experiment) => {
@@ -142,7 +178,7 @@ export function GlobalProvider ({ children }) {
       projectId: experiment.projectId,
       experiment: experiment
     })
-    return experiment.update()
+    return experiment.update().catch((err) => showNetworkErrorToast(err))
   }
 
   const cancelExperiment = (experiment) => {
@@ -151,7 +187,7 @@ export function GlobalProvider ({ children }) {
       projectId: experiment.projectId,
       experiment: experiment.set('isActive', false)
     })
-    return experiment.cancel()
+    return experiment.cancel().catch((err) => showNetworkErrorToast(err))
   }
 
   return (
@@ -171,7 +207,9 @@ export function GlobalProvider ({ children }) {
         createExperiment,
         deleteExperiment,
         updateExperiment,
-        cancelExperiment
+        cancelExperiment,
+        showErrorToast,
+        showNetworkErrorToast
       }}
     >
       {children}

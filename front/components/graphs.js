@@ -1,24 +1,28 @@
-import React, { useState } from 'react'
-import { Range } from 'immutable'
 import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
   LineChart,
   Line as RechartsLine,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  ResponsiveContainer,
   Tooltip,
-  Legend,
-  ResponsiveContainer
+  XAxis,
+  YAxis
 } from 'recharts'
+import { DISPLAY_DECIMAL_LENGTH, GRAPH_DIMMED_OPACITY } from '../constants'
+import React, { useState } from 'react'
+import { Range } from 'immutable'
 
-export function Histogram (props) {
-  const discrete = props.discrete
-  const data = props.values.map((v, i) => ({
-    x: discrete ? props.labels[i].toString() : props.labels[i].toFixed(2),
-    y: v
-  }))
+export const Histogram = (props) => {
+  const { discrete, labels, values } = props
+  const data = values.map((value, index) => {
+    const label = labels[index]
+    return {
+      x: discrete ? label.toString() : label.toFixed(DISPLAY_DECIMAL_LENGTH),
+      y: value
+    }
+  })
   return (
     <ResponsiveContainer width='100%' height={400}>
       <BarChart
@@ -50,7 +54,7 @@ export function Histogram (props) {
   )
 }
 
-export function Line (props) {
+export const Line = (props) => {
   const [activeTitle, setIsActiveTitle] = useState('')
 
   const colors = [
@@ -58,7 +62,7 @@ export function Line (props) {
     '#3498db', '#e74c3c', '#1abc9c', '#e67e22', '#f1c40f'
   ]
 
-  // make up recharts data
+  // Make up recharts data
   const maxX = Math.max(...props.values.map((value) => value.length))
   const data = Range(0, maxX).map((i) => ({ x: i })).toArray()
   props.values.forEach((value, dataIndex) => {
@@ -107,7 +111,7 @@ export function Line (props) {
         {props.titles.map((title, i) => {
           let opacity = 1.0
           if (activeTitle !== '' && activeTitle !== title) {
-            opacity = 0.1
+            opacity = GRAPH_DIMMED_OPACITY
           }
           return (
             <RechartsLine
