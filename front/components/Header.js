@@ -8,7 +8,8 @@ import { Progress } from 'react-sweet-progress'
 import { Range } from 'immutable'
 
 const JobItem = (props) => {
-  const { experiment, metrics, project } = props
+  const { experiment, project } = props
+  const { metrics } = experiment
 
   const totalEpoch = experiment.config.n_epochs
   const currentEpoch = metrics.td_error ? metrics.td_error.length : 0
@@ -40,7 +41,7 @@ const JobItem = (props) => {
 }
 
 const JobList = (props) => {
-  const { projects } = props.projects
+  const { projects } = props
   const cpuJobs = props.status.cpu.jobs
   const totalGPU = props.status.gpu.total
   const gpuJobs = props.status.gpu.jobs
