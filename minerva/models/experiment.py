@@ -1,13 +1,14 @@
-import numpy as np
-import minerva.config as config
+# pylint: disable=no-member, too-many-instance-attributes
+
 import os
 import re
 import json
 import shutil
-
+import numpy as np
 from d3rlpy.algos import CQL, DiscreteCQL
-from datetime import datetime
+
 from .base import BaseModel
+from ..config import get_config
 from ..database import db, ma
 from ..async import is_running, dispatch, kill
 from ..tasks import train
@@ -21,11 +22,6 @@ class Experiment(db.Model, BaseModel):
     log_name = db.Column(db.String(100))
     config = db.Column(db.Text)
     is_active = db.Column(db.Boolean, default=True)
-    created_at = db.Column(db.DateTime, nullable=True, default=datetime.now)
-    updated_at = db.Column(db.DateTime,
-                           nullable=True,
-                           default=datetime.now,
-                           onupdate=datetime.now)
 
     def __init__(self, project_id, name, log_name, config):
         self.project_id = project_id
@@ -76,7 +72,7 @@ class Experiment(db.Model, BaseModel):
                  params=json.loads(self.config),
                  dataset_path=self.project.dataset.get_dataset_path(),
                  experiment_name=self.log_name,
-                 logdir=config.LOG_DIR)
+                 logdir=get_config('LOG_DIR'))
 
     def cancel_training(self):
         kill(self.id)
@@ -84,7 +80,7 @@ class Experiment(db.Model, BaseModel):
         self.update()
 
     def get_log_path(self):
-        return os.path.join(config.LOG_DIR, self.log_name)
+        return os.path.join(get_config('LOG_DIR'), self.log_name)
 
     def save_torch_script_policy(self, path, epoch):
         params_path = os.path.join(self.get_log_path(), 'params.json')

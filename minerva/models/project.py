@@ -1,5 +1,5 @@
-from datetime import datetime
-from flask_marshmallow.fields import fields
+# pylint: disable=no-member, too-many-instance-attributes
+
 from .base import BaseModel
 from .experiment import Experiment
 from ..database import db, ma
@@ -11,11 +11,6 @@ class Project(db.Model, BaseModel):
     dataset_id = db.Column(db.Integer, db.ForeignKey('datasets.id'))
     name = db.Column(db.String(100))
     algorithm = db.Column(db.String(100))
-    created_at = db.Column(db.DateTime, nullable=True, default=datetime.now)
-    updated_at = db.Column(db.DateTime,
-                           nullable=True,
-                           default=datetime.now,
-                           onupdate=datetime.now)
 
     experiments = db.relationship(Experiment, backref='project')
 

@@ -1,5 +1,5 @@
-import numpy as np
 import csv
+import numpy as np
 
 from d3rlpy.dataset import MDPDataset
 
@@ -20,8 +20,8 @@ def export_vector_observation_dataset_as_csv(dataset, fname):
     observation_size = dataset.get_observation_shape()[0]
     action_size = dataset.get_action_size()
 
-    with open(fname, 'w') as f:
-        writer = csv.writer(f)
+    with open(fname, 'w') as file:
+        writer = csv.writer(file)
 
         # write header
         header = ['episode']
@@ -57,8 +57,8 @@ def import_csv_as_image_observation_dataset(fname, discrete_action):
 
 
 def import_csv_as_vector_observation_dataset(fname, discrete_action):
-    with open(fname, 'r') as f:
-        reader = csv.reader(f)
+    with open(fname, 'r') as file:
+        reader = csv.reader(file)
         rows = [row for row in reader]
 
         # get observation shape
@@ -67,9 +67,6 @@ def import_csv_as_vector_observation_dataset(fname, discrete_action):
 
         # retrieve data section
         csv_data = np.array(rows[1:], dtype=np.float32)
-
-        # get episode ids
-        episode_ids = csv_data[:, 0]
 
         # get observation columns
         observation_size = _get_observation_size_from_header(header)
@@ -87,6 +84,7 @@ def import_csv_as_vector_observation_dataset(fname, discrete_action):
         rewards = csv_data[:, -1]
 
         # make terminal flags
+        episode_ids = csv_data[:, 0]
         terminals = np.zeros_like(episode_ids)
         for i, episode_id in enumerate(episode_ids):
             if i + 1 == len(episode_ids) or episode_id != episode_ids[i + 1]:

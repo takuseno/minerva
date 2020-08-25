@@ -1,14 +1,11 @@
-import numpy as np
-import werkzeug
 import os
 import uuid
 import json
-import minerva.config as config
-
+import werkzeug
 from flask import Blueprint, request, jsonify
 from sqlalchemy import desc
-from d3rlpy.dataset import MDPDataset
-from ..database import db
+
+from ..config import get_config
 from ..dataset import import_csv_as_mdp_dataset
 from ..models.dataset import Dataset, DatasetSchema
 
@@ -24,7 +21,7 @@ def upload_dataset():
     # save file
     file = request.files['dataset']
     file_name = werkzeug.utils.secure_filename(file.filename)
-    file_path = os.path.join(config.UPLOAD_DIR, file_name)
+    file_path = os.path.join(get_config('UPLOAD_DIR'), file_name)
     file.save(file_path)
 
     # save as MDPDataset
@@ -34,7 +31,7 @@ def upload_dataset():
                                             image=is_image,
                                             discrete_action=is_discrete)
     dataset_name = str(uuid.uuid1()) + '.h5'
-    dataset_path = os.path.join(config.DATASET_DIR, dataset_name)
+    dataset_path = os.path.join(get_config('DATASET_DIR'), dataset_name)
     mdp_dataset.dump(dataset_path)
 
     # get dataset size
@@ -59,10 +56,7 @@ def upload_dataset():
 
 @dataset_route.route('/', methods=['GET'])
 def get_all_datasets():
-    datasets = db.session.query(Dataset)\
-        .order_by(desc(Dataset.id))\
-        .all()
-
+    datasets = Dataset.create_query().order_by(desc(Dataset.id)).all()
     dataset_schema = DatasetSchema(many=True)
     return jsonify({
         'datasets': dataset_schema.dump(datasets),
@@ -79,8 +73,8 @@ def get_dataset(dataset_id):
 @dataset_route.route('/<dataset_id>', methods=['PUT'])
 def update_dataset(dataset_id):
     dataset = Dataset.get(dataset_id, raise_404=True)
-    json = request.get_json()
-    dataset.name = json['name']
+    json_data = request.get_json()
+    dataset.name = json_data['name']
     dataset.update()
     return jsonify(DatasetSchema().dump(dataset))
 

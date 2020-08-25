@@ -31,3 +31,19 @@ def prepare_directory():
 
     if not os.path.exists(LOG_DIR):
         os.makedirs(LOG_DIR)
+
+
+def get_config(key):
+    if key == 'ROOT_DIR':
+        return ROOT_DIR
+    if key == 'DATASET_DIR':
+        return DATASET_DIR
+    if key == 'DATABASE_PATH':
+        return DATABASE_PATH
+    if key == 'LOG_DIR':
+        return LOG_DIR
+    if key == 'TMP_DIR':
+        return TMP_DIR
+    if key == 'UPLOAD_DIR':
+        return UPLOAD_DIR
+    raise ValueError('invalid key value.')

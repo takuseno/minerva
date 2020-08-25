@@ -1,8 +1,9 @@
+# pylint: disable=unidiomatic-typecheck
+
 import json
 
 from d3rlpy.gpu import get_gpu_count
 from flask import Blueprint, jsonify
-from ..database import db
 from ..models.experiment import Experiment, ExperimentSchema
 from .project import _process_metrics
 
@@ -13,9 +14,8 @@ system_route = Blueprint('system', __name__)
 def get_system_status():
     n_gpus = get_gpu_count()
 
-    experiments = db.session.query(Experiment)\
-        .filter(Experiment.is_active == True)\
-        .all()
+    # get all active experiments
+    experiments = Experiment.create_query().filter(Experiment.is_active).all()
 
     gpu_jobs = {}
     cpu_jobs = []

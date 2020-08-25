@@ -1,13 +1,16 @@
-import numpy as np
-import click
+# pylint: disable=unused-import
+
 import os
 import shutil
-import minerva.models
-
-from flask import Flask, Blueprint, redirect, url_for
+import click
+import numpy as np
+from flask import Flask, redirect
 from flask.json import JSONEncoder
+
+import minerva.models
+from minerva.config import DATABASE_PATH, ROOT_DIR
 from minerva.config import config, prepare_directory
-from minerva.database import init_db, db, ma
+from minerva.database import init_db, db
 from minerva.controllers import dataset_route
 from minerva.controllers import project_route
 from minerva.controllers import system_route
@@ -21,14 +24,14 @@ app.url_map.strict_slashes = False
 
 # enable to return ndarray in json
 class CustomJSONEncoder(JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, np.integer):
-            return int(obj)
-        elif isinstance(obj, np.floating):
-            return float(obj)
-        elif isinstance(obj, np.ndarray):
-            return obj.tolist()
-        return JSONEncoder.default(self, obj)
+    def default(self, o):
+        if isinstance(o, np.integer):
+            return int(o)
+        if isinstance(o, np.floating):
+            return float(o)
+        if isinstance(o, np.ndarray):
+            return o.tolist()
+        return JSONEncoder.default(self, o)
 
 
 app.json_encoder = CustomJSONEncoder
@@ -49,7 +52,7 @@ app.register_blueprint(system_route, url_prefix='/api/system')
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def send_file(path):
-    if path == '' or path == '/':
+    if path in ['', '/']:
         return redirect('/projects')
     if path.find('favicon.ico') > -1:
         path = 'favicon.ico'
@@ -68,7 +71,6 @@ def cli():
 @click.option('--port', '-p', default=9000)
 def run(host, port):
     # create databse if not exists
-    from minerva.config import DATABASE_PATH
     if not os.path.exists(DATABASE_PATH):
         with app.app_context():
             db.create_all()
@@ -85,7 +87,6 @@ def create_db():
 
 @cli.command()
 def clean():
-    from minerva.config import ROOT_DIR
     shutil.rmtree(ROOT_DIR)
 
 

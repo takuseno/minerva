@@ -1,12 +1,11 @@
 import json
 import uuid
 import os
-import minerva.config as config
-
 from flask import Blueprint, request, jsonify, send_file
 from werkzeug.exceptions import NotFound
 from sqlalchemy import desc
-from ..database import db
+
+from ..config import get_config
 from ..models.project import Project, ProjectSchema
 from ..models.experiment import Experiment, ExperimentSchema
 
@@ -15,10 +14,7 @@ project_route = Blueprint('project', __name__)
 
 @project_route.route('/', methods=['GET'])
 def get_all_projects():
-    projects = db.session.query(Project)\
-        .order_by(desc(Project.id))\
-        .all()
-
+    projects = Project.create_query().order_by(desc(Project.id)).all()
     project_schema = ProjectSchema(many=True)
     return jsonify({
         'projects': project_schema.dump(projects),
@@ -28,9 +24,9 @@ def get_all_projects():
 
 @project_route.route('/', methods=['POST'])
 def create_project():
-    json = request.get_json()
-    dataset_id = json['dataset_id']
-    name = json['name']
+    json_data = request.get_json()
+    dataset_id = json_data['dataset_id']
+    name = json_data['name']
     project = Project.create(dataset_id, name, 'cql')
     return jsonify(ProjectSchema().dump(project))
 
@@ -44,8 +40,8 @@ def get_project(project_id):
 @project_route.route('/<project_id>', methods=['PUT'])
 def update_project(project_id):
     project = Project.get(project_id, raise_404=True)
-    json = request.get_json()
-    project.name = json['name']
+    json_data = request.get_json()
+    project.name = json_data['name']
     project.update()
     return jsonify(ProjectSchema().dump(project))
 
@@ -67,7 +63,7 @@ def _process_metrics(experiment, data):
 
 @project_route.route('/<project_id>/experiments', methods=['GET'])
 def get_all_experiments(project_id):
-    experiments = db.session.query(Experiment)\
+    experiments = Experiment.create_query()\
         .filter(Experiment.project_id == int(project_id))\
         .order_by(desc(Experiment.id))\
         .all()
@@ -121,8 +117,8 @@ def update_experiment(project_id, experiment_id):
     if experiment.project_id != int(project_id):
         return NotFound()
 
-    json = request.get_json()
-    experiment.name = json['name']
+    json_data = request.get_json()
+    experiment.name = json_data['name']
     experiment.update()
 
     data = ExperimentSchema().dump(experiment)
@@ -168,7 +164,7 @@ def download_policy(project_id, experiment_id):
     epoch = int(request.args.get('epoch'))
 
     # save greedy-policy as TorchScript
-    save_path = os.path.join(config.TMP_DIR, 'policy.pt')
+    save_path = os.path.join(get_config('TMP_DIR'), 'policy.pt')
     experiment.save_torch_script_policy(save_path, epoch)
 
     return send_file(save_path,

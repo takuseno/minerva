@@ -6,7 +6,6 @@ from d3rlpy.metrics.scorer import average_value_estimation_scorer
 from d3rlpy.metrics.scorer import value_estimation_std_scorer
 from d3rlpy.metrics.scorer import continuous_action_diff_scorer
 from d3rlpy.metrics.scorer import discrete_action_match_scorer
-from d3rlpy.metrics.scorer import NEGATED_SCORER
 from sklearn.model_selection import train_test_split
 
 

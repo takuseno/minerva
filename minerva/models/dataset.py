@@ -1,9 +1,9 @@
-import os
-import minerva.config as config
+# pylint: disable=no-member, too-many-instance-attributes
 
+import os
 from d3rlpy.dataset import MDPDataset
-from werkzeug.exceptions import NotFound
-from datetime import datetime
+
+from ..config import get_config
 from ..database import db, ma
 from .base import BaseModel
 from .project import Project
@@ -20,11 +20,6 @@ class Dataset(db.Model, BaseModel):
     is_image = db.Column(db.Boolean)
     is_discrete = db.Column(db.Boolean)
     statistics = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, nullable=True, default=datetime.now)
-    updated_at = db.Column(db.DateTime,
-                           nullable=True,
-                           default=datetime.now,
-                           onupdate=datetime.now)
 
     projects = db.relationship(Project, backref='dataset')
 
@@ -53,7 +48,7 @@ class Dataset(db.Model, BaseModel):
 
     def delete(self):
         # remove dataset file
-        path = os.path.join(config.DATASET_DIR, self.file_name)
+        path = os.path.join(get_config('DATASET_DIR'), self.file_name)
         if os.path.exists(path):
             os.remove(path)
         super().delete()
@@ -64,7 +59,7 @@ class Dataset(db.Model, BaseModel):
         return mdp_dataset
 
     def get_dataset_path(self):
-        return os.path.join(config.DATASET_DIR, self.file_name)
+        return os.path.join(get_config('DATASET_DIR'), self.file_name)
 
 
 class DatasetSchema(ma.SQLAlchemySchema):
