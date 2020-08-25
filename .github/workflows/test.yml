@@ -30,5 +30,8 @@ jobs:
           pip install pytest-cov gym flask msgpack
           npm install
       - name: Unit tests
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           ./scripts/test
+          bash <(curl -s https://codecov.io/bash)
