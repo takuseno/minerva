@@ -12,3 +12,4 @@ test_data
 .coverage
 node_modules
 dist/index.bundle.js
+docs/_build
