@@ -21,7 +21,7 @@ on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 # -- Project information -----------------------------------------------------
 
-project = 'minerva'
+project = 'MINERVA'
 copyright = '2020, Takuma Seno'
 author = 'Takuma Seno'
 
