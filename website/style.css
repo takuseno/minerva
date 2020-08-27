@@ -17,7 +17,7 @@ body {
 }
 
 .hero {
-  background-color: rgba(255, 255, 255,0.9);
+  background-color: rgba(255, 255, 255, 0.9);
   background-image: url('hero.svg');
   background-blend-mode: lighten;
 }
@@ -51,7 +51,7 @@ body {
 
 .features > .container > .card {
   border-radius: 0.5em;
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0 ,0 , 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   margin: 16px;
 }
 
@@ -63,7 +63,7 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  background: linear-gradient(rgba(120,197,233,0.0), rgba(120,197,233,0.5) 50%, rgba(120,197,233,1.0));
+  background: linear-gradient(rgba(41, 128, 185, 0.0), rgba(41, 128, 185, 0.5) 50%, rgba(41, 128, 185, 1.0));
 }
 
 .video {
@@ -78,7 +78,7 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  background: linear-gradient(rgba(120,197,233,1.0), rgba(120,197,233,0.5) 50%, rgba(120,197,233,0.0));
+  background: rgba(41, 128, 185, 1.0);
 }
 
 .youtube > iframe {
@@ -104,7 +104,7 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  background: white;
+  background: linear-gradient(rgba(41, 128, 185, 1.0), rgba(41, 128, 185, 0.5) 50%, rgba(41, 128, 185, 0.0));
 }
 
 .footer {
