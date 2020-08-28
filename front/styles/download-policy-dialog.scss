@@ -5,14 +5,16 @@
   font-weight: $weight-300;
 }
 
-.epoch-select {
+.select-wrapper {
   margin-bottom: 6px;
   margin-top: 6px;
   text-align: center;
 
   .label {
+    display: inline-block;
     font-size: 1em;
     font-weight: $weight-300;
+    width: 80px;
   }
 
   .minerva-form-select {

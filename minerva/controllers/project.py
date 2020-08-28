@@ -163,11 +163,21 @@ def download_policy(project_id, experiment_id):
 
     epoch = int(request.args.get('epoch'))
 
-    # save greedy-policy as TorchScript
-    save_path = os.path.join(get_config('TMP_DIR'), 'policy.pt')
-    experiment.save_torch_script_policy(save_path, epoch)
+    model_format = request.args.get('format')
+    if model_format == 'torchscript':
+        as_onnx = False
+        file_name = 'policy.pt'
+    elif model_format == 'onnx':
+        as_onnx = True
+        file_name = 'policy.onnx'
+    else:
+        raise ValueError('format should be torchscript or onnx.')
+
+    # save greedy-policy as TorchScript or ONNX
+    save_path = os.path.join(get_config('TMP_DIR'), file_name)
+    experiment.save_policy(save_path, epoch, as_onnx)
 
     return send_file(save_path,
                      as_attachment=True,
-                     attachment_filename='policy.pt',
+                     attachment_filename=file_name,
                      mimetype='application/octet-stream')

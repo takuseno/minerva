@@ -12,8 +12,8 @@ import { Range } from 'immutable'
 const modalStyles = {
   content: {
     width: '500px',
-    height: '240px',
-    top: '32%',
+    height: '260px',
+    top: '30%',
     left: '30%',
     right: 'auto',
     bottom: 'auto',
@@ -27,6 +27,7 @@ Modal.setAppElement('#root')
 
 export const DownloadPolicyDialog = (props) => {
   const [epoch, setEpoch] = useState(-1)
+  const [format, setFormat] = useState('torchscript')
 
   const { experiment } = props
 
@@ -40,13 +41,18 @@ export const DownloadPolicyDialog = (props) => {
     if (epoch === -1) {
       return
     }
-    experiment.downloadPolicy(epoch)
+    experiment.downloadPolicy(epoch, format)
     props.onClose()
   }
 
   const epochOptions = Range(0, props.totalEpoch).map((i) => (
     { value: i, text: i }
   ))
+
+  const formatOptions = [
+    { value: 'torchscript', text: 'TorchScript' },
+    { value: 'onnx', text: 'ONNX' }
+  ]
 
   return (
     <Modal
@@ -58,13 +64,21 @@ export const DownloadPolicyDialog = (props) => {
       <div>
         <p className='dialog-title'>Download policy function</p>
         <p className='experiment-title'>{experiment.name}</p>
-        <div className='epoch-select'>
+        <div className='select-wrapper'>
           <span className='label'>EPOCH</span>
           <SelectForm
             placeholder='CHOOSE EPOCH TO DOWNLOAD'
             options={epochOptions}
             value={epoch}
             onChange={(v) => setEpoch(v)}
+          />
+        </div>
+        <div className='select-wrapper'>
+          <span className='label'>FORMAT</span>
+          <SelectForm
+            options={formatOptions}
+            value={format}
+            onChange={(v) => setFormat(v)}
           />
         </div>
         <FormGroup>

@@ -194,10 +194,14 @@ def test_experiment_api(client):
     assert res.status_code == 200
     assert res.json['name'] == 'updated'
 
-    # check download
-    url = '/api/projects/%d/experiments/%d/download?epoch=0' % (project_id,
-                                                                experiment_id)
-    res = client.get(url)
+    # check download as TorchScript
+    url = '/api/projects/{}/experiments/{}/download?epoch=0&format=torchscript'
+    res = client.get(url.format(project_id, experiment_id))
+    assert res.status_code == 200
+
+    # check download as ONNX
+    url = '/api/projects/{}/experiments/{}/download?epoch=0&format=onnx'
+    res = client.get(url.format(project_id, experiment_id))
     assert res.status_code == 200
 
     # check delete

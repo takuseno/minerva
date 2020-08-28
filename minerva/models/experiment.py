@@ -82,7 +82,7 @@ class Experiment(db.Model, BaseModel):
     def get_log_path(self):
         return os.path.join(get_config('LOG_DIR'), self.log_name)
 
-    def save_torch_script_policy(self, path, epoch):
+    def save_policy(self, path, epoch, as_onnx):
         params_path = os.path.join(self.get_log_path(), 'params.json')
         model_path = os.path.join(self.get_log_path(), 'model_%d.pt' % epoch)
 
@@ -102,7 +102,7 @@ class Experiment(db.Model, BaseModel):
         algo.load_model(model_path)
 
         # save TorchScript policy
-        algo.save_policy(path)
+        algo.save_policy(path, as_onnx)
 
 
 class ExperimentSchema(ma.SQLAlchemySchema):
