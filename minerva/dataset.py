@@ -1,19 +1,66 @@
 import csv
+import os
 import numpy as np
 
+from PIL import Image
+from tqdm import trange
 from d3rlpy.dataset import MDPDataset
 
 
 def export_mdp_dataset_as_csv(dataset, fname):
-    # image observation
     if len(dataset.get_observation_shape()) > 1:
+        # image observation
         export_image_observation_dataset_as_csv(dataset, fname)
-    # vector observation
-    export_vector_observation_dataset_as_csv(dataset, fname)
+    else:
+        # vector observation
+        export_vector_observation_dataset_as_csv(dataset, fname)
 
 
 def export_image_observation_dataset_as_csv(dataset, fname):
-    raise NotImplementedError('image observation is not ready.')
+    data_size = dataset.observations.shape[0]
+    action_size = dataset.get_action_size()
+
+    # prepare image directory
+    csv_file_name = os.path.basename(fname)
+    image_dir_name = csv_file_name.split('.')[0] + '_images'
+    image_dir_path = os.path.join(os.path.dirname(fname), image_dir_name)
+    os.makedirs(image_dir_path, exist_ok=True)
+
+    # save image files
+    for i in trange(data_size, desc='saving images'):
+        # convert channel-fist to channel-last
+        if dataset.observations[i].shape[0] == 1:
+            array = dataset.observations[i][0]
+        else:
+            array = np.transpose(dataset.observations[i], [1, 2, 0])
+        image = Image.fromarray(array)
+        image_path = os.path.join(image_dir_path, 'observation_%d.png' % i)
+        image.save(image_path, quality=100)
+
+    with open(fname, 'w') as file:
+        writer = csv.writer(file)
+
+        # write header
+        header = ['episode', 'observation:0']
+        if dataset.is_action_discrete():
+            header += ['action:0']
+        else:
+            header += ['action:%d' % i for i in range(action_size)]
+        header += ['reward']
+        writer.writerow(header)
+
+        count = 0
+        for i, episode in enumerate(dataset.episodes):
+            # prepare data to write
+            for j in range(episode.observations.shape[0]):
+                row = []
+                row.append(i)
+                image_path = os.path.join(image_dir_name, 'observation_%d.png')
+                row.append(image_path % count)
+                row += episode.actions[j].reshape(-1).tolist()
+                row.append(episode.rewards[j])
+                count += 1
+                writer.writerow(row)
 
 
 def export_vector_observation_dataset_as_csv(dataset, fname):
@@ -53,7 +100,61 @@ def import_csv_as_mdp_dataset(fname, image=False, discrete_action=False):
 
 
 def import_csv_as_image_observation_dataset(fname, discrete_action):
-    raise NotImplementedError('image observation is not ready')
+    with open(fname, 'r') as file:
+        reader = csv.reader(file)
+        rows = [row for row in reader]
+
+        # check header
+        header = rows[0]
+        _validate_csv_header(header)
+
+        # get action size
+        action_size = _get_action_size_from_header(header)
+
+        data_size = len(rows) - 1
+
+        observations = []
+        actions = []
+        rewards = []
+        terminals = []
+        for i, row in enumerate(rows[1:]):
+            episode_id = row[0]
+
+            # load image
+            image_path = os.path.join(os.path.dirname(fname), row[1])
+            image = Image.open(image_path)
+            array = np.asarray(image)
+            if image.mode == 'L':
+                array = array.reshape((1, *array.shape))
+            else:
+                # channel first
+                array = array.transpose([2, 0, 1])
+            observations.append(array)
+
+            # get action columns
+            action = list(map(float, row[2:2 + action_size]))
+            if discrete_action:
+                actions.append(int(action[0]))
+            else:
+                actions.append(action)
+
+            # get reward column
+            rewards.append(float(row[-1]))
+
+            if i == data_size - 1:
+                terminals.append(1)
+            elif episode_id != rows[i + 2][0]:
+                terminals.append(1)
+            else:
+                terminals.append(0)
+
+        dataset = MDPDataset(observations=np.array(observations),
+                             actions=np.array(actions),
+                             rewards=np.array(rewards),
+                             terminals=np.array(terminals),
+                             discrete_action=discrete_action)
+
+    return dataset
 
 
 def import_csv_as_vector_observation_dataset(fname, discrete_action):
@@ -90,10 +191,10 @@ def import_csv_as_vector_observation_dataset(fname, discrete_action):
             if i + 1 == len(episode_ids) or episode_id != episode_ids[i + 1]:
                 terminals[i] = 1.0
 
-        dataset = MDPDataset(observations,
-                             actions,
-                             rewards,
-                             terminals,
+        dataset = MDPDataset(observations=observations,
+                             actions=actions,
+                             rewards=rewards,
+                             terminals=terminals,
                              discrete_action=discrete_action)
 
     return dataset
