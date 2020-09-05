@@ -2,11 +2,14 @@ import pytest
 import os
 import json
 import time
+import numpy as np
 import minerva.config as config
 
 from d3rlpy.datasets import get_cartpole
+from d3rlpy.dataset import MDPDataset
 from werkzeug.datastructures import FileStorage
 from minerva.dataset import export_mdp_dataset_as_csv
+from minerva.dataset import export_image_observation_dataset_as_csv
 from minerva.index import app, db
 from minerva.models.dataset import Dataset
 from minerva.models.project import Project
@@ -51,9 +54,61 @@ def _upload_dataset(client):
     return res, mdp_dataset
 
 
-def test_dataset_api(client):
+def _upload_image_dataset(client):
+    # prepare dummy data
+    shape = (100, 3, 84, 84)
+    observations = np.random.randint(255, size=shape, dtype=np.uint8)
+    actions = np.random.random((100, 2)).astype('f4')
+    rewards = np.random.random((100, 1)).astype('f4')
+    terminals = (np.arange(100) % 9) == 0
+
+    # prepare dataset
+    mdp_dataset = MDPDataset(observations, actions, rewards, terminals)
+    csv_path = os.path.join('test_data', 'dataset.csv')
+    export_image_observation_dataset_as_csv(mdp_dataset,
+                                            csv_path,
+                                            relative_path=False)
+
+    # prepare upload request
+    with open(csv_path, 'rb') as f:
+        data = {'is_image': 'true', 'is_discrete': 'true'}
+        file = FileStorage(stream=f,
+                           filename='dataset.csv',
+                           content_type='text/csv')
+        data['dataset'] = file
+
+        # add images
+        image_dir_path = os.path.join('test_data', 'dataset_images')
+        image_fds = []
+        for i in range(100):
+            file_name = 'observation_%d.png' % i
+            file_path = os.path.join(image_dir_path, file_name)
+            fd = open(file_path, 'rb')
+            file = FileStorage(stream=fd,
+                               filename=file_name,
+                               content_type='image/png')
+            data['image_%d' % i] = file
+            image_fds.append(fd)
+        data['total_images'] = 100
+
+        # upload
+        res = client.post('/api/datasets/upload',
+                          data=data,
+                          content_type='multipart/form-data')
+
+        for fd in image_fds:
+            fd.close()
+
+    return res, mdp_dataset
+
+
+@pytest.mark.parametrize('is_image', [False, True])
+def test_dataset_api(client, is_image):
     # check upload dataset
-    res, mdp_dataset = _upload_dataset(client)
+    if is_image:
+        res, mdp_dataset = _upload_image_dataset(client)
+    else:
+        res, mdp_dataset = _upload_dataset(client)
     assert res.status_code == 200
     assert res.json['name'] == 'dataset.csv'
     assert res.json['episode_size'] == len(mdp_dataset)

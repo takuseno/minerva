@@ -71,13 +71,6 @@ def test_image_dataset(discrete_action, n_channels, action_size, data_size):
                                         image=True,
                                         discrete_action=discrete_action)
 
-    print(dataset.observations[0])
-    print(ref.observations[0])
-    print(dataset.observations.shape)
-    print(ref.observations.shape)
-    print(ref.observations.dtype)
-    print(dataset.observations.dtype)
-
     assert dataset.get_observation_shape() == ref.get_observation_shape()
     assert dataset.get_action_size() == ref.get_action_size()
     assert np.all(dataset.observations == ref.observations)

@@ -16,7 +16,9 @@ def export_mdp_dataset_as_csv(dataset, fname):
         export_vector_observation_dataset_as_csv(dataset, fname)
 
 
-def export_image_observation_dataset_as_csv(dataset, fname):
+def export_image_observation_dataset_as_csv(dataset,
+                                            fname,
+                                            relative_path=True):
     data_size = dataset.observations.shape[0]
     action_size = dataset.get_action_size()
 
@@ -55,11 +57,18 @@ def export_image_observation_dataset_as_csv(dataset, fname):
             for j in range(episode.observations.shape[0]):
                 row = []
                 row.append(i)
-                image_path = os.path.join(image_dir_name, 'observation_%d.png')
+
+                # add image path
+                file_name = 'observation_%d.png'
+                if relative_path:
+                    image_path = os.path.join(image_dir_name, file_name)
+                else:
+                    image_path = file_name
                 row.append(image_path % count)
+                count += 1
+
                 row += episode.actions[j].reshape(-1).tolist()
                 row.append(episode.rewards[j])
-                count += 1
                 writer.writerow(row)
 
 
@@ -148,10 +157,16 @@ def import_csv_as_image_observation_dataset(fname, discrete_action):
             else:
                 terminals.append(0)
 
-        dataset = MDPDataset(observations=np.array(observations),
-                             actions=np.array(actions),
-                             rewards=np.array(rewards),
-                             terminals=np.array(terminals),
+        # convert list to ndarray
+        observations = np.array(observations, dtype=np.uint8)
+        actions = np.array(actions)
+        rewards = np.array(rewards, dtype=np.float32)
+        terminals = np.array(terminals, dtype=np.float32)
+
+        dataset = MDPDataset(observations=observations,
+                             actions=actions,
+                             rewards=rewards,
+                             terminals=terminals,
                              discrete_action=discrete_action)
 
     return dataset
