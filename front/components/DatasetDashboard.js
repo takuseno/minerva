@@ -126,7 +126,7 @@ const DatasetStatistics = (props) => {
           </tr>
           <tr>
             <th>observation shape</th>
-            <td>{stats.observation_shape}</td>
+            <td>({stats.observation_shape.join(', ')})</td>
           </tr>
           <tr>
             <th>action type</th>
