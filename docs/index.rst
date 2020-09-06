@@ -17,6 +17,7 @@ MINERVA: An Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement Learning
    installation
    getting_started
    tutorials
+   command
 
 .. toctree::
    :maxdepth: 2
