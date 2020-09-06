@@ -32,6 +32,7 @@ export const CONTINUOUS_CONFIGS = {
       n_epochs: 100,
       q_func_type: 'mean',
       scaler: null,
+      n_frames: 4,
       batch_size: 100,
       use_gpu: null
     },
@@ -64,6 +65,7 @@ export const DISCRETE_CONFIGS = {
       n_epochs: 100,
       q_func_type: 'mean',
       scaler: null,
+      n_frames: 4,
       batch_size: 32,
       use_gpu: null
     },

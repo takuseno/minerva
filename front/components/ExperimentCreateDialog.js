@@ -20,8 +20,8 @@ import {
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../context'
 import { Line } from 'rc-progress'
+import { Map } from 'immutable'
 import Modal from 'react-modal'
-import { Record } from 'immutable'
 
 const modalStyles = {
   content: {
@@ -160,8 +160,8 @@ export const ExperimentCreateDialog = (props) => {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [experimentName, setExperimentName] = useState('')
-  const [basicConfig, setBasicConfig] = useState(Record({})())
-  const [advancedConfig, setAdvancedConfig] = useState(Record({})())
+  const [basicConfig, setBasicConfig] = useState(Map({}))
+  const [advancedConfig, setAdvancedConfig] = useState(Map({}))
   const [isShowingAdvancedConfig, setIsShowingAdvancedConfig] = useState(false)
   const {
     status,
@@ -176,17 +176,22 @@ export const ExperimentCreateDialog = (props) => {
   useEffect(() => {
     setExperimentName(`${algorithm.toUpperCase()}_${getTimestamp()}`)
 
-    // Default scaling option based on observation type
+    // Default option based on observation type
     const scaler = dataset.isImage ? 'pixel' : null
-    setBasicConfig(Record(configs[algorithm].basic_config)({ scaler: scaler }))
+    let config = Map(configs[algorithm].basic_config).set('scaler', scaler)
+    if (!dataset.isImage) {
+      // Remove frame stacking option
+      config = config.delete('n_frames')
+    }
+    setBasicConfig(config)
 
-    setAdvancedConfig(Record(configs[algorithm].advanced_config)())
+    setAdvancedConfig(Map(configs[algorithm].advanced_config))
   }, [props.isOpen])
 
   const handleClose = () => {
     setUploadProgress(0)
-    setBasicConfig(Record({})())
-    setAdvancedConfig(Record({})())
+    setBasicConfig(Map({}))
+    setAdvancedConfig(Map({}))
     setExperimentName('')
     setIsShowingAdvancedConfig(false)
     props.onClose()
