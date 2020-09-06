@@ -128,6 +128,47 @@ FileInput.defaultProps = {
   onChange: () => {}
 }
 
+export const DirectoryInput = (props) => {
+  const [directoryName, setDirectoryName] = useState('')
+  const handleChange = (e) => {
+    if (e.target.files.length > 0) {
+      // Convert FileList to Array
+      const fileList = []
+      for (let i = 0; i < e.target.files.length; ++i) {
+        fileList.push(e.target.files[i])
+      }
+      props.onChange(fileList)
+
+      // Update directory name
+      const samplePath = e.target.files[0].webkitRelativePath
+      const [name] = samplePath.split('/')
+      const fileCount = e.target.files.length
+      setDirectoryName(`${wrapText(name, 15)} (${fileCount} files)`)
+    }
+  }
+  return (
+    <label className='minerva-form-file minerva-form-directory'>
+      <input
+        type='file'
+        name={props.name}
+        onChange={handleChange}
+        webkitdirectory=''
+        mozdirectory=''
+        msdirectory=''
+        odirectory=''
+        directory=''
+      />
+      <span className='minerva-form-file-button'>{props.text}</span>
+      <span className='minerva-form-file-name'>{directoryName}</span>
+    </label>
+  )
+}
+
+DirectoryInput.defaultProps = {
+  text: 'UPLOAD',
+  onChange: () => {}
+}
+
 export const Checkbox = (props) => {
   const handleChange = (e) => {
     props.onChange(e.target.checked)

@@ -95,8 +95,14 @@ export const GlobalProvider = ({ children }) => {
     showErrorToast(message)
   }
 
-  const uploadDataset = (file, isImage, isDiscrete, progressCallback) => (
-    Dataset.upload(file, isImage, isDiscrete, progressCallback)
+  const uploadDataset = (
+    file,
+    isImage,
+    isDiscrete,
+    imageFiles,
+    progressCallback
+  ) => (
+    Dataset.upload(file, isImage, isDiscrete, imageFiles, progressCallback)
       .then((dataset) => {
         setDatasets(datasets.unshift(dataset))
         return dataset

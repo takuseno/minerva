@@ -41,11 +41,17 @@ export class Dataset extends DatasetRecord {
     })
   }
 
-  static upload (file, isImage, isDiscrete, progressCallback = () => {}) {
+  static upload (file, isImage, isDiscrete, imageFiles, progressCallback) {
     const params = new FormData()
     params.append('dataset', file)
     params.append('is_image', isImage)
     params.append('is_discrete', isDiscrete)
+    if (isImage) {
+      imageFiles.forEach((imageFile, i) => {
+        params.append(`image_${i}`, imageFile)
+      })
+      params.append('total_images', imageFiles.length)
+    }
     const config = {
       headers: { 'Content-type': 'multipart/form-data' },
       onUploadProgress: progressCallback
