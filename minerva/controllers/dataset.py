@@ -33,7 +33,8 @@ def upload_dataset():
         total_images = int(request.form.get('total_images'))
         for i in range(total_images):
             image_file = request.files['image_%d' % i]
-            image_name = werkzeug.utils.secure_filename(image_file.filename)
+            image_name = os.path.basename(image_file.filename)
+            image_name = werkzeug.utils.secure_filename(image_name)
             image_path = os.path.join(get_config('UPLOAD_DIR'), image_name)
             image_file.save(image_path)
 
