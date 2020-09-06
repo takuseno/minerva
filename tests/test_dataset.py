@@ -64,7 +64,7 @@ def test_image_dataset(discrete_action, n_channels, action_size, data_size):
                      discrete_action=discrete_action)
 
     # save as csv
-    export_mdp_dataset_as_csv(ref, 'test_data/test.csv')
+    export_mdp_dataset_as_csv(ref, 'test_data/test.csv', relative_path=True)
 
     # load from csv
     dataset = import_csv_as_mdp_dataset('test_data/test.csv',

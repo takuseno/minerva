@@ -7,18 +7,16 @@ from tqdm import trange
 from d3rlpy.dataset import MDPDataset
 
 
-def export_mdp_dataset_as_csv(dataset, fname):
+def export_mdp_dataset_as_csv(dataset, fname, relative_path=False):
     if len(dataset.get_observation_shape()) > 1:
         # image observation
-        export_image_observation_dataset_as_csv(dataset, fname)
+        export_image_observation_dataset_as_csv(dataset, fname, relative_path)
     else:
         # vector observation
         export_vector_observation_dataset_as_csv(dataset, fname)
 
 
-def export_image_observation_dataset_as_csv(dataset,
-                                            fname,
-                                            relative_path=True):
+def export_image_observation_dataset_as_csv(dataset, fname, relative_path):
     data_size = dataset.observations.shape[0]
     action_size = dataset.get_action_size()
 
