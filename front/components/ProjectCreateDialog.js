@@ -14,12 +14,10 @@ import Modal from 'react-modal'
 const modalStyles = {
   content: {
     width: '500px',
-    height: '240px',
-    top: '32%',
-    left: '30%',
+    top: 'auto',
+    left: 'auto',
     right: 'auto',
     bottom: 'auto',
-    marginRight: '-50%',
     padding: '32px',
     'box-shadow': '10px 10px 20px 20px rgba(0, 0, 0, 0.1)'
   }

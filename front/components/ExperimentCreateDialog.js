@@ -26,13 +26,12 @@ import { Record } from 'immutable'
 const modalStyles = {
   content: {
     width: '600px',
-    height: '420px',
-    top: '18%',
-    left: '30%',
+    top: 'auto',
+    left: 'auto',
     right: 'auto',
     bottom: 'auto',
-    marginRight: '-50%',
     padding: '32px',
+    'max-height': '80%',
     'box-shadow': '10px 10px 20px 20px rgba(0, 0, 0, 0.1)'
   }
 }
