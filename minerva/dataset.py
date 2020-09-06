@@ -130,12 +130,20 @@ def import_csv_as_image_observation_dataset(fname, discrete_action):
             # load image
             image_path = os.path.join(os.path.dirname(fname), row[1])
             image = Image.open(image_path)
+
+            # resize image to (84, 84)
+            if image.size != (84, 84):
+                image = image.resize((84, 84), Image.BICUBIC)
+
+            # convert PIL.Image to ndarray
             array = np.asarray(image)
+
+            # fix channel-first shape
             if image.mode == 'L':
                 array = array.reshape((1, *array.shape))
             else:
-                # channel first
                 array = array.transpose([2, 0, 1])
+
             observations.append(array)
 
             # get action columns
@@ -148,9 +156,7 @@ def import_csv_as_image_observation_dataset(fname, discrete_action):
             # get reward column
             rewards.append(float(row[-1]))
 
-            if i == data_size - 1:
-                terminals.append(1)
-            elif episode_id != rows[i + 2][0]:
+            if i == data_size - 1 or episode_id != rows[i + 2][0]:
                 terminals.append(1)
             else:
                 terminals.append(0)
