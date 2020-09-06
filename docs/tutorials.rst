@@ -19,6 +19,8 @@ Train
 
 Follow instruction from :ref:`upload_dataset` to :ref:`start_training`.
 
+.. _tutorial_deploy:
+
 Deploy
 ~~~~~~
 
