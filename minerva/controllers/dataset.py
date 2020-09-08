@@ -1,12 +1,15 @@
 import os
 import uuid
 import json
+import base64
+from io import BytesIO
+
 import werkzeug
 from flask import Blueprint, request, jsonify
 from sqlalchemy import desc
 
 from ..config import get_config
-from ..dataset import import_csv_as_mdp_dataset
+from ..dataset import import_csv_as_mdp_dataset, convert_ndarray_to_image
 from ..models.dataset import Dataset, DatasetSchema
 
 dataset_route = Blueprint('dataset', __name__)
@@ -95,3 +98,32 @@ def delete_dataset(dataset_id):
     dataset = Dataset.get(dataset_id, raise_404=True)
     dataset.delete()
     return jsonify({})
+
+
+@dataset_route.route('/<dataset_id>/example', methods=['GET'])
+def get_example_vector_observation(dataset_id):
+    dataset = Dataset.get(dataset_id, raise_404=True)
+
+    # take care of computational cost
+    mdp_dataset = dataset.load_mdp_dataset()
+
+    if dataset.is_image:
+        # take first 3 samples
+        ndarrays = mdp_dataset.observations[:3]
+
+        observations = []
+        for ndarray in ndarrays:
+            image = convert_ndarray_to_image(ndarray)
+
+            # encode image to base64
+            buffer = BytesIO()
+            image.save(buffer, format='PNG')
+            encoded_image = base64.b64encode(buffer.getvalue())
+
+            # return in string
+            observations.append(encoded_image.decode().replace("'", ''))
+    else:
+        # take first 10 samples
+        observations = mdp_dataset.observations[:10]
+
+    return jsonify({'observations': observations})

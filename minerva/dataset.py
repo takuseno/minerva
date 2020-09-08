@@ -7,6 +7,25 @@ from tqdm import trange
 from d3rlpy.dataset import MDPDataset
 
 
+def convert_ndarray_to_image(ndarray):
+    # convert channel-fist to channel-last
+    if ndarray.shape[0] == 1:
+        array = ndarray[0]
+    else:
+        array = np.transpose(ndarray, [1, 2, 0])
+    return Image.fromarray(array)
+
+
+def convert_image_to_ndarray(image):
+    array = np.asarray(image)
+    # fix channel-first shape
+    if image.mode == 'L':
+        array = array.reshape((1, *array.shape))
+    else:
+        array = array.transpose([2, 0, 1])
+    return array
+
+
 def export_mdp_dataset_as_csv(dataset, fname, relative_path=False):
     if len(dataset.get_observation_shape()) > 1:
         # image observation
@@ -28,12 +47,7 @@ def export_image_observation_dataset_as_csv(dataset, fname, relative_path):
 
     # save image files
     for i in trange(data_size, desc='saving images'):
-        # convert channel-fist to channel-last
-        if dataset.observations[i].shape[0] == 1:
-            array = dataset.observations[i][0]
-        else:
-            array = np.transpose(dataset.observations[i], [1, 2, 0])
-        image = Image.fromarray(array)
+        image = convert_ndarray_to_image(dataset.observations[i])
         image_path = os.path.join(image_dir_path, 'observation_%d.png' % i)
         image.save(image_path, quality=100)
 
@@ -136,13 +150,7 @@ def import_csv_as_image_observation_dataset(fname, discrete_action):
                 image = image.resize((84, 84), Image.BICUBIC)
 
             # convert PIL.Image to ndarray
-            array = np.asarray(image)
-
-            # fix channel-first shape
-            if image.mode == 'L':
-                array = array.reshape((1, *array.shape))
-            else:
-                array = array.transpose([2, 0, 1])
+            array = convert_image_to_ndarray(image)
 
             observations.append(array)
 

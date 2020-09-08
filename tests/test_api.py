@@ -1,15 +1,19 @@
 import pytest
 import os
 import json
+import base64
 import time
 import numpy as np
 import minerva.config as config
 
+from io import BytesIO
 from d3rlpy.datasets import get_cartpole
 from d3rlpy.dataset import MDPDataset
 from werkzeug.datastructures import FileStorage
+from PIL import Image
 from minerva.dataset import export_mdp_dataset_as_csv
 from minerva.dataset import export_image_observation_dataset_as_csv
+from minerva.dataset import convert_image_to_ndarray
 from minerva.index import app, db
 from minerva.models.dataset import Dataset
 from minerva.models.project import Project
@@ -146,6 +150,18 @@ def test_dataset_api(client, is_image):
     assert res.json['name'] == 'updated'
     with app.app_context():
         assert Dataset.get(dataset_id).name == 'updated'
+
+    # check get example observations
+    res = client.get('/api/datasets/%d/example' % dataset_id)
+    assert res.status_code == 200
+    examples = res.json['observations']
+    if is_image:
+        for i, base64_image in enumerate(examples):
+            image = Image.open(BytesIO(base64.b64decode(base64_image)))
+            ndarray = convert_image_to_ndarray(image)
+            assert np.all(ndarray == mdp_dataset.observations[i])
+    else:
+        assert np.allclose(np.array(examples), mdp_dataset.observations[:10])
 
     # check delete
     res = client.delete('/api/datasets/%d' % dataset_id, follow_redirects=True)
