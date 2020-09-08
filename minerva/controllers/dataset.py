@@ -123,7 +123,8 @@ def get_example_vector_observation(dataset_id):
             # return in string
             observations.append(encoded_image.decode().replace("'", ''))
     else:
-        # take first 10 samples
-        observations = mdp_dataset.observations[:10]
+        # take first 100 samples
+        n_steps = min(100, mdp_dataset.observations.shape[0])
+        observations = mdp_dataset.observations[:n_steps]
 
     return jsonify({'observations': observations})

@@ -75,6 +75,18 @@ export class Dataset extends DatasetRecord {
     return axios.put(`/api/datasets/${this.id}`, this.toRequest())
   }
 
+  getExampleObservations () {
+    return new Promise((resolve, reject) => {
+      axios.get(`/api/datasets/${this.id}/example`)
+        .then((res) => {
+          const { observations } = res.data
+          resolve(observations)
+          return observations
+        })
+        .catch((err) => reject(err))
+    })
+  }
+
   static fromResponse (data) {
     const dataset = new Dataset({
       id: data.id,

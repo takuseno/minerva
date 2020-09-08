@@ -161,7 +161,7 @@ def test_dataset_api(client, is_image):
             ndarray = convert_image_to_ndarray(image)
             assert np.all(ndarray == mdp_dataset.observations[i])
     else:
-        assert np.allclose(np.array(examples), mdp_dataset.observations[:10])
+        assert np.allclose(np.array(examples), mdp_dataset.observations[:100])
 
     # check delete
     res = client.delete('/api/datasets/%d' % dataset_id, follow_redirects=True)

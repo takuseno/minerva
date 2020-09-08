@@ -20,7 +20,10 @@ export const DatasetContent = (props) => (
       <Switch>
         <Route path='/datasets/:id'>
           <DatasetSidebar datasets={props.datasets} />
-          <DatasetDashboard datasets={props.datasets} />
+          <DatasetDashboard
+            datasets={props.datasets}
+            examples={props.examples}
+          />
         </Route>
         <Route exact path='/datasets'>
           <Redirect to={`/datasets/${props.datasets.first().id}`} />

@@ -42,6 +42,7 @@ export const GlobalProvider = ({ children }) => {
   const [datasets, setDatasets] = useState(List([]))
   const [projects, setProjects] = useState(List([]))
   const [experiments, dispatch] = useReducer(experimentReducer, Map({}))
+  const [examples, setExamples] = useState(Map({}))
   const [status, setStatus] = useState({})
   const [statusTime, setStatusTime] = useState(Date.now())
 
@@ -196,12 +197,23 @@ export const GlobalProvider = ({ children }) => {
     return experiment.cancel().catch((err) => showNetworkErrorToast(err))
   }
 
+  const fetchExampleObservations = (dataset) => {
+    dataset.getExampleObservations()
+      .then((observations) => {
+        const newExamples = examples.set(dataset.id, observations)
+        setExamples(newExamples)
+        return observations
+      })
+      .catch((err) => showErrorToast(err))
+  }
+
   return (
     <GlobalContext.Provider
       value={{
         datasets,
         projects,
         experiments,
+        examples,
         status,
         uploadDataset,
         deleteDataset,
@@ -214,6 +226,7 @@ export const GlobalProvider = ({ children }) => {
         deleteExperiment,
         updateExperiment,
         cancelExperiment,
+        fetchExampleObservations,
         showErrorToast,
         showNetworkErrorToast
       }}

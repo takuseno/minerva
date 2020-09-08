@@ -8,7 +8,12 @@ import { Header } from './Header'
 import { ToastContainer } from 'react-toastify'
 
 export default function Main () {
-  const { datasets, projects, experiments } = useContext(GlobalContext)
+  const {
+    datasets,
+    projects,
+    experiments,
+    examples
+  } = useContext(GlobalContext)
   return (
     <div className='main'>
       <Header />
@@ -21,7 +26,7 @@ export default function Main () {
           />
         </Route>
         <Route path='/datasets'>
-          <DatasetContent datasets={datasets} />
+          <DatasetContent datasets={datasets} examples={examples} />
         </Route>
         <Route path='/'>
           <Redirect to='/projects' />

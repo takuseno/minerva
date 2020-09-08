@@ -1,6 +1,6 @@
 import '../styles/dataset-dashboard.scss'
 import { Button, TextForm } from './forms'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { ConfirmationDialog } from './ConfirmationDialog.js'
 import { GlobalContext } from '../context'
@@ -105,14 +105,64 @@ const convertByteToString = (size) => {
   return `${(size / (2 ** 30)).toFixed(2).toString()}GiB`
 }
 
+const ExampleObservations = (props) => {
+  const { dataset, example } = props
+  if (dataset.isImage) {
+    return (
+      <div className='example-wrapper'>
+        <div className='example'>
+          <div class='images'>
+            {example.map((image, i) => (
+              <img key={i} src={`data:image/jpeg;base64,${image}`} />
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+  return (
+    <div className='example-wrapper'>
+      <div className='example'>
+        <div className='table-wrapper'>
+          <table>
+            <tr className='table-header'>
+              <th>step</th>
+              {example[0].map((data, i) => (
+                <th key={i}>{i}</th>
+              ))}
+            </tr>
+            {example.map((data, i) => (
+              <tr key={i}>
+                <th>{i}</th>
+                {data.map((column, j) => (
+                  <td key={j}>{column.toFixed(4)}</td>
+                ))}
+              </tr>
+            ))}
+          </table>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const DatasetStatistics = (props) => {
-  const { dataset } = props
+  const { fetchExampleObservations } = useContext(GlobalContext)
+  const { dataset, example } = props
   const stats = dataset.statistics
   const actionSpace = dataset.isDiscrete ? 'discrete' : 'continuous'
   const observationSpace = dataset.isImage ? 'image' : 'vector'
   const returnHist = stats.return.histogram
   const rewardHist = stats.reward.histogram
   const actionHist = stats.action.histogram
+
+  // Load example observations
+  useEffect(() => {
+    if (example === undefined) {
+      fetchExampleObservations(dataset)
+    }
+  }, [dataset.id])
+
   return (
     <div className='dataset-body'>
       <div className='dataset-section'>
@@ -149,6 +199,8 @@ const DatasetStatistics = (props) => {
             <td>{convertByteToString(dataset.dataSize)}</td>
           </tr>
         </table>
+        {example !== undefined &&
+          <ExampleObservations dataset={dataset} example={example} />}
       </div>
       <div className='dataset-section'>
         <span className='section-title'>Statistics</span>
@@ -211,8 +263,9 @@ const DatasetStatistics = (props) => {
 
 export const DatasetDashboard = (props) => {
   const { id } = useParams()
-  const { datasets } = props
+  const { datasets, examples } = props
   const dataset = datasets.find((d) => d.id === Number(id))
+  const example = examples.get(dataset.id)
   if (dataset === undefined) {
     // TODO: show error page
     return (<div className='dashboard' />)
@@ -221,7 +274,7 @@ export const DatasetDashboard = (props) => {
     <div className='dashboard'>
       <DatasetHeader dataset={dataset} />
       <div className='dataset-body-wrapper'>
-        <DatasetStatistics dataset={dataset} />
+        <DatasetStatistics dataset={dataset} example={example} />
       </div>
     </div>
   )
