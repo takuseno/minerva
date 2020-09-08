@@ -103,6 +103,10 @@ Upload dataset with vector observation
 
 .. image:: ./assets/dataset_dialog.jpg
 
+This is an example dashboard screen after uploading a vector dataset.
+
+.. image:: ./assets/dataset_dashboard_vector.jpg
+
 Upload dataset with image observation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -113,6 +117,10 @@ Upload dataset with image observation
 5. Click ``SUBMIT`` to upload the dataset.
 
 .. image:: ./assets/image_dataset_dialog.jpg
+
+This is an example dashboard screen after uploading an image dataset.
+
+.. image:: ./assets/dataset_dashboard_image.jpg
 
 .. note::
 
