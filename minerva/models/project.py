@@ -7,6 +7,7 @@ from ..database import db, ma
 
 class Project(db.Model, BaseModel):
     __tablename__ = 'projects'
+    __table_args__ = {'sqlite_autoincrement': True}
     id = db.Column(db.Integer, primary_key=True)
     dataset_id = db.Column(db.Integer, db.ForeignKey('datasets.id'))
     name = db.Column(db.String(100))

@@ -16,6 +16,7 @@ from ..tasks import train
 
 class Experiment(db.Model, BaseModel):
     __tablename__ = 'experiments'
+    __table_args__ = {'sqlite_autoincrement': True}
     id = db.Column(db.Integer, primary_key=True)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
     name = db.Column(db.String(100))
