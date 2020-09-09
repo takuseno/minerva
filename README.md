@@ -35,6 +35,14 @@ be exported as [TorchScript](https://pytorch.org/docs/stable/jit.html) and
 $ pip install minerva
 ```
 
+## update guide
+
+If you update MINERVA, the database schema should be also updated as follows:
+```
+$ pip install -U minerva
+$ minerva upgrade-db
+```
+
 ## usage
 ### run server
 At the first time, `~/.minerva` will be automatically created to store
