@@ -4,6 +4,7 @@
 [![PyPI version](https://badge.fury.io/py/minerva-ui.svg)](https://badge.fury.io/py/minerva-ui)
 ![test](https://github.com/takuseno/minerva/workflows/test/badge.svg)
 ![format check](https://github.com/takuseno/minerva/workflows/format%20check/badge.svg)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/takuseno/minerva)](https://hub.docker.com/r/takuseno/minerva)
 [![Documentation Status](https://readthedocs.org/projects/minerva-ui/badge/?version=latest)](https://minerva-ui.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/takuseno/minerva/branch/master/graph/badge.svg?token=7OL530W7T4)](https://codecov.io/gh/takuseno/minerva)
 ![MIT](https://img.shields.io/badge/license-MIT-blue)
@@ -36,8 +37,14 @@ be exported as [TorchScript](https://pytorch.org/docs/stable/jit.html) and
 [ONNX](https://onnx.ai/).
 
 ## installation
+### PyPI
 ```
 $ pip install minerva-ui
+```
+
+### Docker
+```
+$ docker run -d --gpus all -p 9000:9000 --name minerva takuseno/minerva:latest
 ```
 
 ## update guide
