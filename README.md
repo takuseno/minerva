@@ -1,6 +1,7 @@
 <div align="center"><img src="assets/logo.jpg" width="800"/></div>
 
 # MINERVA: An out-of-the-box GUI tool for data-driven deep reinforcement learning
+[![PyPI version](https://badge.fury.io/py/minerva-ui.svg)](https://badge.fury.io/py/minerva-ui)
 ![test](https://github.com/takuseno/minerva/workflows/test/badge.svg)
 ![format check](https://github.com/takuseno/minerva/workflows/format%20check/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/minerva-ui/badge/?version=latest)](https://minerva-ui.readthedocs.io/en/latest/?badge=latest)
