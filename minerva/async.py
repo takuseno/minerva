@@ -12,7 +12,7 @@ def dispatch(uid, func, *args, **kwargs):
     queue = Queue()
     process = Process(target=_child_process,
                       args=(func, queue, args, kwargs),
-                      daemon=False)
+                      daemon=True)
     process.start()
     RUNNING_PROCESSES[uid] = (process, queue)
 
