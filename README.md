@@ -3,6 +3,7 @@
 # MINERVA: An out-of-the-box GUI tool for data-driven deep reinforcement learning
 ![test](https://github.com/takuseno/minerva/workflows/test/badge.svg)
 ![format check](https://github.com/takuseno/minerva/workflows/format%20check/badge.svg)
+[![Documentation Status](https://readthedocs.org/projects/minerva-ui/badge/?version=latest)](https://minerva-ui.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/takuseno/minerva/branch/master/graph/badge.svg?token=7OL530W7T4)](https://codecov.io/gh/takuseno/minerva)
 ![MIT](https://img.shields.io/badge/license-MIT-blue)
 
@@ -11,6 +12,8 @@ Learning, designed for everyone including non-programmers to do reinforcement
 learning as a tool.
 
 <div align="center"><img src="assets/screenshot1.jpg" width="800"/></div>
+
+Documentation: https://minerva-ui.readthedocs.io
 
 ## key features
 ### :zap: All You Need Is Dataset
