@@ -10,7 +10,7 @@ from d3rlpy.algos import CQL, DiscreteCQL
 from .base import BaseModel
 from ..config import get_config
 from ..database import db, ma
-from ..async import is_running, dispatch, kill
+from ..async_helper import is_running, dispatch, kill
 from ..tasks import train
 
 

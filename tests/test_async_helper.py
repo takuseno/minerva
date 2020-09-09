@@ -1,7 +1,7 @@
 import time
 import numpy as np
 
-from minerva.async import dispatch, get, is_running, kill
+from minerva.async_helper import dispatch, get, is_running, kill
 
 
 def test_dispatch():
