@@ -20,3 +20,20 @@ clean
 Clean all data including the database, the training metrics, and trained parameters::
 
   $ minerva clean
+
+
+upgrade-db
+----------
+
+Upgrade database based on the latest schema definitions.
+This command should be called after version updates::
+
+  $ minerva upgrade-db
+
+
+downgrade-db
+------------
+
+Downgrade database to the previous revision::
+
+  $ minerva downgrade-db

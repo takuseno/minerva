@@ -7,6 +7,7 @@ else:
 
 DATASET_DIR = os.path.join(ROOT_DIR, 'dataset')
 DATABASE_PATH = os.path.join(ROOT_DIR, 'database.db')
+MIGRATION_DIR = os.path.join(ROOT_DIR, 'migrations')
 LOG_DIR = os.path.join(ROOT_DIR, 'train_logs')
 TMP_DIR = '/tmp/minerva'
 UPLOAD_DIR = '/tmp/minerva'
@@ -35,15 +36,19 @@ def prepare_directory():
 
 def get_config(key):
     if key == 'ROOT_DIR':
-        return ROOT_DIR
-    if key == 'DATASET_DIR':
-        return DATASET_DIR
-    if key == 'DATABASE_PATH':
-        return DATABASE_PATH
-    if key == 'LOG_DIR':
-        return LOG_DIR
-    if key == 'TMP_DIR':
-        return TMP_DIR
-    if key == 'UPLOAD_DIR':
-        return UPLOAD_DIR
-    raise ValueError('invalid key value.')
+        path = ROOT_DIR
+    elif key == 'DATASET_DIR':
+        path = DATASET_DIR
+    elif key == 'DATABASE_PATH':
+        path = DATABASE_PATH
+    elif key == 'LOG_DIR':
+        path = LOG_DIR
+    elif key == 'TMP_DIR':
+        path = TMP_DIR
+    elif key == 'UPLOAD_DIR':
+        path = UPLOAD_DIR
+    elif key == 'MIGRATION_DIR':
+        path = MIGRATION_DIR
+    else:
+        raise ValueError('invalid key value.')
+    return path

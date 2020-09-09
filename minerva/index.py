@@ -8,7 +8,8 @@ from flask import Flask, redirect
 from flask.json import JSONEncoder
 
 import minerva.models
-from minerva.config import DATABASE_PATH, ROOT_DIR
+import minerva.database as database
+from minerva.config import DATABASE_PATH, ROOT_DIR, MIGRATION_DIR
 from minerva.config import config, prepare_directory
 from minerva.database import init_db, db
 from minerva.controllers import dataset_route
@@ -74,6 +75,8 @@ def run(host, port):
     if not os.path.exists(DATABASE_PATH):
         with app.app_context():
             db.create_all()
+            database.init_migration(MIGRATION_DIR)
+            database.create_migration(MIGRATION_DIR)
 
     # start server
     app.run(debug=True, host=host, port=int(port))
@@ -83,6 +86,19 @@ def run(host, port):
 def create_db():
     with app.app_context():
         db.create_all()
+
+
+@cli.command()
+def upgrade_db():
+    with app.app_context():
+        database.create_migration(MIGRATION_DIR)
+        database.upgrade_db(MIGRATION_DIR)
+
+
+@cli.command()
+def downgrade_db():
+    with app.app_context():
+        database.downgrade_db(MIGRATION_DIR)
 
 
 @cli.command()
