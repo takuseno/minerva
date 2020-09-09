@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # clean
-rm -rf minerva-ui.egg-info
+rm -rf minerva_ui.egg-info
 rm -rf dist
 rm -rf build
 
