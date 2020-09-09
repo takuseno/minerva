@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(name="minerva-ui",
-      version="0.1",
+      version="0.11",
       description="Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement Learning",
       long_description=open("README.md").read(),
       long_description_content_type="text/markdown",
