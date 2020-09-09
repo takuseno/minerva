@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+  <head>
+    <title>MINERVA: An Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement Learning</title>
+    <meta name="description" content="MINERVA provides extremely powerful deep reinforcement learning algoriths through the stunning GUI. You can start reinforcement learning projects with the minimum lines of codes.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/notosansjp.css">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <section class="hero is-medium is-bold">
+
+      <div class="hero-head">
+        <header class="navbar">
+          <div class="container">
+            <div class="navbar-brand">
+              <a class="navbar-item minerva-header-logo">
+                MINERVA
+              </a>
+              <span class="navbar-burger burger" data-target="navbarMenuHeroC">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </div>
+            <div id="navbarMenuHeroC" class="navbar-menu">
+              <div class="navbar-end">
+                <span class="navbar-item">
+                  <a class="button is-inverted download" href="https://github.com/takuseno/minerva">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Download</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title text-center minerva-logo">MINERVA</h1>
+          <h2 class="subtitle text-center minerva-subtitle">
+            An Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement Learning
+          </h2>
+          <div class="buttons is-fullwidth is-centered">
+            <a class="button" href="https://github.com/takuseno/minerva">
+              <span class="icon">
+                <i class="fab fa-github"></i>
+              </span>
+              <span>GitHub</span>
+            </a>
+            <a class="button" href="https://youtu.be/k8LrR1gMPIY">See Video</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container has-text-centered">
+        <h2 class="title">
+          The world's first deep reinforcement learning software for everyone.
+        </h2>
+        <div class="content is-medium">
+          <p>
+            MINERVA provides extremely powerful deep reinforcement learning
+            algoriths through the stunning GUI. You can start reinforcement
+            learning projects with the minimum lines of codes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section features">
+      <div class="container has-text-centered">
+
+        <h1 class="title">features</h1>
+
+        <div class="tile is-ancestor">
+
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <h1 class="title">
+                <span class="icon">
+                  <i class="fas fa-database"></i>
+                </span>
+              </h1>
+              <h1 class="subtitle has-text-weight-semibold">
+                ALL YOU NEED IS A DATASET
+              </h1>
+              <p class="has-text-weight-medium">
+                MINERVA only requires datasets to start data-driven deep reinforcement learning.
+                Any combinations of vector observations and image observations
+                with discrete actions and continuous actions are supported.
+              </p>
+            </div>
+          </div>
+
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <h1 class="title">
+                <span class="icon">
+                  <i class="fas fa-leaf"></i>
+                </span>
+              </h1>
+              <h1 class="subtitle has-text-weight-semibold">
+                STUNNING GUI
+              </h1>
+              <p class="has-text-weight-medium">
+                MINERVA provides designed with intuitive GUI to let everyone
+                lerverage extremely powerful algorithms without barriers.
+                The GUI is developed as a Single Page Application (SPA) to make
+                it work in the eye-opening speed.
+              </p>
+            </div>
+          </div>
+
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <h1 class="title">
+                <span class="icon">
+                  <i class="fas fa-rocket"></i>
+                </span>
+              </h1>
+              <h1 class="subtitle has-text-weight-semibold">
+                POWERFUL ALGORITHMS
+              </h1>
+              <p class="has-text-weight-medium">
+              MINERVA is powered by <a href="https://github.com/takuseno/d3rlpy">d3rlpy</a>,
+              a powerful data-driven deep reinforcement learning library for Python,
+              to provide extremely powerful algorithms in an out-of-the-box way.
+              The trained policy can be exported as
+              <a href="https://pytorch.org/docs/stable/jit.html">TorchScript</a>
+              and <a href="https://onnx.ai">ONNX</a>.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section gui">
+      <div class="container has-text-centered">
+        <h1 class="title">the new deep reinforcement learning experience</h1>
+
+        <div class="container mb-6">
+          <h2 class="subsitle has-text-weight-bold is-size-4">Dataset Management</h2>
+          <p class="is-size-5 mb-2">
+            Datasets can be easily uploaded to manage and visualize statistical information.
+          </p>
+          <img class="screenshot" src="screenshot2.jpg"></img>
+        </div>
+
+        <div class="container mb-6">
+          <h2 class="subsitle has-text-weight-bold is-size-4">Out-Of-The-Box Policy Training</h2>
+          <p class="is-size-5 mb-2">
+            Start training deep reinforcement learning algorithms without coding while visualizing metrics.
+          </p>
+          <img class="screenshot" src="screenshot1.jpg"></img>
+        </div>
+
+        <div class="container">
+          <h2 class="subsitle has-text-weight-bold is-size-4">Exporting Inference Model</h2>
+          <p class="is-size-5 mb-2">
+            The trained policy can be exported as TorchScript and ONNX format for deployment.
+          </p>
+          <img class="screenshot" src="screenshot3.jpg"></img>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section video">
+      <div class="container has-text-centered">
+          <h1 class="title">video</h1>
+          <div class="youtube is-fullwidth">
+            <iframe
+              width="1280"
+              height="720"
+              src="https://www.youtube.com/embed/vckHfTWjAw4"
+              frameborder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+      </div>
+    </section>
+
+    <section class="section library">
+      <div class="container has-text-centered">
+        <h1 class="title">core library</h1>
+        <div class="card">
+          <div class="card-content">
+            <h1 class="title">d3rlpy</h1>
+            <h2 class="subtitle has-text-weight-medium">
+              A data-driven deep reinforcement learning library as an
+              out-of-the-box tool
+            </h2>
+            <div class="content">
+              <p class="has-text-weight-medium">
+                d3rlpy is a Python library providing the state-of-the-art
+                data-driven deep reinforcement learning algorithms through
+                scikit-learn style API.
+              </p>
+            </div>
+            <div class="buttons is-centered">
+              <a class="button" href="https://takuseno.github.io/d3rlpy">
+                Project Page
+              </a>
+              <iframe src="https://ghbtns.com/github-btn.html?user=takuseno&repo=d3rlpy&type=star&count=true&size=large" frameborder="0" scrolling="0" width="130" height="30" title="GitHub"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>Copyright &copy; 2020 Takuma Seno.</p>
+      </div>
+    </footer>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script defer src="script.js"></script>
+  </body>
+</html>
