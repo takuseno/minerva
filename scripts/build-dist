@@ -1,9 +1,12 @@
 #!/bin/bash
 
 # clean
-rm -rf minerva.egg-info
+rm -rf minerva-ui.egg-info
 rm -rf dist
 rm -rf build
+
+# build frontend
+npm run build
 
 python setup.py test
 
