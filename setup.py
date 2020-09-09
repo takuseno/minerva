@@ -22,6 +22,7 @@ setup(name="minerva-ui",
       packages=["minerva",
                 "minerva.controllers",
                 "minerva.models"],
+      package_data={'minerva': ['dist/*']},
       python_requires=">=3.5.0",
       include_package_data=True,
       entry_points={'console_scripts': ['minerva=minerva.index:cli']})

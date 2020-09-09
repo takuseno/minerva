@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
   entry: './front/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'minerva/dist'),
     filename: 'index.bundle.js'
   },
   module: {

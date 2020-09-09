@@ -12,5 +12,6 @@ test_data
 .node-version
 .coverage
 node_modules
-dist/index.bundle.js
+minerva/dist/index.bundle.js
 docs/_build
+build

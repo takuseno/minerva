@@ -16,7 +16,7 @@ from minerva.controllers import dataset_route
 from minerva.controllers import project_route
 from minerva.controllers import system_route
 
-static_path = os.path.join(os.path.dirname(__file__), '..', 'dist')
+static_path = os.path.join(os.path.dirname(__file__), 'dist')
 app = Flask(__name__, static_folder=static_path)
 for name, val in config.items():
     app.config[name] = val
