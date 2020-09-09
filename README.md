@@ -55,9 +55,9 @@ database, uploaded datasets and training metrics.
 ```
 $ minerva run
 ```
+By default, you can access to MINERVA interface at http://localhost:9000 .
 You can change the host and port with `--host` and `--port` arguments
 respectively.
-
 
 ### delete data
 You can delete entire data (`~/.minerva`) as follows:
