@@ -1,0 +1,14 @@
+#!/bin/bash
+
+VERSION="latest"
+
+while getopts v: OPT
+do
+  case $OPT in
+    "v" ) VERSION=$OPTARG ;;
+      * ) echo "Usage: ./scripts/build-docker [-v VERSION]" 1>&2
+          exit 1 ;;
+  esac
+done
+
+docker build -t takuseno/minerva:$VERSION docker
