@@ -6,6 +6,7 @@
 [![Documentation Status](https://readthedocs.org/projects/minerva-ui/badge/?version=latest)](https://minerva-ui.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/takuseno/minerva/branch/master/graph/badge.svg?token=7OL530W7T4)](https://codecov.io/gh/takuseno/minerva)
 ![MIT](https://img.shields.io/badge/license-MIT-blue)
+[![Gitter](https://img.shields.io/gitter/room/d3rlpy/minerva)](https://gitter.im/d3rlpy/minerva)
 
 MINERVA is an Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement
 Learning, designed for everyone including non-programmers to do reinforcement
