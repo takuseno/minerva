@@ -26,7 +26,7 @@ Install MINERVA via PyPI
 
 `pip` is a recommended way to install minerva::
 
-  $ pip install minerva
+  $ pip install minerva-ui
 
 Install MINERVA from source
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

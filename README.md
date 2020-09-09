@@ -36,14 +36,14 @@ be exported as [TorchScript](https://pytorch.org/docs/stable/jit.html) and
 
 ## installation
 ```
-$ pip install minerva
+$ pip install minerva-ui
 ```
 
 ## update guide
 
 If you update MINERVA, the database schema should be also updated as follows:
 ```
-$ pip install -U minerva
+$ pip install -U minerva-ui
 $ minerva upgrade-db
 ```
 
