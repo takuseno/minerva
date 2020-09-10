@@ -1,3 +1,4 @@
+import { BaseModel } from './base'
 import { Dataset } from './dataset'
 import { Record } from 'immutable'
 import axios from 'axios'
@@ -12,31 +13,9 @@ const ProjectRecord = Record({
   updatedAt: ''
 })
 
-export class Project extends ProjectRecord {
-  static get (id) {
-    return new Promise((resolve, reject) => {
-      axios.get(`/api/projects/${id}`)
-        .then((res) => {
-          const project = Project.fromResponse(res.data)
-          resolve(project)
-          return project
-        })
-        .catch((err) => reject(err))
-    })
-  }
+const urlBase = '/api/projects'
 
-  static getAll () {
-    return new Promise((resolve, reject) => {
-      axios.get('/api/projects')
-        .then((res) => {
-          const projects = res.data.projects.map(Project.fromResponse)
-          resolve(projects)
-          return projects
-        })
-        .catch((err) => reject(err))
-    })
-  }
-
+export class Project extends BaseModel(ProjectRecord, urlBase, 'project') {
   static create (datasetId, name, progressCallback = () => {}) {
     const config = { onUploadProgress: progressCallback }
     const data = { dataset_id: datasetId, name: name }
@@ -49,14 +28,6 @@ export class Project extends ProjectRecord {
         })
         .catch((err) => reject(err))
     })
-  }
-
-  delete () {
-    return axios.delete(`/api/projects/${this.id}`)
-  }
-
-  update () {
-    return axios.put(`/api/projects/${this.id}`, this.toRequest())
   }
 
   static fromResponse (data) {

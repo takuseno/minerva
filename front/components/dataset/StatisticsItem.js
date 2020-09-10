@@ -8,19 +8,19 @@ export const StatisticsItem = (props) => (
     <table className='statistics-table'>
       <tr>
         <th>mean</th>
-        <td>{props.mean.toFixed(2)}</td>
+        <td>{props.stats.mean.toFixed(2)}</td>
       </tr>
       <tr>
         <th>standard deviation</th>
-        <td>{props.std.toFixed(2)}</td>
+        <td>{props.stats.std.toFixed(2)}</td>
       </tr>
       <tr>
         <th>maximum value</th>
-        <td>{props.max.toFixed(2)}</td>
+        <td>{props.stats.max.toFixed(2)}</td>
       </tr>
       <tr>
         <th>minimum value</th>
-        <td>{props.min.toFixed(2)}</td>
+        <td>{props.stats.min.toFixed(2)}</td>
       </tr>
     </table>
     <div className='graph'>

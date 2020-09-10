@@ -100,7 +100,7 @@ export const ProjectHeader = (props) => {
       onCreate={() => setIsCreating(true)}
       onEdit={handleEdit}
       onDelete={() => setIsDeleting(true)}
-      onSubmit={handleDelete}
+      onSubmitDelete={handleDelete}
       onCancelDelete={() => setIsDeleting(false)}
       onCancelCreate={() => setIsCreating(false)}
       isCreating={isCreating}

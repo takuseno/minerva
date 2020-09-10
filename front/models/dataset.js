@@ -1,5 +1,6 @@
 /* global FormData */
 
+import { BaseModel } from './base'
 import { Record } from 'immutable'
 import axios from 'axios'
 
@@ -16,31 +17,9 @@ const DatasetRecord = Record({
   updatedAt: ''
 })
 
-export class Dataset extends DatasetRecord {
-  static get (id) {
-    return new Promise((resolve, reject) => {
-      axios.get(`/api/datasets/${id}`)
-        .then((res) => {
-          const dataset = Dataset.fromResponse(res.data)
-          resolve(dataset)
-          return dataset
-        })
-        .catch((err) => reject(err))
-    })
-  }
+const urlBase = '/api/datasets'
 
-  static getAll () {
-    return new Promise((resolve, reject) => {
-      axios.get('/api/datasets')
-        .then((res) => {
-          const datasets = res.data.datasets.map(Dataset.fromResponse)
-          resolve(datasets)
-          return datasets
-        })
-        .catch((err) => reject(err))
-    })
-  }
-
+export class Dataset extends BaseModel(DatasetRecord, urlBase, 'dataset') {
   static upload (file, isImage, isDiscrete, imageFiles, progressCallback) {
     const params = new FormData()
     params.append('dataset', file)
@@ -65,14 +44,6 @@ export class Dataset extends DatasetRecord {
         })
         .catch((err) => reject(err))
     })
-  }
-
-  delete () {
-    return axios.delete(`/api/datasets/${this.id}`)
-  }
-
-  update () {
-    return axios.put(`/api/datasets/${this.id}`, this.toRequest())
   }
 
   getExampleObservations () {
