@@ -1,0 +1,79 @@
+@import '../colors';
+@import '../font';
+
+
+.experiment-detail {
+  border-bottom: 1px solid $white-dark;
+  box-sizing: border-box;
+  overflow: auto;
+  padding: 6px;
+
+  .top-line {
+    align-items: center;
+    display: flex;
+
+    .react-sweet-progress-circle-outer {
+      height: 35px;
+      width: 35px;
+    }
+
+    .experiment-name {
+      font-size: 1em;
+      font-weight: $weight-300;
+      margin-left: 6px;
+    }
+
+    .success {
+      color: $green-dark;
+      font-size: .8em;
+      font-weight: $weight-400;
+      margin-left: auto;
+    }
+
+    .failed {
+      color: $red-dark;
+      font-size: .8em;
+      font-weight: $weight-400;
+      margin-left: auto;
+    }
+
+    .running {
+      color: $blue-dark;
+      font-size: .8em;
+      font-weight: $weight-400;
+      margin-left: auto;
+    }
+  }
+
+  .middle-line {
+    table {
+      box-sizing: border-box;
+      font-size: .8em;
+      padding: 6px;
+      width: 100%;
+
+      th {
+        font-weight: $weight-300;
+        width: 100px;
+      }
+
+      td {
+        font-weight: $weight-400;
+      }
+    }
+  }
+
+  .bottom-line {
+    .minerva-form-button {
+      float: right;
+      margin-left: 6px;
+
+      span {
+        font-size: .8em;
+        font-weight: $weight-400;
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+    }
+  }
+}

@@ -1,24 +1,15 @@
-import '../styles/create-experiment-dialog.scss'
-import '../styles/dialog.scss'
+import '../../styles/dialog.scss'
+import '../../styles/project/create-experiment-dialog.scss'
 import {
   Button,
-  Checkbox,
   FormGroup,
   FormRow,
-  MultiSelectForm,
-  SelectForm,
   TextFormUnderline
-} from './forms.js'
-import {
-  CONTINUOUS_CONFIGS,
-  DISCRETE_CONFIGS,
-  IMAGE_AUGMENTATION_OPTIONS,
-  Q_FUNC_TYPE_OPTIONS,
-  SCALER_OPTIONS,
-  VECTOR_AUGMENTATION_OPTIONS
-} from '../constants'
+} from '../forms.js'
+import { CONTINUOUS_CONFIGS, DISCRETE_CONFIGS } from '../../constants'
 import React, { useContext, useEffect, useState } from 'react'
-import { GlobalContext } from '../context'
+import { ConfigForm } from './ConfigForm'
+import { GlobalContext } from '../../context'
 import { Line } from 'rc-progress'
 import { Map } from 'immutable'
 import Modal from 'react-modal'
@@ -48,81 +39,6 @@ const getTimestamp = () => {
     date.getMinutes(),
     date.getSeconds()
   ].join('')
-}
-
-const ConfigForm = (props) => {
-  const { dataset } = props
-
-  if (props.label === 'q_func_type') {
-    const options = Object.entries(Q_FUNC_TYPE_OPTIONS)
-      .map(([key, value]) => ({ text: value, value: key }))
-    return (
-      <SelectForm
-        options={options}
-        value={props.value}
-        onChange={(newValue) => props.onChange(props.label, newValue)}
-      />
-    )
-  } else if (props.label === 'scaler') {
-    const options = Object.entries(SCALER_OPTIONS)
-      .map(([key, value]) => ({ text: value, value: key }))
-    return (
-      <SelectForm
-        options={options}
-        value={props.value}
-        onChange={(newValue) => {
-          props.onChange(props.label, newValue === 'null' ? null : newValue)
-        }}
-      />
-    )
-  } else if (props.label === 'augmentation') {
-    const augmentations = dataset.isImage ? IMAGE_AUGMENTATION_OPTIONS
-      : VECTOR_AUGMENTATION_OPTIONS
-    const options = Object.entries(augmentations)
-      .map(([key, value]) => ({ text: value, value: key }))
-    return (
-      <FormRow>
-        <MultiSelectForm
-          options={options}
-          onChange={(newValue) => props.onChange(props.label, newValue)}
-          value={props.value}
-        />
-      </FormRow>
-    )
-  } else if (props.label === 'use_gpu') {
-    const options = [{ text: 'CPU', value: null }]
-    if (props.status.gpu !== undefined) {
-      for (let i = 0; i < props.status.gpu.total; ++i) {
-        options.push({ text: `GPU:${i}`, value: i })
-      }
-    }
-    return (
-      <SelectForm
-        options={options}
-        value={props.value}
-        onChange={(newValue) => {
-          const value = newValue === 'null' ? null : Number(newValue)
-          props.onChange(props.label, value)
-        }}
-      />
-    )
-  } else if ((typeof props.value) === 'boolean') {
-    return (
-      <FormRow>
-        <Checkbox
-          text=''
-          value={props.value}
-          onChange={(check) => props.onChange(props.label, check)}
-        />
-      </FormRow>
-    )
-  }
-  return (
-    <TextFormUnderline
-      value={props.value}
-      onChange={(newValue) => props.onChange(props.label, Number(newValue))}
-    />
-  )
 }
 
 const ConfigForms = (props) => {
@@ -163,11 +79,7 @@ export const ExperimentCreateDialog = (props) => {
   const [basicConfig, setBasicConfig] = useState(Map({}))
   const [advancedConfig, setAdvancedConfig] = useState(Map({}))
   const [isShowingAdvancedConfig, setIsShowingAdvancedConfig] = useState(false)
-  const {
-    status,
-    createExperiment,
-    showErrorToast
-  } = useContext(GlobalContext)
+  const { status, createExperiment, showErrorToast } = useContext(GlobalContext)
 
   const { dataset, project } = props
   const { algorithm } = project

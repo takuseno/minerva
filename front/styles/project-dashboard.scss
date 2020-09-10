@@ -18,24 +18,6 @@
       height: 100%;
       width: 300px;
 
-      .project-detail {
-        border-bottom: 1px solid $white-dark;
-
-        table {
-          th {
-            font-size: 1.1em;
-            font-weight: $weight-300;
-            text-align: left;
-          }
-
-          td {
-            font-size: 1.1em;
-            font-weight: $weight-400;
-            text-align: left;
-          }
-        }
-      }
-
       .experiments {
         flex-basis: 0;
         flex-grow: 1;
@@ -43,82 +25,6 @@
         margin: 0;
         overflow: auto;
         padding: 0;
-
-        .experiment-detail {
-          border-bottom: 1px solid $white-dark;
-          box-sizing: border-box;
-          overflow: auto;
-          padding: 6px;
-
-          .top-line {
-            align-items: center;
-            display: flex;
-
-            .react-sweet-progress-circle-outer {
-              height: 35px;
-              width: 35px;
-            }
-
-            .experiment-name {
-              font-size: 1em;
-              font-weight: $weight-300;
-              margin-left: 6px;
-            }
-
-            .success {
-              color: $green-dark;
-              font-size: .8em;
-              font-weight: $weight-400;
-              margin-left: auto;
-            }
-
-            .failed {
-              color: $red-dark;
-              font-size: .8em;
-              font-weight: $weight-400;
-              margin-left: auto;
-            }
-
-            .running {
-              color: $blue-dark;
-              font-size: .8em;
-              font-weight: $weight-400;
-              margin-left: auto;
-            }
-          }
-
-          .middle-line {
-            table {
-              box-sizing: border-box;
-              font-size: .8em;
-              padding: 6px;
-              width: 100%;
-
-              th {
-                font-weight: $weight-300;
-                width: 100px;
-              }
-
-              td {
-                font-weight: $weight-400;
-              }
-            }
-          }
-
-          .bottom-line {
-            .minerva-form-button {
-              float: right;
-              margin-left: 6px;
-
-              span {
-                font-size: .8em;
-                font-weight: $weight-400;
-                padding-left: 12px;
-                padding-right: 12px;
-              }
-            }
-          }
-        }
       }
 
       .empty {
@@ -137,106 +43,6 @@
       overflow: auto;
       position: relative;
 
-      .graph {
-        box-sizing: border-box;
-        padding: 6px;
-
-        .minerva-form-select {
-          font-size: 1.2em;
-        }
-
-        .graph-item {
-          box-sizing: border-box;
-          height: 450px;
-          padding: 24px;
-          width: 100%;
-        }
-      }
-
-      .params-list {
-        flex-grow: 1;
-        position: relative;
-        width: 100%;
-
-        .parameter-table {
-          border-collapse: collapse;
-          border-spacing: 0;
-          border-top: 1px solid $black-light;
-          box-sizing: border-box;
-          display: block;
-          height: 100%;
-          overflow: auto;
-          position: absolute;
-          table-layout: fixed;
-          white-space: nowrap;
-          width: 100%;
-
-          tr {
-            box-sizing: border-box;
-
-            th {
-              background: $white;
-              box-sizing: border-box;
-              font-size: 1em;
-              font-weight: $weight-300;
-              padding-bottom: 6px;
-              padding-left: 12px;
-              padding-right: 12px;
-              padding-top: 6px;
-            }
-
-            td {
-              background: $white;
-              box-sizing: border-box;
-              font-size: 1em;
-              font-weight: $weight-200;
-              padding-bottom: 6px;
-              padding-left: 12px;
-              padding-right: 12px;
-              padding-top: 6px;
-            }
-          }
-
-          .table-header {
-            th {
-              background: $white;
-              position: sticky;
-              top: 0;
-
-              &::before {
-                border-bottom: 2px solid $white-dark;
-                content: '';
-                height: 100%;
-                left: -1px;
-                position: absolute;
-                top: -1px;
-                width: 100%;
-              }
-            }
-
-            .name {
-              z-index: 1;
-            }
-          }
-
-          .name {
-            box-sizing: border-box;
-            left: 0;
-            position: sticky;
-
-            &::before {
-              border-right: 1px solid $white-dark;
-              content: '';
-              height: 100%;
-              left: -1px;
-              position: absolute;
-              top: -1px;
-              width: 100%;
-            }
-          }
-        }
-      }
-
       .empty {
         color: $white-dark;
         font-size: 1em;
@@ -253,41 +59,6 @@
   flex-grow: 1;
   position: reletive;
   width: 100%;
-
-  .project-header {
-    border-bottom: 1px solid $black-light;
-    box-sizing: border-box;
-    display: flex;
-    padding: 6px;
-    width: 100%;
-
-    .project-name {
-      flex-grow: 1;
-      font-size: 2em;
-      font-weight: $weight-200;
-    }
-
-    .minerva-form-text {
-      border: 0;
-      flex-grow: 1;
-      font-size: 2em;
-      font-weight: $weight-200;
-      padding: 0;
-
-      &:focus {
-        border: 0;
-        outline: 0;
-      }
-    }
-
-    .edit-buttons {
-      float: right;
-
-      button {
-        margin: 6px;
-      }
-    }
-  }
 
   .project-body {
     flex-grow: 1;

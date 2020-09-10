@@ -1,10 +1,10 @@
-import '../styles/dialog.scss'
-import '../styles/download-policy-dialog.scss'
+import '../../styles/dialog.scss'
+import '../../styles/project/download-policy-dialog.scss'
 import {
   Button,
   FormGroup,
   SelectForm
-} from './forms.js'
+} from '../forms.js'
 import React, { useState } from 'react'
 import Modal from 'react-modal'
 import { Range } from 'immutable'

@@ -1,0 +1,21 @@
+@import '../colors';
+@import '../font';
+
+
+.project-detail {
+  border-bottom: 1px solid $white-dark;
+
+  table {
+    th {
+      font-size: 1.1em;
+      font-weight: $weight-300;
+      text-align: left;
+    }
+
+    td {
+      font-size: 1.1em;
+      font-weight: $weight-400;
+      text-align: left;
+    }
+  }
+}

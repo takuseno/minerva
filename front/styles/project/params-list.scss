@@ -1,0 +1,87 @@
+@import '../colors';
+@import '../font';
+
+
+.params-list {
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+
+  .parameter-table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-top: 1px solid $black-light;
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+    overflow: auto;
+    position: absolute;
+    table-layout: fixed;
+    white-space: nowrap;
+    width: 100%;
+
+    tr {
+      box-sizing: border-box;
+
+      th {
+        background: $white;
+        box-sizing: border-box;
+        font-size: 1em;
+        font-weight: $weight-300;
+        padding-bottom: 6px;
+        padding-left: 12px;
+        padding-right: 12px;
+        padding-top: 6px;
+      }
+
+      td {
+        background: $white;
+        box-sizing: border-box;
+        font-size: 1em;
+        font-weight: $weight-200;
+        padding-bottom: 6px;
+        padding-left: 12px;
+        padding-right: 12px;
+        padding-top: 6px;
+      }
+    }
+
+    .table-header {
+      th {
+        background: $white;
+        position: sticky;
+        top: 0;
+
+        &::before {
+          border-bottom: 2px solid $white-dark;
+          content: '';
+          height: 100%;
+          left: -1px;
+          position: absolute;
+          top: -1px;
+          width: 100%;
+        }
+      }
+
+      .name {
+        z-index: 1;
+      }
+    }
+
+    .name {
+      box-sizing: border-box;
+      left: 0;
+      position: sticky;
+
+      &::before {
+        border-right: 1px solid $white-dark;
+        content: '';
+        height: 100%;
+        left: -1px;
+        position: absolute;
+        top: -1px;
+        width: 100%;
+      }
+    }
+  }
+}
