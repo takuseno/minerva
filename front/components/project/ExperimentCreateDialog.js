@@ -13,19 +13,7 @@ import { GlobalContext } from '../../context'
 import { Line } from 'rc-progress'
 import { Map } from 'immutable'
 import Modal from 'react-modal'
-
-const modalStyles = {
-  content: {
-    width: '600px',
-    top: 'auto',
-    left: 'auto',
-    right: 'auto',
-    bottom: 'auto',
-    padding: '32px',
-    'max-height': '80%',
-    'box-shadow': '10px 10px 20px 20px rgba(0, 0, 0, 0.1)'
-  }
-}
+import { modalStyles } from '../dialog'
 
 const convertSnakeToUpper = (text) => text.toUpperCase().replace(/_/gu, ' ')
 

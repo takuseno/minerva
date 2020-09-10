@@ -12,18 +12,7 @@ import React, { useContext, useState } from 'react'
 import { GlobalContext } from '../context'
 import { Line } from 'rc-progress'
 import Modal from 'react-modal'
-
-const modalStyles = {
-  content: {
-    width: '500px',
-    top: 'auto',
-    left: 'auto',
-    right: 'auto',
-    bottom: 'auto',
-    padding: '32px',
-    'box-shadow': '10px 10px 20px 20px rgba(0, 0, 0, 0.1)'
-  }
-}
+import { modalStyles } from './dialog'
 
 Modal.setAppElement('#root')
 
