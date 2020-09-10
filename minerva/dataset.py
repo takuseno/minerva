@@ -243,9 +243,7 @@ def _validate_csv_header(header):
     # check observation section
     index = 1
     observation_index = 0
-    while True:
-        if header[index].find('action') > -1:
-            break
+    while header[index].find('action') == -1:
         ref_name = 'observation:%d' % observation_index
         message = "column=%d must be '%s'" % (index, ref_name)
         assert header[index] == ref_name, message
@@ -254,9 +252,7 @@ def _validate_csv_header(header):
 
     # check action section
     action_index = 0
-    while True:
-        if header[index] == 'reward':
-            break
+    while header[index] != 'reward':
         ref_name = 'action:%d' % action_index
         message = "column=%d must be '%s'" % (index, ref_name)
         assert header[index] == ref_name, message

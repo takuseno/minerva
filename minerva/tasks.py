@@ -26,11 +26,10 @@ def train(algo_name,
           params,
           dataset_path,
           experiment_name=None,
-          logdir='d3rlpy_logs',
-          test_size=0.2):
+          logdir='d3rlpy_logs'):
     # prepare dataset
     dataset = MDPDataset.load(dataset_path)
-    train_data, test_data = train_test_split(dataset, test_size=test_size)
+    train_data, test_data = train_test_split(dataset, test_size=0.2)
 
     # evaluate
     scorers = _get_scorers(dataset.is_action_discrete())

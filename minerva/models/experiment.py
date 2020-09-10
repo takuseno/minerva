@@ -14,6 +14,22 @@ from ..async_helper import is_running, dispatch, kill
 from ..tasks import train
 
 
+def _get_metrics(log_path):
+    metrics = {}
+    pattern = re.compile('^.*.csv$')
+    file_names = os.listdir(log_path)
+    csv_names = filter(lambda name: re.match(pattern, name), file_names)
+    for file_name in csv_names:
+        path = os.path.join(log_path, file_name)
+        name = file_name[:-4]
+        data = np.loadtxt(path, delimiter=',')
+        if len(data.shape) == 1:
+            data = data.reshape((1, -1))
+        data[np.isnan(data)] = 0.0
+        metrics[name] = data[:, 2]
+    return metrics
+
+
 class Experiment(db.Model, BaseModel):
     __tablename__ = 'experiments'
     __table_args__ = {'sqlite_autoincrement': True}
@@ -49,19 +65,7 @@ class Experiment(db.Model, BaseModel):
     def get_metrics(self):
         if not os.path.exists(self.get_log_path()):
             return {}
-
-        metrics = {}
-        csv_pattern = re.compile('^.*.csv$')
-        for file_name in os.listdir(self.get_log_path()):
-            if re.match(csv_pattern, file_name):
-                path = os.path.join(self.get_log_path(), file_name)
-                name = file_name[:-4]
-                data = np.loadtxt(path, delimiter=',')
-                if len(data.shape) == 1:
-                    data = data.reshape((1, -1))
-                data[np.isnan(data)] = 0.0
-                metrics[name] = data[:, 2]
-        return metrics
+        return _get_metrics(self.get_log_path())
 
     def get_current_status(self):
         return is_running(self.id)
