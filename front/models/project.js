@@ -31,12 +31,16 @@ export class Project extends BaseModel(ProjectRecord, urlBase, 'project') {
   }
 
   static fromResponse (data) {
+    let dataset = null
+    if (data.dataset !== undefined && data.dataset !== null) {
+      dataset = Dataset.fromResponse(data.dataset)
+    }
     const project = new Project({
       id: data.id,
       datasetId: data.dataset_id,
       name: data.name,
       algorithm: data.algorithm,
-      dataset: Dataset.fromResponse(data.dataset),
+      dataset: dataset,
       createdAt: data.created_at,
       updatedAt: data.updated_at
     })

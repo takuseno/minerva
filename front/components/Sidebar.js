@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { DatasetUploadDialog } from './DatasetUploadDialog'
 import { ProjectCreateDialog } from './ProjectCreateDialog'
 
-const SideBarItem = (props) => {
+const SidebarItem = (props) => {
   const { isActive, name, url } = props
   const itemClass = isActive ? 'item active' : 'item'
   return (
@@ -14,65 +14,66 @@ const SideBarItem = (props) => {
   )
 }
 
-export const DatasetSidebar = (props) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const { datasets } = props
+const Sidebar = (props) => {
+  const { data, title, dialog, urlBase, onOpenDialog } = props
   const { id } = useParams()
   return (
     <div className='sidebar'>
       <div className='list'>
         <p className='item add'>
-          <span className='option' onClick={() => setIsDialogOpen(true)}>
-            ADD DATASET
+          <span className='option' onClick={onOpenDialog}>
+            ADD {title}
           </span>
         </p>
         <ul>
-          {datasets.map((dataset) => (
-            <SideBarItem
-              key={dataset.id}
-              isActive={dataset.id === Number(id)}
-              name={dataset.name}
-              url={`/datasets/${dataset.id}`}
+          {data.map((datum) => (
+            <SidebarItem
+              key={datum.id}
+              isActive={datum.id === Number(id)}
+              name={datum.name}
+              url={`${urlBase}/${datum.id}`}
             />
           ))}
         </ul>
       </div>
-      <DatasetUploadDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-      />
+      {dialog}
     </div>
+  )
+}
+
+export const DatasetSidebar = (props) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  return (
+    <Sidebar
+      data={props.datasets}
+      title='DATASET'
+      urlBase='/datasets'
+      onOpenDialog={() => setIsDialogOpen(true)}
+      dialog={
+        <DatasetUploadDialog
+          isOpen={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+        />
+      }
+    />
   )
 }
 
 export const ProjectSidebar = (props) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const { projects } = props
-  const { id } = useParams()
   return (
-    <div className='sidebar'>
-      <div className='list'>
-        <p className='item add'>
-          <span className='option' onClick={() => setIsDialogOpen(true)}>
-            ADD PROJECT
-          </span>
-        </p>
-        <ul>
-          {projects.map((project) => (
-            <SideBarItem
-              key={project.id}
-              isActive={project.id === Number(id)}
-              name={project.name}
-              url={`/projects/${project.id}`}
-            />
-          ))}
-        </ul>
-      </div>
-      <ProjectCreateDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        datasets={props.datasets}
-      />
-    </div>
+    <Sidebar
+      data={props.projects}
+      title='PROJECT'
+      urlBase='/projects'
+      onOpenDialog={() => setIsDialogOpen(true)}
+      dialog={
+        <ProjectCreateDialog
+          isOpen={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          datasets={props.datasets}
+        />
+      }
+    />
   )
 }
