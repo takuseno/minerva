@@ -4,6 +4,16 @@ import React, { useState } from 'react'
 import { DatasetUploadDialog } from './DatasetUploadDialog'
 import { ProjectCreateDialog } from './ProjectCreateDialog'
 
+const SideBarItem = (props) => {
+  const { isActive, name, url } = props
+  const itemClass = isActive ? 'item active' : 'item'
+  return (
+    <li className={itemClass}>
+      <Link className='option' to={url}>{name}</Link>
+    </li>
+  )
+}
+
 export const DatasetSidebar = (props) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { datasets } = props
@@ -17,16 +27,14 @@ export const DatasetSidebar = (props) => {
           </span>
         </p>
         <ul>
-          {datasets.map((dataset) => {
-            const itemClass = dataset.id === Number(id) ? 'item active' : 'item'
-            return (
-              <li key={dataset.id} className={itemClass}>
-                <Link className='option' to={`/datasets/${dataset.id}`}>
-                  {dataset.name}
-                </Link>
-              </li>
-            )
-          })}
+          {datasets.map((dataset) => (
+            <SideBarItem
+              key={dataset.id}
+              isActive={dataset.id === Number(id)}
+              name={dataset.name}
+              url={`/datasets/${dataset.id}`}
+            />
+          ))}
         </ul>
       </div>
       <DatasetUploadDialog
@@ -50,17 +58,14 @@ export const ProjectSidebar = (props) => {
           </span>
         </p>
         <ul>
-          {projects.map((project) => {
-            const activeId = project.id
-            const itemClass = activeId === Number(id) ? 'item active' : 'item'
-            return (
-              <li key={project.id} className={itemClass}>
-                <Link className='option' to={`/projects/${project.id}`}>
-                  {project.name}
-                </Link>
-              </li>
-            )
-          })}
+          {projects.map((project) => (
+            <SideBarItem
+              key={project.id}
+              isActive={project.id === Number(id)}
+              name={project.name}
+              url={`/projects/${project.id}`}
+            />
+          ))}
         </ul>
       </div>
       <ProjectCreateDialog
