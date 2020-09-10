@@ -35,20 +35,13 @@ def prepare_directory():
 
 
 def get_config(key):
-    if key == 'ROOT_DIR':
-        path = ROOT_DIR
-    elif key == 'DATASET_DIR':
-        path = DATASET_DIR
-    elif key == 'DATABASE_PATH':
-        path = DATABASE_PATH
-    elif key == 'LOG_DIR':
-        path = LOG_DIR
-    elif key == 'TMP_DIR':
-        path = TMP_DIR
-    elif key == 'UPLOAD_DIR':
-        path = UPLOAD_DIR
-    elif key == 'MIGRATION_DIR':
-        path = MIGRATION_DIR
-    else:
-        raise ValueError('invalid key value.')
-    return path
+    paths = {
+        'ROOT_DIR': ROOT_DIR,
+        'DATASET_DIR': DATASET_DIR,
+        'DATABASE_PATH': DATABASE_PATH,
+        'LOG_DIR': LOG_DIR,
+        'TMP_DIR': TMP_DIR,
+        'UPLOAD_DIR': UPLOAD_DIR,
+        'MIGRATION_DIR': MIGRATION_DIR
+    }
+    return paths[key]
