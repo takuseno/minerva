@@ -5,21 +5,14 @@ from flask import Blueprint, request, jsonify, send_file
 from werkzeug.exceptions import NotFound
 from sqlalchemy import desc
 
+from .generator import generate_for_model
 from ..config import get_config
 from ..models.project import Project, ProjectSchema
 from ..models.experiment import Experiment, ExperimentSchema
 
 project_route = Blueprint('project', __name__)
 
-
-@project_route.route('/', methods=['GET'])
-def get_all_projects():
-    projects = Project.create_query().order_by(desc(Project.id)).all()
-    project_schema = ProjectSchema(many=True)
-    return jsonify({
-        'projects': project_schema.dump(projects),
-        'total': len(projects)
-    })
+generate_for_model(project_route, Project, ProjectSchema)
 
 
 @project_route.route('/', methods=['POST'])
@@ -29,28 +22,6 @@ def create_project():
     name = json_data['name']
     project = Project.create(dataset_id, name, 'cql')
     return jsonify(ProjectSchema().dump(project))
-
-
-@project_route.route('/<project_id>', methods=['GET'])
-def get_project(project_id):
-    project = Project.get(project_id, raise_404=True)
-    return jsonify(ProjectSchema().dump(project))
-
-
-@project_route.route('/<project_id>', methods=['PUT'])
-def update_project(project_id):
-    project = Project.get(project_id, raise_404=True)
-    json_data = request.get_json()
-    project.name = json_data['name']
-    project.update()
-    return jsonify(ProjectSchema().dump(project))
-
-
-@project_route.route('/<project_id>', methods=['DELETE'])
-def delete_project(project_id):
-    project = Project.get(project_id, raise_404=True)
-    project.delete()
-    return jsonify({})
 
 
 def _process_metrics(experiment, data):

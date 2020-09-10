@@ -6,13 +6,15 @@ from io import BytesIO
 
 import werkzeug
 from flask import Blueprint, request, jsonify
-from sqlalchemy import desc
 
+from .generator import generate_for_model
 from ..config import get_config
 from ..dataset import import_csv_as_mdp_dataset, convert_ndarray_to_image
 from ..models.dataset import Dataset, DatasetSchema
 
 dataset_route = Blueprint('dataset', __name__)
+
+generate_for_model(dataset_route, Dataset, DatasetSchema)
 
 
 @dataset_route.route('/upload', methods=['POST'])
@@ -66,38 +68,6 @@ def upload_dataset():
 
     # return json
     return jsonify(DatasetSchema().dump(dataset))
-
-
-@dataset_route.route('/', methods=['GET'])
-def get_all_datasets():
-    datasets = Dataset.create_query().order_by(desc(Dataset.id)).all()
-    dataset_schema = DatasetSchema(many=True)
-    return jsonify({
-        'datasets': dataset_schema.dump(datasets),
-        'total': len(datasets)
-    })
-
-
-@dataset_route.route('/<dataset_id>', methods=['GET'])
-def get_dataset(dataset_id):
-    dataset = Dataset.get(dataset_id, raise_404=True)
-    return jsonify(DatasetSchema().dump(dataset))
-
-
-@dataset_route.route('/<dataset_id>', methods=['PUT'])
-def update_dataset(dataset_id):
-    dataset = Dataset.get(dataset_id, raise_404=True)
-    json_data = request.get_json()
-    dataset.name = json_data['name']
-    dataset.update()
-    return jsonify(DatasetSchema().dump(dataset))
-
-
-@dataset_route.route('/<dataset_id>', methods=['DELETE'])
-def delete_dataset(dataset_id):
-    dataset = Dataset.get(dataset_id, raise_404=True)
-    dataset.delete()
-    return jsonify({})
 
 
 @dataset_route.route('/<dataset_id>/example', methods=['GET'])
