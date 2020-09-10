@@ -1,0 +1,34 @@
+@import '../colors';
+@import '../font';
+
+
+.statistics-item {
+  box-sizing: border-box;
+  margin: 12px;
+  padding: 24px;
+  text-align: center;
+  width: 100%;
+
+  .statistics-title {
+    font-size: 1.2em;
+    font-weight: $weight-400;
+  }
+
+  .statistics-table {
+    border-collapse: collapse;
+    width: 300px;
+
+    th,
+    td {
+      border: 1px solid $black-dark;
+      font-size: 1em;
+      font-weight: $weight-200;
+    }
+  }
+
+  .graph {
+    box-sizing: border-box;
+    margin-top: 12px;
+    width: 100%;
+  }
+}
