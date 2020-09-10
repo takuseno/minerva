@@ -16,61 +16,80 @@ import React from 'react'
 export const ConfigForm = (props) => {
   const { dataset } = props
 
-  if (props.label === 'q_func_type') {
-    const options = Object.entries(Q_FUNC_TYPE_OPTIONS)
-      .map(([key, value]) => ({ text: value, value: key }))
-    return (
-      <SelectForm
-        options={options}
-        value={props.value}
-        onChange={(newValue) => props.onChange(props.label, newValue)}
-      />
-    )
-  } else if (props.label === 'scaler') {
-    const options = Object.entries(SCALER_OPTIONS)
-      .map(([key, value]) => ({ text: value, value: key }))
-    return (
-      <SelectForm
-        options={options}
-        value={props.value}
-        onChange={(newValue) => {
-          props.onChange(props.label, newValue === 'null' ? null : newValue)
-        }}
-      />
-    )
-  } else if (props.label === 'augmentation') {
-    const augmentations = dataset.isImage ? IMAGE_AUGMENTATION_OPTIONS
-      : VECTOR_AUGMENTATION_OPTIONS
-    const options = Object.entries(augmentations)
-      .map(([key, value]) => ({ text: value, value: key }))
-    return (
-      <FormRow>
-        <MultiSelectForm
+  let form = null
+  switch (props.label) {
+    case 'q_func_type': {
+      const options = Object.entries(Q_FUNC_TYPE_OPTIONS)
+        .map(([key, value]) => ({ text: value, value: key }))
+      form = (
+        <SelectForm
           options={options}
-          onChange={(newValue) => props.onChange(props.label, newValue)}
           value={props.value}
+          onChange={(newValue) => props.onChange(props.label, newValue)}
         />
-      </FormRow>
-    )
-  } else if (props.label === 'use_gpu') {
-    const options = [{ text: 'CPU', value: null }]
-    if (props.status.gpu !== undefined) {
-      for (let i = 0; i < props.status.gpu.total; ++i) {
-        options.push({ text: `GPU:${i}`, value: i })
-      }
+      )
+      break
     }
-    return (
-      <SelectForm
-        options={options}
-        value={props.value}
-        onChange={(newValue) => {
-          const value = newValue === 'null' ? null : Number(newValue)
-          props.onChange(props.label, value)
-        }}
-      />
-    )
-  } else if ((typeof props.value) === 'boolean') {
-    return (
+    case 'scaler': {
+      const options = Object.entries(SCALER_OPTIONS)
+        .map(([key, value]) => ({ text: value, value: key }))
+      form = (
+        <SelectForm
+          options={options}
+          value={props.value}
+          onChange={(newValue) => {
+            props.onChange(props.label, newValue === 'null' ? null : newValue)
+          }}
+        />
+      )
+      break
+    }
+    case 'augmentation': {
+      const augmentations = dataset.isImage ? IMAGE_AUGMENTATION_OPTIONS
+        : VECTOR_AUGMENTATION_OPTIONS
+      const options = Object.entries(augmentations)
+        .map(([key, value]) => ({ text: value, value: key }))
+      form = (
+        <FormRow>
+          <MultiSelectForm
+            options={options}
+            onChange={(newValue) => props.onChange(props.label, newValue)}
+            value={props.value}
+          />
+        </FormRow>
+      )
+      break
+    }
+    case 'use_gpu': {
+      const options = [{ text: 'CPU', value: null }]
+      if (props.status.gpu !== undefined) {
+        for (let i = 0; i < props.status.gpu.total; ++i) {
+          options.push({ text: `GPU:${i}`, value: i })
+        }
+      }
+      form = (
+        <SelectForm
+          options={options}
+          value={props.value}
+          onChange={(newValue) => {
+            const value = newValue === 'null' ? null : Number(newValue)
+            props.onChange(props.label, value)
+          }}
+        />
+      )
+      break
+    }
+    default:
+      form = (
+        <TextFormUnderline
+          value={props.value}
+          onChange={(newValue) => props.onChange(props.label, Number(newValue))}
+        />
+      )
+  }
+
+  if ((typeof props.value) === 'boolean') {
+    form = (
       <FormRow>
         <Checkbox
           text=''
@@ -80,10 +99,6 @@ export const ConfigForm = (props) => {
       </FormRow>
     )
   }
-  return (
-    <TextFormUnderline
-      value={props.value}
-      onChange={(newValue) => props.onChange(props.label, Number(newValue))}
-    />
-  )
+
+  return form
 }
