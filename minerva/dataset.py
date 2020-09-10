@@ -35,8 +35,15 @@ def export_mdp_dataset_as_csv(dataset, fname, relative_path=False):
         export_vector_observation_dataset_as_csv(dataset, fname)
 
 
-def export_image_observation_dataset_as_csv(dataset, fname, relative_path):
+def _save_image_files(dataset, dir_path):
     data_size = dataset.observations.shape[0]
+    for i in trange(data_size, desc='saving images'):
+        image = convert_ndarray_to_image(dataset.observations[i])
+        image_path = os.path.join(dir_path, 'observation_%d.png' % i)
+        image.save(image_path, quality=100)
+
+
+def export_image_observation_dataset_as_csv(dataset, fname, relative_path):
     action_size = dataset.get_action_size()
 
     # prepare image directory
@@ -46,10 +53,13 @@ def export_image_observation_dataset_as_csv(dataset, fname, relative_path):
     os.makedirs(image_dir_path, exist_ok=True)
 
     # save image files
-    for i in trange(data_size, desc='saving images'):
-        image = convert_ndarray_to_image(dataset.observations[i])
-        image_path = os.path.join(image_dir_path, 'observation_%d.png' % i)
-        image.save(image_path, quality=100)
+    _save_image_files(dataset, image_dir_path)
+
+    file_name = 'observation_%d.png'
+    if relative_path:
+        image_path = os.path.join(image_dir_name, file_name)
+    else:
+        image_path = file_name
 
     with open(fname, 'w') as file:
         writer = csv.writer(file)
@@ -71,11 +81,6 @@ def export_image_observation_dataset_as_csv(dataset, fname, relative_path):
                 row.append(i)
 
                 # add image path
-                file_name = 'observation_%d.png'
-                if relative_path:
-                    image_path = os.path.join(image_dir_name, file_name)
-                else:
-                    image_path = file_name
                 row.append(image_path % count)
                 count += 1
 
@@ -120,6 +125,16 @@ def import_csv_as_mdp_dataset(fname, image=False, discrete_action=False):
     return import_csv_as_vector_observation_dataset(fname, discrete_action)
 
 
+def _load_image(path):
+    image = Image.open(path)
+
+    # resize image to (84, 84)
+    if image.size != (84, 84):
+        image = image.resize((84, 84), Image.BICUBIC)
+
+    return image
+
+
 def import_csv_as_image_observation_dataset(fname, discrete_action):
     with open(fname, 'r') as file:
         reader = csv.reader(file)
@@ -142,12 +157,7 @@ def import_csv_as_image_observation_dataset(fname, discrete_action):
             episode_id = row[0]
 
             # load image
-            image_path = os.path.join(os.path.dirname(fname), row[1])
-            image = Image.open(image_path)
-
-            # resize image to (84, 84)
-            if image.size != (84, 84):
-                image = image.resize((84, 84), Image.BICUBIC)
+            image = _load_image(os.path.join(os.path.dirname(fname), row[1]))
 
             # convert PIL.Image to ndarray
             array = convert_image_to_ndarray(image)
