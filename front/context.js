@@ -9,6 +9,38 @@ import { toast } from 'react-toastify'
 
 export const GlobalContext = React.createContext({})
 
+const showErrorToast = (message) => {
+  toast.error(message, {
+    position: 'bottom-center',
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: false
+  })
+}
+
+const showNetworkErrorToast = (err) => {
+  const { url, method } = err.config
+  let message = `${method.toUpperCase()}: ${url} "${err.message}"`
+  if (err.response) {
+    message = `${method.toUpperCase()}: ${url} "${err.status}: ${err.data}"`
+  }
+  showErrorToast(message)
+}
+
+const updateFunc = (data, setData) => (datum) => {
+  const index = data.findIndex((d) => d.id === datum.id)
+  setData(data.set(index, datum))
+  return datum.update().catch((err) => showNetworkErrorToast(err))
+}
+
+const deleteFunc = (data, setData) => (datum) => {
+  const newData = data.filter((d) => d.id !== datum.id)
+  setData(newData)
+  return datum.delete().catch((err) => showNetworkErrorToast(err))
+}
+
 // Reducers
 const experimentReducer = (experiments, action) => {
   const actions = {
@@ -76,26 +108,6 @@ export const GlobalProvider = ({ children }) => {
 
   // Actions
 
-  const showErrorToast = (message) => {
-    toast.error(message, {
-      position: 'bottom-center',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: false
-    })
-  }
-
-  const showNetworkErrorToast = (err) => {
-    const { url, method } = err.config
-    let message = `${method.toUpperCase()}: ${url} "${err.message}"`
-    if (err.response) {
-      message = `${method.toUpperCase()}: ${url} "${err.status}: ${err.data}"`
-    }
-    showErrorToast(message)
-  }
-
   const uploadDataset = (
     file,
     isImage,
@@ -111,17 +123,9 @@ export const GlobalProvider = ({ children }) => {
       .catch((err) => showNetworkErrorToast(err))
   )
 
-  const deleteDataset = (dataset) => {
-    const newDatasets = datasets.filter((d) => d.id !== dataset.id)
-    setDatasets(newDatasets)
-    return dataset.delete().catch((err) => showNetworkErrorToast(err))
-  }
+  const deleteDataset = deleteFunc(datasets, setDatasets)
 
-  const updateDataset = (dataset) => {
-    const index = datasets.findIndex((d) => d.id === dataset.id)
-    setDatasets(datasets.set(index, dataset))
-    return dataset.update().catch((err) => showNetworkErrorToast(err))
-  }
+  const updateDataset = updateFunc(datasets, setDatasets)
 
   const createProject = (datasetId, name, progressCallback) => (
     Project.create(datasetId, name, progressCallback)
@@ -132,17 +136,9 @@ export const GlobalProvider = ({ children }) => {
       .catch((err) => showNetworkErrorToast(err))
   )
 
-  const deleteProject = (project) => {
-    const newProjects = projects.filter((p) => p.id !== project.id)
-    setProjects(newProjects)
-    return project.delete().catch((err) => showNetworkErrorToast(err))
-  }
+  const deleteProject = deleteFunc(projects, setProjects)
 
-  const updateProject = (project) => {
-    const index = projects.findIndex((p) => p.id === project.id)
-    setProjects(projects.set(index, project))
-    return project.update().catch((err) => showNetworkErrorToast(err))
-  }
+  const updateProject = updateFunc(projects, setProjects)
 
   const fetchExperiments = (projectId) => (
     Experiment.getAll(projectId)

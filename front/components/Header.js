@@ -40,7 +40,18 @@ const JobItem = (props) => {
   )
 }
 
-const JobList = (props) => {
+const JobList = (props) => props.jobs.map((experiment) => {
+  const { projects } = props
+  const { projectId } = experiment
+  const project = projects.find((p) => p.id === projectId)
+  return (
+    <li key={experiment.id}>
+      <JobItem experiment={experiment} project={project} />
+    </li>
+  )
+})
+
+const JobFloatPanel = (props) => {
   const { projects } = props
   const cpuJobs = props.status.cpu.jobs
   const totalGPU = props.status.gpu.total
@@ -53,15 +64,7 @@ const JobList = (props) => {
           <p className='empty-message'>No Jobs</p>}
         {cpuJobs.length > 0 &&
           <ul>
-            {cpuJobs.map((experiment) => {
-              const { projectId } = experiment
-              const project = projects.find((p) => p.id === projectId)
-              return (
-                <li key={experiment.id}>
-                  <JobItem experiment={experiment} project={project} />
-                </li>
-              )
-            })}
+            <JobList projects={projects} jobs={cpuJobs} />
           </ul>}
       </div>
       {Range(0, totalGPU).toJS().map((i) => (
@@ -71,15 +74,7 @@ const JobList = (props) => {
             <p className='empty-message'>No Jobs</p>}
           {gpuJobs[i] !== undefined && gpuJobs[i].length > 0 &&
             <ul>
-              {gpuJobs[i].map((experiment) => {
-                const { projectId } = experiment
-                const project = projects.find((p) => p.id === projectId)
-                return (
-                  <li key={experiment.id}>
-                    <JobItem experiment={experiment} project={project} />
-                  </li>
-                )
-              })}
+              <JobList projects={projects} jobs={gpuJobs[i]} />
             </ul>}
         </div>
       ))}
@@ -114,7 +109,7 @@ export const Header = () => {
             <CpuIcon size='large' />
           </div>
           {isJobListOpen && status.cpu !== undefined &&
-            <JobList status={status} projects={projects} />}
+            <JobFloatPanel status={status} projects={projects} />}
         </div>
       </div>
     </div>
