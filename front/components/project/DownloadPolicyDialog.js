@@ -1,16 +1,9 @@
 import '../../styles/dialog.scss'
 import '../../styles/project/download-policy-dialog.scss'
-import {
-  Button,
-  FormGroup,
-  SelectForm
-} from '../forms.js'
 import React, { useState } from 'react'
-import Modal from 'react-modal'
+import { Dialog } from '../dialog'
 import { Range } from 'immutable'
-import { modalStyles } from '../dialog'
-
-Modal.setAppElement('#root')
+import { SelectForm } from '../forms.js'
 
 export const DownloadPolicyDialog = (props) => {
   const [epoch, setEpoch] = useState(-1)
@@ -42,15 +35,16 @@ export const DownloadPolicyDialog = (props) => {
   ]
 
   return (
-    <Modal
+    <Dialog
       isOpen={props.isOpen}
-      contentLabel='Download policy'
-      style={modalStyles}
-      onRequestClose={handleClose}
+      title='Download policy'
+      message={experiment.name}
+      confirmText='SUBMIT'
+      cancelText='CANCEL'
+      onConfirm={handleSubmit}
+      onClose={handleClose}
     >
       <div>
-        <p className='dialog-title'>Download policy function</p>
-        <p className='experiment-title'>{experiment.name}</p>
         <div className='select-wrapper'>
           <span className='label'>EPOCH</span>
           <SelectForm
@@ -68,11 +62,7 @@ export const DownloadPolicyDialog = (props) => {
             onChange={(v) => setFormat(v)}
           />
         </div>
-        <FormGroup>
-          <Button text='DOWNLOAD' onClick={handleSubmit} />
-          <Button text='CANCEL' onClick={handleClose} />
-        </FormGroup>
       </div>
-    </Modal>
+    </Dialog>
   )
 }

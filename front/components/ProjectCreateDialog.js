@@ -1,18 +1,12 @@
 import '../styles/dialog.scss'
 import {
-  Button,
-  FormGroup,
   FormRow,
   SelectForm,
   TextFormUnderline
 } from './forms.js'
 import React, { useContext, useState } from 'react'
+import { Dialog } from './dialog'
 import { GlobalContext } from '../context'
-import { Line } from 'rc-progress'
-import Modal from 'react-modal'
-import { modalStyles } from './dialog'
-
-Modal.setAppElement('#root')
 
 export const ProjectCreateDialog = (props) => {
   const [isUploading, setIsUploading] = useState(false)
@@ -54,14 +48,18 @@ export const ProjectCreateDialog = (props) => {
   ))
 
   return (
-    <Modal
+    <Dialog
       isOpen={props.isOpen}
-      contentLabel='Create project'
-      style={modalStyles}
-      onRequestClose={handleClose}
+      title='Create project'
+      message=''
+      confirmText='SUBMIT'
+      cancelText='CANCEL'
+      onConfirm={handleSubmit}
+      onClose={handleClose}
+      isUploading={isUploading}
+      uploadProgress={uploadProgress}
     >
       <div>
-        <p className='dialog-title'>Create project</p>
         <FormRow>
           <SelectForm
             placeholder='CHOOSE DATASET'
@@ -77,17 +75,7 @@ export const ProjectCreateDialog = (props) => {
             onChange={(name) => setProjectName(name)}
           />
         </FormRow>
-        <FormGroup>
-          <Button text='SUBMIT' onClick={handleSubmit} />
-          <Button text='CANCEL' onClick={handleClose} />
-        </FormGroup>
-        {isUploading &&
-          <Line
-            percent={uploadProgress}
-            strokeWidth='1'
-            strokeColor='#2980b9'
-          />}
       </div>
-    </Modal>
+    </Dialog>
   )
 }

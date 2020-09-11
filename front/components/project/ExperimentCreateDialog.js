@@ -1,19 +1,12 @@
 import '../../styles/dialog.scss'
 import '../../styles/project/create-experiment-dialog.scss'
-import {
-  Button,
-  FormGroup,
-  FormRow,
-  TextFormUnderline
-} from '../forms.js'
+import { Button, FormRow, TextFormUnderline } from '../forms.js'
 import { CONTINUOUS_CONFIGS, DISCRETE_CONFIGS } from '../../constants'
 import React, { useContext, useEffect, useState } from 'react'
 import { ConfigForm } from './ConfigForm'
+import { Dialog } from '../dialog'
 import { GlobalContext } from '../../context'
-import { Line } from 'rc-progress'
 import { Map } from 'immutable'
-import Modal from 'react-modal'
-import { modalStyles } from '../dialog'
 
 const convertSnakeToUpper = (text) => text.toUpperCase().replace(/_/gu, ' ')
 
@@ -57,8 +50,6 @@ const ConfigForms = (props) => {
     </table>
   )
 }
-
-Modal.setAppElement('#root')
 
 export const ExperimentCreateDialog = (props) => {
   const [isUploading, setIsUploading] = useState(false)
@@ -129,14 +120,18 @@ export const ExperimentCreateDialog = (props) => {
   }
 
   return (
-    <Modal
+    <Dialog
       isOpen={props.isOpen}
-      contentLabel='Run experiment'
-      style={modalStyles}
-      onRequestClose={handleClose}
+      title='Run experiment'
+      message=''
+      confirmText='SUBMIT'
+      cancelText='CANCEL'
+      onConfirm={handleSubmit}
+      onClose={handleClose}
+      isUploading={isUploading}
+      uploadProgress={uploadProgress}
     >
       <div>
-        <p className='dialog-title'>Run experiment</p>
         <FormRow>
           <TextFormUnderline
             value={experimentName}
@@ -171,17 +166,7 @@ export const ExperimentCreateDialog = (props) => {
             onChange={handleAdvancedConfigChange}
             dataset={props.dataset}
           />}
-        <FormGroup>
-          <Button text='SUBMIT' onClick={handleSubmit} />
-          <Button text='CANCEL' onClick={handleClose} />
-        </FormGroup>
-        {isUploading &&
-          <Line
-            percent={uploadProgress}
-            strokeWidth='1'
-            strokeColor='#2980b9'
-          />}
       </div>
-    </Modal>
+    </Dialog>
   )
 }

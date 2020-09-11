@@ -1,20 +1,14 @@
 import '../styles/dataset-upload-dialog.scss'
 import '../styles/dialog.scss'
 import {
-  Button,
   Checkbox,
   DirectoryInput,
   FileInput,
-  FormGroup,
   FormRow
 } from './forms.js'
 import React, { useContext, useState } from 'react'
+import { Dialog } from './dialog'
 import { GlobalContext } from '../context'
-import { Line } from 'rc-progress'
-import Modal from 'react-modal'
-import { modalStyles } from './dialog'
-
-Modal.setAppElement('#root')
 
 export const DatasetUploadDialog = (props) => {
   const [isUploading, setIsUploading] = useState(false)
@@ -55,14 +49,18 @@ export const DatasetUploadDialog = (props) => {
   }
 
   return (
-    <Modal
+    <Dialog
       isOpen={props.isOpen}
-      contentLabel='Upload dataset'
-      style={modalStyles}
-      onRequestClose={handleClose}
+      title='Upload dataset'
+      message=''
+      confirmText='SUBMIT'
+      cancelText='CANCEL'
+      onConfirm={handleSubmit}
+      onClose={handleClose}
+      isUploading={isUploading}
+      uploadProgress={uploadProgress}
     >
       <div>
-        <p className='dialog-title'>Upload dataset</p>
         <FormRow>
           <FileInput
             name='dataset'
@@ -92,17 +90,7 @@ export const DatasetUploadDialog = (props) => {
               onChange={(files) => setImageFiles(files)}
             />
           </FormRow>}
-        <FormGroup>
-          <Button text='SUBMIT' onClick={handleSubmit} />
-          <Button text='CANCEL' onClick={handleClose} />
-        </FormGroup>
-        {isUploading &&
-          <Line
-            percent={uploadProgress}
-            strokeWidth='1'
-            strokeColor='#2980b9'
-          />}
       </div>
-    </Modal>
+    </Dialog>
   )
 }
