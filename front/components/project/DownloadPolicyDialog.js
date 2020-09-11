@@ -39,8 +39,7 @@ export const DownloadPolicyDialog = (props) => {
       isOpen={props.isOpen}
       title='Download policy'
       message={experiment.name}
-      confirmText='SUBMIT'
-      cancelText='CANCEL'
+      confirmText='DOWNLOAD'
       onConfirm={handleSubmit}
       onClose={handleClose}
     >

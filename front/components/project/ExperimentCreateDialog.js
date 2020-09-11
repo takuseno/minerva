@@ -123,9 +123,6 @@ export const ExperimentCreateDialog = (props) => {
     <Dialog
       isOpen={props.isOpen}
       title='Run experiment'
-      message=''
-      confirmText='SUBMIT'
-      cancelText='CANCEL'
       onConfirm={handleSubmit}
       onClose={handleClose}
       isUploading={isUploading}

@@ -45,3 +45,13 @@ export const Dialog = ({ children, ...props }) => (
     </div>
   </Modal>
 )
+
+Dialog.defaultProps = {
+  title: '',
+  message: '',
+  confirmText: 'SUBMIT',
+  cancelText: 'CANCEL',
+  isOpen: false,
+  isUploading: false,
+  uploadProgress: 0
+}

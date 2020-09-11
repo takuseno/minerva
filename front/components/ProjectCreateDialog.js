@@ -51,9 +51,6 @@ export const ProjectCreateDialog = (props) => {
     <Dialog
       isOpen={props.isOpen}
       title='Create project'
-      message=''
-      confirmText='SUBMIT'
-      cancelText='CANCEL'
       onConfirm={handleSubmit}
       onClose={handleClose}
       isUploading={isUploading}

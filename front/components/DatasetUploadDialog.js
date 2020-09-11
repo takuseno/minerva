@@ -52,9 +52,6 @@ export const DatasetUploadDialog = (props) => {
     <Dialog
       isOpen={props.isOpen}
       title='Upload dataset'
-      message=''
-      confirmText='SUBMIT'
-      cancelText='CANCEL'
       onConfirm={handleSubmit}
       onClose={handleClose}
       isUploading={isUploading}
