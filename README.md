@@ -108,3 +108,7 @@ $ ./scripts/test
 This work is supported by Information-technology Promotion Agency, Japan
 (IPA), Exploratory IT Human Resources Project (MITOU Program) in the fiscal
 year 2020.
+
+The concept of the GUI software for deep reinforcement learning is inspired by
+[DeepAnalyzer](https://ghelia.com/en/product/) from Ghelia inc.
+I'm showing the great respect to the team here.
