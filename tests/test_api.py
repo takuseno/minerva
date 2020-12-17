@@ -178,7 +178,7 @@ def test_project_api(client):
     dataset_id = res.json['id']
 
     # check create project
-    data = {'name': 'test', 'dataset_id': dataset_id}
+    data = {'name': 'test', 'dataset_id': dataset_id, 'algorithm': 'cql'}
     res = client.post('/api/projects',
                       data=json.dumps(data),
                       content_type='application/json',
@@ -222,7 +222,11 @@ def test_experiment_api(client):
     res, _ = _upload_dataset(client)
 
     # create project
-    data = {'name': 'test_project', 'dataset_id': res.json['id']}
+    data = {
+        'name': 'test_project',
+        'dataset_id': res.json['id'],
+        'algorithm': 'cql'
+    }
     res = client.post('/api/projects',
                       data=json.dumps(data),
                       content_type='application/json',

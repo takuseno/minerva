@@ -20,7 +20,8 @@ def create_project():
     json_data = request.get_json()
     dataset_id = json_data['dataset_id']
     name = json_data['name']
-    project = Project.create(dataset_id, name, 'cql')
+    algorithm = json_data['algorithm']
+    project = Project.create(dataset_id, name, algorithm)
     return jsonify(ProjectSchema().dump(project))
 
 

@@ -37,6 +37,7 @@ def train(algo_name,
     # train
     algo = create_algo(algo_name, dataset.is_action_discrete(), **params)
     algo.fit(train_data,
+             n_epochs=params['n_epochs'],
              eval_episodes=test_data,
              scorers=scorers,
              experiment_name=experiment_name,

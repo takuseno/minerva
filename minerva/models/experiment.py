@@ -5,7 +5,7 @@ import re
 import json
 import shutil
 import numpy as np
-from d3rlpy.algos import CQL, DiscreteCQL
+from d3rlpy.algos import get_algo
 
 from .base import BaseModel
 from ..config import get_config
@@ -95,13 +95,9 @@ class Experiment(db.Model, BaseModel):
             raise ValueError('%s does not exist.' % model_path)
 
         # initialize algorithm from json file
-        if self.project.algorithm == 'cql':
-            if self.project.dataset.is_discrete:
-                algo = DiscreteCQL.from_json(params_path)
-            else:
-                algo = CQL.from_json(params_path)
-        else:
-            raise ValueError('unsupported algorithm.')
+        algorithm_name = self.project.algorithm
+        is_discrete = self.project.dataset.is_discrete
+        algo = get_algo(algorithm_name, is_discrete).from_json(params_path)
 
         # load model parameters
         algo.load_model(model_path)
