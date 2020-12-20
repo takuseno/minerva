@@ -8,15 +8,19 @@ from d3rlpy.metrics.scorer import average_value_estimation_scorer
 from d3rlpy.metrics.scorer import value_estimation_std_scorer
 from d3rlpy.metrics.scorer import continuous_action_diff_scorer
 from d3rlpy.metrics.scorer import discrete_action_match_scorer
+from d3rlpy.metrics.scorer import initial_state_value_estimation_scorer
+from d3rlpy.metrics.scorer import soft_opc_scorer
 from sklearn.model_selection import train_test_split
 
 
-def _get_scorers(discrete_action):
+def _get_scorers(discrete_action, dataset_stats):
     scorers = {}
     scorers['td_error'] = td_error_scorer
     scorers['discounted_sum_of_advantage'] = discounted_sum_of_advantage_scorer
     scorers['value_scale'] = average_value_estimation_scorer
     scorers['value_standard_deviation'] = value_estimation_std_scorer
+    scorers['initial_state_value'] = initial_state_value_estimation_scorer
+    scorers['soft_opc'] = soft_opc_scorer(0.8 * dataset_stats['return']['max'])
     if discrete_action:
         scorers['action_match'] = discrete_action_match_scorer
     else:
@@ -33,8 +37,11 @@ def train(algo_name,
     dataset = MDPDataset.load(dataset_path)
     train_data, test_data = train_test_split(dataset, test_size=0.2)
 
+    # get dataset statistics
+    stats = dataset.compute_stats()
+
     # evaluate
-    scorers = _get_scorers(dataset.is_action_discrete())
+    scorers = _get_scorers(dataset.is_action_discrete(), stats)
 
     # train
     algo = create_algo(algo_name, dataset.is_action_discrete(), **params)
