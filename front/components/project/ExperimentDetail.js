@@ -85,7 +85,7 @@ export const ExperimentDetail = (props) => {
           </tr>
           <tr>
             <th>Q FUNCTION</th>
-            <td>{Q_FUNC_TYPE_OPTIONS[experiment.config.q_func_type]}</td>
+            <td>{Q_FUNC_TYPE_OPTIONS[experiment.config.q_func_factory]}</td>
           </tr>
           <tr>
             <th>SCALER</th>
