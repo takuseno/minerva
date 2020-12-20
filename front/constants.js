@@ -29,7 +29,7 @@ export const VECTOR_AUGMENTATION_OPTIONS = {
 export const COMMON_CONFIGS = {
   basic_config: {
     n_epochs: 100,
-    q_func_type: 'mean',
+    q_func_factory: 'mean',
     scaler: null,
     n_frames: 4,
     batch_size: 100,

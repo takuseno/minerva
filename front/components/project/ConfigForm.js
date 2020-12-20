@@ -18,7 +18,7 @@ export const ConfigForm = (props) => {
 
   let form = null
   switch (props.label) {
-    case 'q_func_type': {
+    case 'q_func_factory': {
       const options = Object.entries(Q_FUNC_TYPE_OPTIONS)
         .map(([key, value]) => ({ text: value, value: key }))
       form = (

@@ -1,12 +1,16 @@
 import '../../styles/dialog.scss'
 import '../../styles/project/create-experiment-dialog.scss'
 import { Button, FormRow, TextFormUnderline } from '../forms.js'
-import { CONTINUOUS_CONFIGS, DISCRETE_CONFIGS } from '../../constants'
+import {
+  COMMON_CONFIGS,
+  CONTINUOUS_CONFIGS,
+  DISCRETE_CONFIGS
+} from '../../constants'
 import React, { useContext, useEffect, useState } from 'react'
 import { ConfigForm } from './ConfigForm'
 import { Dialog } from '../dialog'
 import { GlobalContext } from '../../context'
-import { Map } from 'immutable'
+import { OrderedMap } from 'immutable'
 
 const convertSnakeToUpper = (text) => text.toUpperCase().replace(/_/gu, ' ')
 
@@ -55,34 +59,48 @@ export const ExperimentCreateDialog = (props) => {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [experimentName, setExperimentName] = useState('')
-  const [basicConfig, setBasicConfig] = useState(Map({}))
-  const [advancedConfig, setAdvancedConfig] = useState(Map({}))
+  const [basicConfig, setBasicConfig] = useState(OrderedMap({}))
+  const [advancedConfig, setAdvancedConfig] = useState(OrderedMap({}))
   const [isShowingAdvancedConfig, setIsShowingAdvancedConfig] = useState(false)
   const { status, createExperiment, showErrorToast } = useContext(GlobalContext)
 
   const { dataset, project } = props
   const { algorithm } = project
-  const configs = dataset.isDiscrete ? DISCRETE_CONFIGS : CONTINUOUS_CONFIGS
 
   useEffect(() => {
     setExperimentName(`${algorithm.toUpperCase()}_${getTimestamp()}`)
 
+    // Algorithm-specific configurations
+    const { isDiscrete } = dataset
+    const algoConfigs = isDiscrete ? DISCRETE_CONFIGS : CONTINUOUS_CONFIGS
+    let algoConfig = OrderedMap(algoConfigs[algorithm])
+
     // Default option based on observation type
     const scaler = dataset.isImage ? 'pixel' : null
-    let config = Map(configs[algorithm].basic_config).set('scaler', scaler)
+    let config = OrderedMap(COMMON_CONFIGS.basic_config).set('scaler', scaler)
     if (!dataset.isImage) {
       // Remove frame stacking option
       config = config.delete('n_frames')
     }
+
+    // Apply algorithm-specific default parameters
+    for (const key of algoConfig.keys()) {
+      if (config.has(key)) {
+        config = config.set(key, algoConfig.get(key))
+        algoConfig = algoConfig.delete(key)
+      }
+    }
+
     setBasicConfig(config)
 
-    setAdvancedConfig(Map(configs[algorithm].advanced_config))
+    const commonAdvancedConfig = COMMON_CONFIGS.advanced_config
+    setAdvancedConfig(OrderedMap(commonAdvancedConfig).merge(algoConfig))
   }, [props.isOpen])
 
   const handleClose = () => {
     setUploadProgress(0)
-    setBasicConfig(Map({}))
-    setAdvancedConfig(Map({}))
+    setBasicConfig(OrderedMap({}))
+    setAdvancedConfig(OrderedMap({}))
     setExperimentName('')
     setIsShowingAdvancedConfig(false)
     props.onClose()

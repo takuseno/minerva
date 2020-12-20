@@ -16,9 +16,9 @@ const ProjectRecord = Record({
 const urlBase = '/api/projects'
 
 export class Project extends BaseModel(ProjectRecord, urlBase, 'project') {
-  static create (datasetId, name, progressCallback = () => {}) {
+  static create (datasetId, name, algorithm, progressCallback = () => {}) {
     const config = { onUploadProgress: progressCallback }
-    const data = { dataset_id: datasetId, name: name }
+    const data = { dataset_id: datasetId, name: name, algorithm: algorithm }
     return new Promise((resolve, reject) => {
       axios.post('/api/projects', data, config)
         .then((res) => {

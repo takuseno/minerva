@@ -127,8 +127,8 @@ export const GlobalProvider = ({ children }) => {
 
   const updateDataset = updateFunc(datasets, setDatasets)
 
-  const createProject = (datasetId, name, progressCallback) => (
-    Project.create(datasetId, name, progressCallback)
+  const createProject = (datasetId, name, algorithm, progressCallback) => (
+    Project.create(datasetId, name, algorithm, progressCallback)
       .then((project) => {
         setProjects(projects.unshift(project))
         return project
