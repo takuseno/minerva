@@ -1,4 +1,4 @@
-# pylint: disable=no-member, too-many-instance-attributes
+# pylint: disable=no-member, too-many-instance-attributes, no-name-in-module
 
 import os
 from d3rlpy.dataset import MDPDataset
