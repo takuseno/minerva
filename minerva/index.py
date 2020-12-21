@@ -67,9 +67,9 @@ def cli():
     pass
 
 
-@cli.command()
-@click.option('--host', '-h', default='0.0.0.0')
-@click.option('--port', '-p', default=9000)
+@cli.command(short_help='Start MINERVA server.')
+@click.option('--host', '-h', default='0.0.0.0', help='Host IP address.')
+@click.option('--port', '-p', default=9000, help='Port number.')
 def run(host, port):
     # create databse if not exists
     if not os.path.exists(DATABASE_PATH):
@@ -82,26 +82,26 @@ def run(host, port):
     app.run(debug=True, host=host, port=int(port))
 
 
-@cli.command()
+@cli.command(short_help='Initialize database.')
 def create_db():
     with app.app_context():
         db.create_all()
 
 
-@cli.command()
+@cli.command(short_help='Upgrade database schema.')
 def upgrade_db():
     with app.app_context():
         database.create_migration(MIGRATION_DIR)
         database.upgrade_db(MIGRATION_DIR)
 
 
-@cli.command()
+@cli.command(short_help='Rollback database schema.')
 def downgrade_db():
     with app.app_context():
         database.downgrade_db(MIGRATION_DIR)
 
 
-@cli.command()
+@cli.command(short_help='Delete all data from the disk.')
 def clean():
     shutil.rmtree(ROOT_DIR)
 
