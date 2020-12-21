@@ -1,3 +1,5 @@
+import time
+
 from multiprocessing import Process, Queue
 
 RUNNING_PROCESSES = {}
@@ -33,4 +35,6 @@ def kill(uid):
     if uid not in RUNNING_PROCESSES:
         return
     process, _ = RUNNING_PROCESSES[uid]
-    process.terminate()
+    while process.is_alive():
+        process.terminate()
+        time.sleep(0.1)
