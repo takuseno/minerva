@@ -13,7 +13,7 @@ However, you can possibly run MINERVA on Windows as long as PyTorch runs since
 it's the core dependency.
 
 Browser
-~~~~~~
+~~~~~~~
 
 For now, MINERVA is only tested with Chrome. There would be incompatibilities
 with other browsers (I've confirmed some glitches on Safari).

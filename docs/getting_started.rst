@@ -136,6 +136,7 @@ To create a new project, click ``ADD PROJECT`` in the project page.
 Then,
 
 1. Choose a dataset from the uploaded ones.
+1. Choose an algorithm to learn.
 2. Fill the project name.
 3. Click ``SUBMIT`` button to create.
 
