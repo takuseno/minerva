@@ -2,6 +2,7 @@
 
 from d3rlpy.dataset import MDPDataset
 from d3rlpy.algos import create_algo
+from d3rlpy.augmentation import DrQPipeline, create_augmentation
 from d3rlpy.metrics.scorer import td_error_scorer
 from d3rlpy.metrics.scorer import discounted_sum_of_advantage_scorer
 from d3rlpy.metrics.scorer import average_value_estimation_scorer
@@ -42,6 +43,14 @@ def train(algo_name,
 
     # evaluate
     scorers = _get_scorers(dataset.is_action_discrete(), stats)
+
+    # data augmentation setting
+    if 'augmentation' in params:
+        aug_names = params['augmentation']
+        n_mean = params['n_augmentations']
+        augmentations = [create_augmentation(name) for name in aug_names]
+        augmentation = DrQPipeline(augmentations, n_mean=n_mean)
+        params['augmentation'] = augmentation
 
     # train
     algo = create_algo(algo_name, dataset.is_action_discrete(), **params)
