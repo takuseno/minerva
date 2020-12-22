@@ -3,13 +3,11 @@
 # MINERVA: An out-of-the-box GUI tool for data-driven deep reinforcement learning
 [![PyPI version](https://badge.fury.io/py/minerva-ui.svg)](https://badge.fury.io/py/minerva-ui)
 ![test](https://github.com/takuseno/minerva/workflows/test/badge.svg)
-![format check](https://github.com/takuseno/minerva/workflows/format%20check/badge.svg)
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/takuseno/minerva)](https://hub.docker.com/r/takuseno/minerva)
 [![Documentation Status](https://readthedocs.org/projects/minerva-ui/badge/?version=latest)](https://minerva-ui.readthedocs.io/en/latest/?badge=latest)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0573d1557dcc6a4321f5/maintainability)](https://codeclimate.com/github/takuseno/minerva/maintainability)
 [![codecov](https://codecov.io/gh/takuseno/minerva/branch/master/graph/badge.svg?token=7OL530W7T4)](https://codecov.io/gh/takuseno/minerva)
 ![MIT](https://img.shields.io/badge/license-MIT-blue)
-[![Gitter](https://img.shields.io/gitter/room/d3rlpy/minerva)](https://gitter.im/d3rlpy/minerva)
 
 MINERVA is an Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement
 Learning, designed for everyone including non-programmers to do reinforcement
@@ -18,6 +16,8 @@ learning as a tool.
 <div align="center"><img src="assets/screenshot1.jpg" width="800"/></div>
 
 Documentation: https://minerva-ui.readthedocs.io
+
+Chat: [![Gitter](https://img.shields.io/gitter/room/d3rlpy/minerva)](https://gitter.im/d3rlpy/minerva)
 
 ## key features
 ### :zap: All You Need Is Dataset
