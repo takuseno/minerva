@@ -8,7 +8,7 @@ MINERVA: An Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement Learning
 
 .. code-block::
 
-  $ pip install minerva
+  $ pip install minerva-ui
 
 .. toctree::
    :maxdepth: 2

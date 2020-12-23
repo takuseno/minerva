@@ -8,6 +8,7 @@ test_data
 *.pt
 *.egg-info
 *.png
+.eggs
 .python-version
 .node-version
 .coverage

@@ -64,6 +64,11 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+# logo image in the sidebar
+html_logo = '_static/logo.jpg'
+
+def setup(app):
+    app.add_stylesheet('css/minerva.css')
 
 # disable document page source link
 html_show_sourcelink = False

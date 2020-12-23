@@ -1,0 +1,13 @@
+:root{
+  --main-bg-color: #34495e;
+}
+
+/* Docs background */
+.wy-side-nav-search{
+  background-color: var(--main-bg-color);
+}
+
+/* Mobile version */
+.wy-nav-top{
+  background-color: var(--main-bg-color);
+}
