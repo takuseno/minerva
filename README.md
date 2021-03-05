@@ -9,8 +9,8 @@
 [![codecov](https://codecov.io/gh/takuseno/minerva/branch/master/graph/badge.svg?token=7OL530W7T4)](https://codecov.io/gh/takuseno/minerva)
 ![MIT](https://img.shields.io/badge/license-MIT-blue)
 
-MINERVA is an Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement
-Learning, designed for everyone including non-programmers to do reinforcement
+MINERVA is an out-of-the-box GUI tool for data-driven deep reinforcement
+learning, designed for everyone including non-programmers to do reinforcement
 learning as a tool.
 
 <div align="center"><img src="assets/screenshot1.jpg" width="800"/></div>
