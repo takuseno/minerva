@@ -71,7 +71,8 @@ def cli():
 @cli.command(short_help='Start MINERVA server.')
 @click.option('--host', '-h', default='0.0.0.0', help='Host IP address.')
 @click.option('--port', '-p', default=9000, help='Port number.')
-def run(host, port):
+@click.option("--debug", is_flag=True, help="Start as debug mode.")
+def run(host, port, debug):
     # create databse if not exists
     if not os.path.exists(DATABASE_PATH):
         with app.app_context():
@@ -80,7 +81,7 @@ def run(host, port):
             database.create_migration(MIGRATION_DIR)
 
     # start server
-    app.run(debug=True, host=host, port=int(port))
+    app.run(debug=debug, host=host, port=int(port))
 
 
 @cli.command(short_help='Initialize database.')
