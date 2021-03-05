@@ -111,11 +111,10 @@ export const GlobalProvider = ({ children }) => {
   const uploadDataset = (
     file,
     isImage,
-    isDiscrete,
     imageFiles,
     progressCallback
   ) => (
-    Dataset.upload(file, isImage, isDiscrete, imageFiles, progressCallback)
+    Dataset.upload(file, isImage, imageFiles, progressCallback)
       .then((dataset) => {
         setDatasets(datasets.unshift(dataset))
         return dataset

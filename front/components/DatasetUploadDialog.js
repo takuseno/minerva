@@ -13,7 +13,6 @@ import { GlobalContext } from '../context'
 export const DatasetUploadDialog = (props) => {
   const [isUploading, setIsUploading] = useState(false)
   const [isImage, setIsImage] = useState(false)
-  const [isDiscrete, setIsDiscrete] = useState(false)
   const [file, setFile] = useState(null)
   const [imageFiles, setImageFiles] = useState([])
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -21,7 +20,6 @@ export const DatasetUploadDialog = (props) => {
 
   const handleClose = () => {
     setIsImage(false)
-    setIsDiscrete(false)
     setFile(null)
     setImageFiles([])
     setUploadProgress(0)
@@ -39,7 +37,7 @@ export const DatasetUploadDialog = (props) => {
       const progress = Math.round(e.loaded * 100 / e.total)
       setUploadProgress(progress)
     }
-    uploadDataset(file, isImage, isDiscrete, imageFiles, progressCallback)
+    uploadDataset(file, isImage, imageFiles, progressCallback)
       .then((dataset) => {
         setIsUploading(false)
         handleClose()
@@ -63,13 +61,6 @@ export const DatasetUploadDialog = (props) => {
             name='dataset'
             text='UPLOAD'
             onChange={(newFile) => setFile(newFile)}
-          />
-        </FormRow>
-        <FormRow>
-          <Checkbox
-            name='is_discrete'
-            text='discrete control'
-            onChange={(checked) => setIsDiscrete(checked)}
           />
         </FormRow>
         <FormRow>

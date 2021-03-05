@@ -14,8 +14,7 @@ def test_vector_dataset_with_discrete_action():
     export_mdp_dataset_as_csv(ref, 'test_data/test.csv')
 
     # load from csv
-    dataset = import_csv_as_mdp_dataset('test_data/test.csv',
-                                        discrete_action=True)
+    dataset = import_csv_as_mdp_dataset('test_data/test.csv')
 
     assert dataset.get_observation_shape() == ref.get_observation_shape()
     assert dataset.get_action_size() == ref.get_action_size()
@@ -23,6 +22,7 @@ def test_vector_dataset_with_discrete_action():
     assert np.all(dataset.actions == ref.actions)
     assert np.allclose(dataset.rewards, ref.rewards)
     assert np.all(dataset.terminals == ref.terminals)
+    assert dataset.is_action_discrete()
 
 
 def test_vector_dataset_with_continuous_action():
@@ -32,8 +32,7 @@ def test_vector_dataset_with_continuous_action():
     export_mdp_dataset_as_csv(ref, 'test_data/test.csv')
 
     # load from csv
-    dataset = import_csv_as_mdp_dataset('test_data/test.csv',
-                                        discrete_action=False)
+    dataset = import_csv_as_mdp_dataset('test_data/test.csv')
 
     assert dataset.get_observation_shape() == ref.get_observation_shape()
     assert dataset.get_action_size() == ref.get_action_size()
@@ -41,6 +40,7 @@ def test_vector_dataset_with_continuous_action():
     assert np.allclose(dataset.actions, ref.actions)
     assert np.allclose(dataset.rewards, ref.rewards)
     assert np.all(dataset.terminals == ref.terminals)
+    assert not dataset.is_action_discrete()
 
 
 @pytest.mark.parametrize('discrete_action', [True, False])
@@ -60,16 +60,13 @@ def test_image_dataset(discrete_action, n_channels, action_size, data_size):
     ref = MDPDataset(observations=observations,
                      actions=actions,
                      rewards=rewards,
-                     terminals=terminals,
-                     discrete_action=discrete_action)
+                     terminals=terminals)
 
     # save as csv
     export_mdp_dataset_as_csv(ref, 'test_data/test.csv', relative_path=True)
 
     # load from csv
-    dataset = import_csv_as_mdp_dataset('test_data/test.csv',
-                                        image=True,
-                                        discrete_action=discrete_action)
+    dataset = import_csv_as_mdp_dataset('test_data/test.csv', image=True)
 
     assert dataset.get_observation_shape() == ref.get_observation_shape()
     assert dataset.get_action_size() == ref.get_action_size()
@@ -77,3 +74,4 @@ def test_image_dataset(discrete_action, n_channels, action_size, data_size):
     assert np.allclose(dataset.actions, ref.actions)
     assert np.allclose(dataset.rewards, ref.rewards)
     assert np.all(dataset.terminals == ref.terminals)
+    assert dataset.is_action_discrete() == discrete_action

@@ -31,7 +31,6 @@ def upload_dataset():
 
     # save as MDPDataset
     is_image = request.form.get('is_image') == 'true'
-    is_discrete = request.form.get('is_discrete') == 'true'
 
     # save image files
     if is_image:
@@ -43,9 +42,7 @@ def upload_dataset():
             image_path = os.path.join(get_config('UPLOAD_DIR'), image_name)
             image_file.save(image_path)
 
-    mdp_dataset = import_csv_as_mdp_dataset(file_path,
-                                            image=is_image,
-                                            discrete_action=is_discrete)
+    mdp_dataset = import_csv_as_mdp_dataset(file_path, image=is_image)
     dataset_name = str(uuid.uuid1()) + '.h5'
     dataset_path = os.path.join(get_config('DATASET_DIR'), dataset_name)
     mdp_dataset.dump(dataset_path)
@@ -64,7 +61,8 @@ def upload_dataset():
 
     # insert record
     dataset = Dataset.create(file_name, dataset_name, episode_size, step_size,
-                             data_size, is_image, is_discrete, stats_json)
+                             data_size, is_image,
+                             mdp_dataset.is_action_discrete(), stats_json)
 
     # return json
     return jsonify(DatasetSchema().dump(dataset))

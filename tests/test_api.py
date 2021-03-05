@@ -44,7 +44,7 @@ def _upload_dataset(client):
 
     # prepare upload request
     with open(csv_path, 'rb') as f:
-        data = {'is_image': 'false', 'is_discrete': 'true'}
+        data = {'is_image': 'false'}
         file = FileStorage(stream=f,
                            filename='dataset.csv',
                            content_type='text/csv')
@@ -75,7 +75,7 @@ def _upload_image_dataset(client):
 
     # prepare upload request
     with open(csv_path, 'rb') as f:
-        data = {'is_image': 'true', 'is_discrete': 'true'}
+        data = {'is_image': 'true'}
         file = FileStorage(stream=f,
                            filename='dataset.csv',
                            content_type='text/csv')
@@ -134,6 +134,7 @@ def test_dataset_api(client, is_image):
     assert res.json['id'] == dataset_id
     assert res.json['name'] == dataset_name
     assert res.json['file_name'] == dataset_file_name
+    assert res.json['is_discrete'] != is_image
 
     # check get_all
     res = client.get('/api/datasets', follow_redirects=True)
@@ -270,12 +271,12 @@ def test_experiment_api(client):
     assert res.json['name'] == 'updated'
 
     # check download as TorchScript
-    url = '/api/projects/{}/experiments/{}/download?epoch=0&format=torchscript'
+    url = '/api/projects/{}/experiments/{}/download?epoch=1&format=torchscript'
     res = client.get(url.format(project_id, experiment_id))
     assert res.status_code == 200
 
     # check download as ONNX
-    url = '/api/projects/{}/experiments/{}/download?epoch=0&format=onnx'
+    url = '/api/projects/{}/experiments/{}/download?epoch=1&format=onnx'
     res = client.get(url.format(project_id, experiment_id))
     assert res.status_code == 200
 

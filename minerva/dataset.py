@@ -121,10 +121,10 @@ def export_vector_observation_dataset_as_csv(dataset, fname):
             writer.writerows(rows)
 
 
-def import_csv_as_mdp_dataset(fname, image=False, discrete_action=False):
+def import_csv_as_mdp_dataset(fname, image=False):
     if image:
-        return import_csv_as_image_observation_dataset(fname, discrete_action)
-    return import_csv_as_vector_observation_dataset(fname, discrete_action)
+        return import_csv_as_image_observation_dataset(fname)
+    return import_csv_as_vector_observation_dataset(fname)
 
 
 def _load_image(path):
@@ -137,7 +137,7 @@ def _load_image(path):
     return image
 
 
-def import_csv_as_image_observation_dataset(fname, discrete_action):
+def import_csv_as_image_observation_dataset(fname):
     with open(fname, 'r') as file:
         reader = csv.reader(file)
         rows = [row for row in reader]
@@ -167,11 +167,7 @@ def import_csv_as_image_observation_dataset(fname, discrete_action):
             observations.append(array)
 
             # get action columns
-            action = list(map(float, row[2:2 + action_size]))
-            if discrete_action:
-                actions.append(int(action[0]))
-            else:
-                actions.append(action)
+            actions.append(list(map(float, row[2:2 + action_size])))
 
             # get reward column
             rewards.append(float(row[-1]))
@@ -190,13 +186,12 @@ def import_csv_as_image_observation_dataset(fname, discrete_action):
         dataset = MDPDataset(observations=observations,
                              actions=actions,
                              rewards=rewards,
-                             terminals=terminals,
-                             discrete_action=discrete_action)
+                             terminals=terminals)
 
     return dataset
 
 
-def import_csv_as_vector_observation_dataset(fname, discrete_action):
+def import_csv_as_vector_observation_dataset(fname):
     with open(fname, 'r') as file:
         reader = csv.reader(file)
         rows = [row for row in reader]
@@ -217,8 +212,6 @@ def import_csv_as_vector_observation_dataset(fname, discrete_action):
         action_size = _get_action_size_from_header(header)
         action_last_index = observation_last_index + action_size
         actions = csv_data[:, observation_last_index:action_last_index]
-        if discrete_action:
-            actions = np.array(actions.reshape(-1), dtype=np.int32)
 
         # get reward column
         rewards = csv_data[:, -1]
@@ -233,8 +226,7 @@ def import_csv_as_vector_observation_dataset(fname, discrete_action):
         dataset = MDPDataset(observations=observations,
                              actions=actions,
                              rewards=rewards,
-                             terminals=terminals,
-                             discrete_action=discrete_action)
+                             terminals=terminals)
 
     return dataset
 
