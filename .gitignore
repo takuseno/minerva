@@ -17,3 +17,4 @@ minerva/dist/index.bundle.js
 docs/_build
 build
 dist
+.mypy_cache

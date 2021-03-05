@@ -9,6 +9,7 @@ from flask.json import JSONEncoder
 
 import minerva.models
 import minerva.database as database
+from minerva._version import __version__
 from minerva.config import DATABASE_PATH, ROOT_DIR, MIGRATION_DIR
 from minerva.config import config, prepare_directory
 from minerva.database import init_db, db
@@ -64,7 +65,7 @@ def send_file(path):
 
 @click.group()
 def cli():
-    pass
+    print("MINERVA command line interface (Version %s)" % __version__)
 
 
 @cli.command(short_help='Start MINERVA server.')
