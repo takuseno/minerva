@@ -113,7 +113,15 @@ export const CONTINUOUS_CONFIGS = {
     initial_alpha: 5.0,
     alpha_threshold: 10.0,
     n_action_samples: 10,
-    n_critics: 2
+    n_critics: 2,
+    soft_q_backup: false
+  },
+  crr: {
+    actor_learning_rate: 3e-4,
+    critic_learning_rate: 3e-4,
+    batch_size: 100,
+    target_update_interval: 100,
+    n_action_samples: 4
   },
   ddpg: {
     actor_learning_rate: 3e-4,
