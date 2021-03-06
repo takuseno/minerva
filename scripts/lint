@@ -1,7 +1,7 @@
 #!/bin/bash -eux
 
 # PyLint check
-pylint minerva --exit-zero
+pylint minerva
 
 # check SCSS format
 npx sass-lint 'front/styles/*.scss' -v -q

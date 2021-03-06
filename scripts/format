@@ -1,10 +1,10 @@
-#!/bin/bash -eux
+#!/bin/bash -ex
 
-if [ $# = 0 ]; then
+if [[ -z $CI ]]; then
   YAPF_ARG="-i"
   STANDARD_ARG="--fix"
 else
-  YAPF_ARG=$*
+  YAPF_ARG="-d"
   STANDARD_ARG=""
 fi
 
