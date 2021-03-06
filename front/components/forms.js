@@ -116,7 +116,12 @@ export const FileInput = (props) => {
   const wrappedName = wrapText(fileName, 20)
   return (
     <label className='minerva-form-file'>
-      <input type='file' name={props.name} onChange={handleChange} />
+      <input
+        type='file'
+        name={props.name}
+        onChange={handleChange}
+        accept={props.accept}
+      />
       <span className='minerva-form-file-button'>{props.text}</span>
       <span className='minerva-form-file-name'>{wrappedName}</span>
     </label>
@@ -125,7 +130,8 @@ export const FileInput = (props) => {
 
 FileInput.defaultProps = {
   text: 'UPLOAD',
-  onChange: () => {}
+  onChange: () => {},
+  accept: ''
 }
 
 export const DirectoryInput = (props) => {

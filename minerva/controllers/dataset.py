@@ -3,6 +3,7 @@ import uuid
 import json
 import base64
 import tempfile
+import zipfile
 from io import BytesIO
 
 import werkzeug
@@ -32,20 +33,25 @@ def upload_dataset():
         file_path = os.path.join(dname, file_name)
         file.save(file_path)
 
-        # save as MDPDataset
-        is_image = request.form.get('is_image') == 'true'
-
         # save image files
+        is_image = request.form.get('is_image') == 'true'
         if is_image:
-            total_images = int(request.form.get('total_images'))
-            for i in range(total_images):
-                image_file = request.files['image_%d' % i]
-                image_name = os.path.basename(image_file.filename)
-                image_name = werkzeug.utils.secure_filename(image_name)
-                image_path = os.path.join(dname, image_name)
-                image_file.save(image_path)
+            # save zip file
+            zip_file = request.files['zip_file']
+            zip_file_name = werkzeug.utils.secure_filename(zip_file.filename)
+            zip_file_path = os.path.join(dname, zip_file_name)
+            zip_file.save(zip_file_path)
+            # decompress zip file
+            with zipfile.ZipFile(zip_file_path) as zip_fd:
+                zip_fd.extractall(dname)
 
-        mdp_dataset = import_csv_as_mdp_dataset(file_path, image=is_image)
+        # convert uploaded data to MDPDataset
+        try:
+            mdp_dataset = import_csv_as_mdp_dataset(file_path, image=is_image)
+        except ValueError:
+            return jsonify({'status': 'dataset conversion failed.'}), 400
+
+        # save MDPDataset object.
         dataset_name = str(uuid.uuid1()) + '.h5'
         dataset_path = os.path.join(get_config('DATASET_DIR'), dataset_name)
         mdp_dataset.dump(dataset_path)

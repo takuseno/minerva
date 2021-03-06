@@ -2,6 +2,8 @@
 
 import csv
 import os
+import tempfile
+import zipfile
 import numpy as np
 
 from PIL import Image
@@ -28,40 +30,36 @@ def convert_image_to_ndarray(image):
     return array
 
 
-def export_mdp_dataset_as_csv(dataset, fname, relative_path=False):
+def export_mdp_dataset_as_csv(dataset, fname):
     if len(dataset.get_observation_shape()) > 1:
         # image observation
-        export_image_observation_dataset_as_csv(dataset, fname, relative_path)
+        export_image_observation_dataset_as_csv(dataset, fname)
     else:
         # vector observation
         export_vector_observation_dataset_as_csv(dataset, fname)
 
 
-def _save_image_files(dataset, dir_path):
-    data_size = dataset.observations.shape[0]
-    for i in trange(data_size, desc='saving images'):
-        image = convert_ndarray_to_image(dataset.observations[i])
-        image_path = os.path.join(dir_path, 'observation_%d.png' % i)
-        image.save(image_path, quality=100)
+def _save_image_files(dataset, zip_path):
+    with tempfile.TemporaryDirectory() as dname:
+        with zipfile.ZipFile(zip_path, 'w') as zip_fd:
+            data_size = dataset.observations.shape[0]
+            for i in trange(data_size, desc='saving images'):
+                image = convert_ndarray_to_image(dataset.observations[i])
+                image_path = os.path.join(dname, 'observation_%d.png' % i)
+                image.save(image_path, quality=100)
+                zip_fd.write(image_path, arcname='observation_%d.png' % i)
 
 
-def export_image_observation_dataset_as_csv(dataset, fname, relative_path):
+def export_image_observation_dataset_as_csv(dataset, fname):
     action_size = dataset.get_action_size()
 
     # prepare image directory
     csv_file_name = os.path.basename(fname)
-    image_dir_name = csv_file_name.split('.')[0] + '_images'
-    image_dir_path = os.path.join(os.path.dirname(fname), image_dir_name)
-    os.makedirs(image_dir_path, exist_ok=True)
 
-    # save image files
-    _save_image_files(dataset, image_dir_path)
-
-    file_name = 'observation_%d.png'
-    if relative_path:
-        image_path = os.path.join(image_dir_name, file_name)
-    else:
-        image_path = file_name
+    # save image files as zip file
+    zip_name = csv_file_name.split('.')[0] + '.zip'
+    zip_path = os.path.join(os.path.dirname(fname), zip_name)
+    _save_image_files(dataset, zip_path)
 
     with open(fname, 'w') as file:
         writer = csv.writer(file)
@@ -83,7 +81,7 @@ def export_image_observation_dataset_as_csv(dataset, fname, relative_path):
                 row.append(i)
 
                 # add image path
-                row.append(image_path % count)
+                row.append('observation_%d.png' % count)
                 count += 1
 
                 row += episode.actions[j].reshape(-1).tolist()
@@ -159,6 +157,9 @@ def import_csv_as_image_observation_dataset(fname):
             episode_id = row[0]
 
             # load image
+            image_path = os.path.join(os.path.dirname(fname), row[1])
+            if not os.path.exists(image_path):
+                raise ValueError(f'{image_path} does not exist.')
             image = _load_image(os.path.join(os.path.dirname(fname), row[1]))
 
             # convert PIL.Image to ndarray

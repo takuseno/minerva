@@ -20,15 +20,12 @@ const DatasetRecord = Record({
 const urlBase = '/api/datasets'
 
 export class Dataset extends BaseModel(DatasetRecord, urlBase, 'dataset') {
-  static upload (file, isImage, imageFiles, progressCallback) {
+  static upload (file, isImage, zipFile, progressCallback) {
     const params = new FormData()
     params.append('dataset', file)
     params.append('is_image', isImage)
     if (isImage) {
-      imageFiles.forEach((imageFile, i) => {
-        params.append(`image_${i}`, imageFile)
-      })
-      params.append('total_images', imageFiles.length)
+      params.append('zip_file', zipFile)
     }
     const config = {
       headers: { 'Content-type': 'multipart/form-data' },

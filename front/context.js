@@ -24,7 +24,9 @@ const showNetworkErrorToast = (err) => {
   const { url, method } = err.config
   let message = `${method.toUpperCase()}: ${url} "${err.message}"`
   if (err.response) {
-    message = `${method.toUpperCase()}: ${url} "${err.status}: ${err.data}"`
+    const errorMessage = JSON.stringify(err.response.data)
+    const { status } = err.response
+    message = `${method.toUpperCase()}: ${url} "${status}: ${errorMessage}"`
   }
   showErrorToast(message)
 }
@@ -108,13 +110,8 @@ export const GlobalProvider = ({ children }) => {
 
   // Actions
 
-  const uploadDataset = (
-    file,
-    isImage,
-    imageFiles,
-    progressCallback
-  ) => (
-    Dataset.upload(file, isImage, imageFiles, progressCallback)
+  const uploadDataset = (file, isImage, zipFile, progressCallback) => (
+    Dataset.upload(file, isImage, zipFile, progressCallback)
       .then((dataset) => {
         setDatasets(datasets.unshift(dataset))
         return dataset

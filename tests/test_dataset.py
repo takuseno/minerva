@@ -1,3 +1,4 @@
+import zipfile
 import pytest
 import numpy as np
 
@@ -63,7 +64,11 @@ def test_image_dataset(discrete_action, n_channels, action_size, data_size):
                      terminals=terminals)
 
     # save as csv
-    export_mdp_dataset_as_csv(ref, 'test_data/test.csv', relative_path=True)
+    export_mdp_dataset_as_csv(ref, 'test_data/test.csv')
+
+    # extract zip file
+    with zipfile.ZipFile('test_data/test.zip', 'r') as zip_fd:
+        zip_fd.extractall('test_data')
 
     # load from csv
     dataset = import_csv_as_mdp_dataset('test_data/test.csv', image=True)

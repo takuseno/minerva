@@ -3,6 +3,7 @@ import os
 import json
 import base64
 import time
+import zipfile
 import numpy as np
 import minerva.config as config
 
@@ -69,39 +70,27 @@ def _upload_image_dataset(client):
     # prepare dataset
     mdp_dataset = MDPDataset(observations, actions, rewards, terminals)
     csv_path = os.path.join('test_data', 'dataset.csv')
-    export_image_observation_dataset_as_csv(mdp_dataset,
-                                            csv_path,
-                                            relative_path=False)
+    zip_path = os.path.join('test_data', 'dataset.zip')
+    export_image_observation_dataset_as_csv(mdp_dataset, csv_path)
 
     # prepare upload request
-    with open(csv_path, 'rb') as f:
+    with open(csv_path, 'rb') as csv_fd, open(zip_path, 'rb') as zip_fd:
         data = {'is_image': 'true'}
-        file = FileStorage(stream=f,
+
+        file = FileStorage(stream=csv_fd,
                            filename='dataset.csv',
                            content_type='text/csv')
         data['dataset'] = file
 
-        # add images
-        image_dir_path = os.path.join('test_data', 'dataset_images')
-        image_fds = []
-        for i in range(100):
-            file_name = 'observation_%d.png' % i
-            file_path = os.path.join(image_dir_path, file_name)
-            fd = open(file_path, 'rb')
-            file = FileStorage(stream=fd,
-                               filename=file_name,
-                               content_type='image/png')
-            data['image_%d' % i] = file
-            image_fds.append(fd)
-        data['total_images'] = 100
+        zip_file = FileStorage(stream=zip_fd,
+                               filename='dataset.zip',
+                               content_type='.zip')
+        data['zip_file'] = zip_file
 
         # upload
         res = client.post('/api/datasets/upload',
                           data=data,
                           content_type='multipart/form-data')
-
-        for fd in image_fds:
-            fd.close()
 
     return res, mdp_dataset
 

@@ -1,11 +1,6 @@
 import '../styles/dataset-upload-dialog.scss'
 import '../styles/dialog.scss'
-import {
-  Checkbox,
-  DirectoryInput,
-  FileInput,
-  FormRow
-} from './forms.js'
+import { Checkbox, FileInput, FormRow } from './forms.js'
 import React, { useContext, useState } from 'react'
 import { Dialog } from './dialog'
 import { GlobalContext } from '../context'
@@ -14,21 +9,21 @@ export const DatasetUploadDialog = (props) => {
   const [isUploading, setIsUploading] = useState(false)
   const [isImage, setIsImage] = useState(false)
   const [file, setFile] = useState(null)
-  const [imageFiles, setImageFiles] = useState([])
+  const [zipFile, setZipFile] = useState(null)
   const [uploadProgress, setUploadProgress] = useState(0)
   const { uploadDataset, showErrorToast } = useContext(GlobalContext)
 
   const handleClose = () => {
     setIsImage(false)
     setFile(null)
-    setImageFiles([])
+    setZipFile(null)
     setUploadProgress(0)
     props.onClose()
   }
 
   const handleSubmit = () => {
     // Quick validation
-    if (file === null || (isImage && imageFiles.length === 0)) {
+    if (file === null || (isImage && zipFile === null)) {
       return
     }
 
@@ -37,7 +32,7 @@ export const DatasetUploadDialog = (props) => {
       const progress = Math.round(e.loaded * 100 / e.total)
       setUploadProgress(progress)
     }
-    uploadDataset(file, isImage, imageFiles, progressCallback)
+    uploadDataset(file, isImage, zipFile, progressCallback)
       .then((dataset) => {
         setIsUploading(false)
         handleClose()
@@ -61,6 +56,7 @@ export const DatasetUploadDialog = (props) => {
             name='dataset'
             text='UPLOAD'
             onChange={(newFile) => setFile(newFile)}
+            accept='.csv'
           />
         </FormRow>
         <FormRow>
@@ -72,10 +68,11 @@ export const DatasetUploadDialog = (props) => {
         </FormRow>
         {isImage &&
           <FormRow>
-            <DirectoryInput
-              name='image_directory'
-              text='UPLOAD IMAGE DIRECTORY'
-              onChange={(files) => setImageFiles(files)}
+            <FileInput
+              name='image_zip'
+              text='UPLOAD ZIPPED IMAGE FILES'
+              onChange={(newFile) => setZipFile(newFile)}
+              accept='.zip'
             />
           </FormRow>}
       </div>
