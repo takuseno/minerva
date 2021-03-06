@@ -66,7 +66,11 @@ This is an example::
 
 .. note::
 
-  The image files must be located in the directory that contains only image files to upload.
+  The image files must be compressed as a zip file. The contained files must be placed in the root.
+
+  .. code-block::
+
+     $ zip images.zip *.png
 
 Start Server
 ------------
@@ -111,7 +115,7 @@ Upload dataset with image observation
 
 1. Click ``UPLOAD`` button to select the dataset CSV file.
 2. Check ``image observation``.
-3. Click ``UPLOAD IMAGE DIRECTORY`` button to select the directory containing image files.
+3. Click ``UPLOAD ZIPPED IMAGE FILES`` button to select the zip file containing image files.
 4. Click ``SUBMIT`` to upload the dataset.
 
 .. image:: ./assets/image_dataset_dialog.jpg
