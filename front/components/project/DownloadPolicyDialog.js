@@ -25,7 +25,7 @@ export const DownloadPolicyDialog = (props) => {
     props.onClose()
   }
 
-  const epochOptions = Range(0, props.totalEpoch).map((i) => (
+  const epochOptions = Range(1, props.totalEpoch + 1).map((i) => (
     { value: i, text: i }
   ))
 

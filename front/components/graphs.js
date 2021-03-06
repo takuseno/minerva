@@ -64,7 +64,7 @@ export const Line = (props) => {
 
   // Make up recharts data
   const maxX = Math.max(...props.values.map((value) => value.length))
-  const data = Range(0, maxX).map((i) => ({ x: i })).toArray()
+  const data = Range(0, maxX).map((i) => ({ x: i + 1 })).toArray()
   props.values.forEach((value, dataIndex) => {
     value.forEach((v, timeIndex) => {
       data[timeIndex][props.titles[dataIndex]] = v
