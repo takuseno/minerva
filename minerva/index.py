@@ -79,6 +79,7 @@ def run(host, port, debug):
             db.create_all()
             database.init_migration(MIGRATION_DIR)
             database.create_migration(MIGRATION_DIR)
+        print('Database initialization has been completed.')
 
     # start server
     app.run(debug=debug, host=host, port=int(port))
@@ -88,6 +89,9 @@ def run(host, port, debug):
 def create_db():
     with app.app_context():
         db.create_all()
+        database.init_migration(MIGRATION_DIR)
+        database.create_migration(MIGRATION_DIR)
+    print('Database initialization has been completed.')
 
 
 @cli.command(short_help='Upgrade database schema.')
@@ -95,17 +99,21 @@ def upgrade_db():
     with app.app_context():
         database.create_migration(MIGRATION_DIR)
         database.upgrade_db(MIGRATION_DIR)
+    print('Database migration has been completed.')
 
 
 @cli.command(short_help='Rollback database schema.')
 def downgrade_db():
     with app.app_context():
         database.downgrade_db(MIGRATION_DIR)
+    print('Database rollback has been completed.')
 
 
 @cli.command(short_help='Delete all data from the disk.')
 def clean():
+    print(f'{ROOT_DIR} is being deleted...')
     shutil.rmtree(ROOT_DIR)
+    print(f'{ROOT_DIR} has been deleted.')
 
 
 if __name__ == '__main__':
