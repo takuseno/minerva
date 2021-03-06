@@ -98,8 +98,7 @@ Upload dataset with vector observation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Click ``UPLOAD`` button to select the dataset CSV file.
-2. Check ``discrete control`` if the action-space is discrete.
-3. Click ``SUBMIT`` to upload the dataset.
+2. Click ``SUBMIT`` to upload the dataset.
 
 .. image:: ./assets/dataset_dialog.jpg
 
@@ -111,10 +110,9 @@ Upload dataset with image observation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Click ``UPLOAD`` button to select the dataset CSV file.
-2. Check ``discrete control`` if the action-space is discrete.
-3. Check ``image observation``.
-4. Click ``UPLOAD IMAGE DIRECTORY`` button to select the directory containing image files.
-5. Click ``SUBMIT`` to upload the dataset.
+2. Check ``image observation``.
+3. Click ``UPLOAD IMAGE DIRECTORY`` button to select the directory containing image files.
+4. Click ``SUBMIT`` to upload the dataset.
 
 .. image:: ./assets/image_dataset_dialog.jpg
 
