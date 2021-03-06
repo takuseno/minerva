@@ -9,8 +9,6 @@ DATASET_DIR = os.path.join(ROOT_DIR, 'dataset')
 DATABASE_PATH = os.path.join(ROOT_DIR, 'database.db')
 MIGRATION_DIR = os.path.join(ROOT_DIR, 'migrations')
 LOG_DIR = os.path.join(ROOT_DIR, 'train_logs')
-TMP_DIR = '/tmp/minerva'
-UPLOAD_DIR = '/tmp/minerva'
 
 config = {
     'SQLALCHEMY_DATABASE_URI': 'sqlite:///%s' % DATABASE_PATH,
@@ -27,9 +25,6 @@ def prepare_directory():
     if not os.path.exists(DATASET_DIR):
         os.makedirs(DATASET_DIR)
 
-    if not os.path.exists(UPLOAD_DIR):
-        os.makedirs(UPLOAD_DIR)
-
     if not os.path.exists(LOG_DIR):
         os.makedirs(LOG_DIR)
 
@@ -40,8 +35,6 @@ def get_config(key):
         'DATASET_DIR': DATASET_DIR,
         'DATABASE_PATH': DATABASE_PATH,
         'LOG_DIR': LOG_DIR,
-        'TMP_DIR': TMP_DIR,
-        'UPLOAD_DIR': UPLOAD_DIR,
         'MIGRATION_DIR': MIGRATION_DIR
     }
     return paths[key]

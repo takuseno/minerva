@@ -2,6 +2,7 @@ import os
 import uuid
 import json
 import base64
+import tempfile
 from io import BytesIO
 
 import werkzeug
@@ -23,29 +24,31 @@ def upload_dataset():
     if 'dataset' not in request.files:
         return jsonify({'status': 'dataset is empty'}), 400
 
-    # save file
-    file = request.files['dataset']
-    file_name = werkzeug.utils.secure_filename(file.filename)
-    file_path = os.path.join(get_config('UPLOAD_DIR'), file_name)
-    file.save(file_path)
+    # save uploaded files and create MDPDataset
+    with tempfile.TemporaryDirectory() as dname:
+        # save file
+        file = request.files['dataset']
+        file_name = werkzeug.utils.secure_filename(file.filename)
+        file_path = os.path.join(dname, file_name)
+        file.save(file_path)
 
-    # save as MDPDataset
-    is_image = request.form.get('is_image') == 'true'
+        # save as MDPDataset
+        is_image = request.form.get('is_image') == 'true'
 
-    # save image files
-    if is_image:
-        total_images = int(request.form.get('total_images'))
-        for i in range(total_images):
-            image_file = request.files['image_%d' % i]
-            image_name = os.path.basename(image_file.filename)
-            image_name = werkzeug.utils.secure_filename(image_name)
-            image_path = os.path.join(get_config('UPLOAD_DIR'), image_name)
-            image_file.save(image_path)
+        # save image files
+        if is_image:
+            total_images = int(request.form.get('total_images'))
+            for i in range(total_images):
+                image_file = request.files['image_%d' % i]
+                image_name = os.path.basename(image_file.filename)
+                image_name = werkzeug.utils.secure_filename(image_name)
+                image_path = os.path.join(dname, image_name)
+                image_file.save(image_path)
 
-    mdp_dataset = import_csv_as_mdp_dataset(file_path, image=is_image)
-    dataset_name = str(uuid.uuid1()) + '.h5'
-    dataset_path = os.path.join(get_config('DATASET_DIR'), dataset_name)
-    mdp_dataset.dump(dataset_path)
+        mdp_dataset = import_csv_as_mdp_dataset(file_path, image=is_image)
+        dataset_name = str(uuid.uuid1()) + '.h5'
+        dataset_path = os.path.join(get_config('DATASET_DIR'), dataset_name)
+        mdp_dataset.dump(dataset_path)
 
     # get dataset size
     data_size = os.path.getsize(dataset_path)

@@ -1,12 +1,12 @@
 import json
 import uuid
 import os
+import tempfile
 from flask import Blueprint, request, jsonify, send_file
 from werkzeug.exceptions import NotFound
 from sqlalchemy import desc
 
 from .generator import generate_for_model
-from ..config import get_config
 from ..models.project import Project, ProjectSchema
 from ..models.experiment import Experiment, ExperimentSchema
 
@@ -145,11 +145,11 @@ def download_policy(project_id, experiment_id):
     else:
         raise ValueError('format should be torchscript or onnx.')
 
-    # save greedy-policy as TorchScript or ONNX
-    save_path = os.path.join(get_config('TMP_DIR'), file_name)
-    experiment.save_policy(save_path, epoch, as_onnx)
-
-    return send_file(save_path,
-                     as_attachment=True,
-                     attachment_filename=file_name,
-                     mimetype='application/octet-stream')
+    with tempfile.TemporaryDirectory() as dname:
+        save_path = os.path.join(dname, file_name)
+        # save greedy-policy as TorchScript or ONNX
+        experiment.save_policy(save_path, epoch, as_onnx)
+        return send_file(save_path,
+                         as_attachment=True,
+                         attachment_filename=file_name,
+                         mimetype='application/octet-stream')
