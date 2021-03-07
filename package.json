@@ -1,7 +1,7 @@
 {
   "name": "minerva",
   "version": "1.0.0",
-  "description": "Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement Learning",
+  "description": "An out-of-the-box GUI tool for offline deep reinforcement learning",
   "main": "index.js",
   "directories": {
     "test": "tests"

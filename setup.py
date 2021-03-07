@@ -9,7 +9,7 @@ exec(open(os.path.join(here, 'minerva', '_version.py')).read())
 
 setup(name="minerva-ui",
       version=__version__,
-      description="An out-of-the-box GUI tool for data-driven deep reinforcement learning",
+      description="An out-of-the-box GUI tool for offline deep reinforcement learning",
       long_description=open("README.md").read(),
       long_description_content_type="text/markdown",
       url="https://github.com/takuseno/minerva",

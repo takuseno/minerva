@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-MINERVA: An Out-of-the-box GUI Tool for Data-Driven Deep Reinforcement Learning
-===============================================================================
+MINERVA: An out-of-the-box GUI tool for offline deep reinforcement learning
+===========================================================================
 
 .. code-block::
 
