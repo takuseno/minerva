@@ -1,6 +1,6 @@
 <div align="center"><img src="assets/logo.jpg" width="800"/></div>
 
-# MINERVA: An out-of-the-box GUI tool for data-driven deep reinforcement learning
+# MINERVA: An out-of-the-box GUI tool for offline deep reinforcement learning
 [![PyPI version](https://badge.fury.io/py/minerva-ui.svg)](https://badge.fury.io/py/minerva-ui)
 ![test](https://github.com/takuseno/minerva/workflows/test/badge.svg)
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/takuseno/minerva)](https://hub.docker.com/r/takuseno/minerva)
@@ -9,7 +9,7 @@
 [![codecov](https://codecov.io/gh/takuseno/minerva/branch/master/graph/badge.svg?token=7OL530W7T4)](https://codecov.io/gh/takuseno/minerva)
 ![MIT](https://img.shields.io/badge/license-MIT-blue)
 
-MINERVA is an out-of-the-box GUI tool for data-driven deep reinforcement
+MINERVA is an out-of-the-box GUI tool for offline deep reinforcement
 learning, designed for everyone including non-programmers to do reinforcement
 learning as a tool.
 
@@ -21,7 +21,7 @@ Chat: [![Gitter](https://img.shields.io/gitter/room/d3rlpy/minerva)](https://git
 
 ## key features
 ### :zap: All You Need Is Dataset
-MINERVA only requires datasets to start data-driven deep reinforcement learning.
+MINERVA only requires datasets to start offline deep reinforcement learning.
 Any combinations of vector observations and image observations with discrete
 actions and continuous actions are supported.
 
@@ -32,7 +32,7 @@ Application (SPA) to make it work in the eye-opening speed.
 
 ### :rocket: Powerful Algorithm
 MINERVA is powered by [d3rlpy](https://github.com/takuseno/d3rlpy), a powerful
-data-driven deep reinforcement learning library for Python, to provide
+offline deep reinforcement learning library for Python, to provide
 extremely powerful algorithms in an out-of-the-box way. The trained policy can
 be exported as [TorchScript](https://pytorch.org/docs/stable/jit.html) and
 [ONNX](https://onnx.ai/).
