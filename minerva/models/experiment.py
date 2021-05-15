@@ -1,28 +1,29 @@
 # pylint: disable=no-member, too-many-instance-attributes
 
+import json
 import os
 import re
-import json
 import shutil
+
 import numpy as np
 from d3rlpy.algos import get_algo
 
-from .base import BaseModel
+from ..async_helper import dispatch, is_running, kill
 from ..config import get_config
 from ..database import db, ma
-from ..async_helper import is_running, dispatch, kill
 from ..tasks import train
+from .base import BaseModel
 
 
 def _get_metrics(log_path):
     metrics = {}
-    pattern = re.compile('^.*.csv$')
+    pattern = re.compile("^.*.csv$")
     file_names = os.listdir(log_path)
     csv_names = filter(lambda name: re.match(pattern, name), file_names)
     for file_name in csv_names:
         path = os.path.join(log_path, file_name)
         name = file_name[:-4]
-        data = np.loadtxt(path, delimiter=',')
+        data = np.loadtxt(path, delimiter=",")
         if len(data.shape) == 1:
             data = data.reshape((1, -1))
         data[np.isnan(data)] = 0.0
@@ -31,10 +32,10 @@ def _get_metrics(log_path):
 
 
 class Experiment(db.Model, BaseModel):
-    __tablename__ = 'experiments'
-    __table_args__ = {'sqlite_autoincrement': True}
+    __tablename__ = "experiments"
+    __table_args__ = {"sqlite_autoincrement": True}
     id = db.Column(db.Integer, primary_key=True)
-    project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey("projects.id"))
     name = db.Column(db.String(100))
     log_name = db.Column(db.String(100))
     config = db.Column(db.Text)
@@ -47,7 +48,7 @@ class Experiment(db.Model, BaseModel):
         self.config = config
 
     def __repr__(self):
-        return '<Experiment {}:{}>'.format(self.id, self.name)
+        return "<Experiment {}:{}>".format(self.id, self.name)
 
     @classmethod
     def create(cls, project_id, name, log_name, config):
@@ -71,13 +72,15 @@ class Experiment(db.Model, BaseModel):
         return is_running(self.id)
 
     def start_training(self):
-        dispatch(self.id,
-                 train,
-                 algo_name=self.project.algorithm,
-                 params=json.loads(self.config),
-                 dataset_path=self.project.dataset.get_dataset_path(),
-                 experiment_name=self.log_name,
-                 logdir=get_config('LOG_DIR'))
+        dispatch(
+            self.id,
+            train,
+            algo_name=self.project.algorithm,
+            params=json.loads(self.config),
+            dataset_path=self.project.dataset.get_dataset_path(),
+            experiment_name=self.log_name,
+            logdir=get_config("LOG_DIR"),
+        )
 
     def cancel_training(self):
         kill(self.id)
@@ -85,14 +88,14 @@ class Experiment(db.Model, BaseModel):
         self.update()
 
     def get_log_path(self):
-        return os.path.join(get_config('LOG_DIR'), self.log_name)
+        return os.path.join(get_config("LOG_DIR"), self.log_name)
 
     def save_policy(self, path, epoch, as_onnx):
-        params_path = os.path.join(self.get_log_path(), 'params.json')
-        model_path = os.path.join(self.get_log_path(), 'model_%d.pt' % epoch)
+        params_path = os.path.join(self.get_log_path(), "params.json")
+        model_path = os.path.join(self.get_log_path(), "model_%d.pt" % epoch)
 
         if not os.path.exists(model_path):
-            raise ValueError('%s does not exist.' % model_path)
+            raise ValueError("%s does not exist." % model_path)
 
         # initialize algorithm from json file
         algorithm_name = self.project.algorithm
@@ -109,8 +112,15 @@ class Experiment(db.Model, BaseModel):
 class ExperimentSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Experiment
-        fields = ('id', 'project_id', 'name', 'log_name', 'config',
-                  'is_active', 'updated_at')
+        fields = (
+            "id",
+            "project_id",
+            "name",
+            "log_name",
+            "config",
+            "is_active",
+            "updated_at",
+        )
 
-    created_at = ma.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
-    updated_at = ma.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
+    created_at = ma.DateTime("%Y-%m-%dT%H:%M:%S+09:00")
+    updated_at = ma.DateTime("%Y-%m-%dT%H:%M:%S+09:00")

@@ -1,6 +1,7 @@
 # pylint: disable=no-member, too-many-instance-attributes, no-name-in-module
 
 import os
+
 from d3rlpy.dataset import MDPDataset
 
 from ..config import get_config
@@ -10,8 +11,8 @@ from .project import Project
 
 
 class Dataset(db.Model, BaseModel):
-    __tablename__ = 'datasets'
-    __table_args__ = {'sqlite_autoincrement': True}
+    __tablename__ = "datasets"
+    __table_args__ = {"sqlite_autoincrement": True}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     file_name = db.Column(db.String(100))
@@ -22,10 +23,19 @@ class Dataset(db.Model, BaseModel):
     is_discrete = db.Column(db.Boolean)
     statistics = db.Column(db.Text)
 
-    projects = db.relationship(Project, backref='dataset')
+    projects = db.relationship(Project, backref="dataset")
 
-    def __init__(self, name, file_name, episode_size, step_size, data_size,
-                 is_image, is_discrete, statistics):
+    def __init__(
+        self,
+        name,
+        file_name,
+        episode_size,
+        step_size,
+        data_size,
+        is_image,
+        is_discrete,
+        statistics,
+    ):
         self.name = name
         self.file_name = file_name
         self.episode_size = episode_size
@@ -36,20 +46,37 @@ class Dataset(db.Model, BaseModel):
         self.statistics = statistics
 
     def __repr__(self):
-        return '<Dataset {}:{}>'.format(self.id, self.name)
+        return "<Dataset {}:{}>".format(self.id, self.name)
 
     @classmethod
-    def create(cls, name, file_name, episode_size, step_size, data_size,
-               is_image, is_discrete, statistics):
-        dataset = Dataset(name, file_name, episode_size, step_size, data_size,
-                          is_image, is_discrete, statistics)
+    def create(
+        cls,
+        name,
+        file_name,
+        episode_size,
+        step_size,
+        data_size,
+        is_image,
+        is_discrete,
+        statistics,
+    ):
+        dataset = Dataset(
+            name,
+            file_name,
+            episode_size,
+            step_size,
+            data_size,
+            is_image,
+            is_discrete,
+            statistics,
+        )
         db.session.add(dataset)
         db.session.commit()
         return dataset
 
     def delete(self):
         # remove dataset file
-        path = os.path.join(get_config('DATASET_DIR'), self.file_name)
+        path = os.path.join(get_config("DATASET_DIR"), self.file_name)
         if os.path.exists(path):
             os.remove(path)
         super().delete()
@@ -60,15 +87,25 @@ class Dataset(db.Model, BaseModel):
         return mdp_dataset
 
     def get_dataset_path(self):
-        return os.path.join(get_config('DATASET_DIR'), self.file_name)
+        return os.path.join(get_config("DATASET_DIR"), self.file_name)
 
 
 class DatasetSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Dataset
-        fields = ('id', 'name', 'file_name', 'episode_size', 'step_size',
-                  'data_size', 'is_image', 'is_discrete', 'statistics',
-                  'created_at', 'updated_at')
+        fields = (
+            "id",
+            "name",
+            "file_name",
+            "episode_size",
+            "step_size",
+            "data_size",
+            "is_image",
+            "is_discrete",
+            "statistics",
+            "created_at",
+            "updated_at",
+        )
 
-    created_at = ma.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
-    updated_at = ma.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
+    created_at = ma.DateTime("%Y-%m-%dT%H:%M:%S+09:00")
+    updated_at = ma.DateTime("%Y-%m-%dT%H:%M:%S+09:00")

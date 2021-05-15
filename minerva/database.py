@@ -1,15 +1,14 @@
 # pylint: disable=unused-argument
 
 import flask_migrate
-
-from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 
 # protect sqlite internal tables from migrations
 def skip_internal_tables(obj, name, type_, reflexted, compare_to):
-    if type_ == 'table' and name == 'sqlite_sequence':
+    if type_ == "table" and name == "sqlite_sequence":
         return False
     return True
 

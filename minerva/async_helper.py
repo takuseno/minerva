@@ -1,5 +1,4 @@
 import time
-
 from multiprocessing import Process, Queue
 
 RUNNING_PROCESSES = {}
@@ -12,9 +11,9 @@ def _child_process(func, queue, args, kwargs):
 
 def dispatch(uid, func, *args, **kwargs):
     queue = Queue()
-    process = Process(target=_child_process,
-                      args=(func, queue, args, kwargs),
-                      daemon=True)
+    process = Process(
+        target=_child_process, args=(func, queue, args, kwargs), daemon=True
+    )
     process.start()
     RUNNING_PROCESSES[uid] = (process, queue)
 

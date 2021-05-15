@@ -2,22 +2,25 @@
 
 import os
 import shutil
+
 import click
 import numpy as np
 from flask import Flask, redirect
 from flask.json import JSONEncoder
 
-import minerva.models
-import minerva.database as database
-from minerva._version import __version__
-from minerva.config import DATABASE_PATH, ROOT_DIR, MIGRATION_DIR
-from minerva.config import config, prepare_directory
-from minerva.database import init_db, db
-from minerva.controllers import dataset_route
-from minerva.controllers import project_route
-from minerva.controllers import system_route
+from . import database, models
+from ._version import __version__
+from .config import (
+    DATABASE_PATH,
+    MIGRATION_DIR,
+    ROOT_DIR,
+    config,
+    prepare_directory,
+)
+from .controllers import dataset_route, project_route, system_route
+from .database import db, init_db
 
-static_path = os.path.join(os.path.dirname(__file__), 'dist')
+static_path = os.path.join(os.path.dirname(__file__), "dist")
 app = Flask(__name__, static_folder=static_path)
 for name, val in config.items():
     app.config[name] = val
@@ -45,21 +48,21 @@ init_db(app)
 prepare_directory()
 
 # API endpoints
-app.register_blueprint(dataset_route, url_prefix='/api/datasets')
-app.register_blueprint(project_route, url_prefix='/api/projects')
-app.register_blueprint(system_route, url_prefix='/api/system')
+app.register_blueprint(dataset_route, url_prefix="/api/datasets")
+app.register_blueprint(project_route, url_prefix="/api/projects")
+app.register_blueprint(system_route, url_prefix="/api/system")
 
 
 # proxy
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
 def send_file(path):
-    if path in ['', '/']:
-        return redirect('/projects')
-    if path.find('favicon.ico') > -1:
-        path = 'favicon.ico'
-    elif path.find('.js') == -1:
-        path = 'index.html'
+    if path in ["", "/"]:
+        return redirect("/projects")
+    if path.find("favicon.ico") > -1:
+        path = "favicon.ico"
+    elif path.find(".js") == -1:
+        path = "index.html"
     return app.send_static_file(path)
 
 
@@ -68,9 +71,9 @@ def cli():
     print("MINERVA command line interface (Version %s)" % __version__)
 
 
-@cli.command(short_help='Start MINERVA server.')
-@click.option('--host', '-h', default='0.0.0.0', help='Host IP address.')
-@click.option('--port', '-p', default=9000, help='Port number.')
+@cli.command(short_help="Start MINERVA server.")
+@click.option("--host", "-h", default="0.0.0.0", help="Host IP address.")
+@click.option("--port", "-p", default=9000, help="Port number.")
 @click.option("--debug", is_flag=True, help="Start as debug mode.")
 def run(host, port, debug):
     # create databse if not exists
@@ -79,42 +82,42 @@ def run(host, port, debug):
             db.create_all()
             database.init_migration(MIGRATION_DIR)
             database.create_migration(MIGRATION_DIR)
-        print('Database initialization has been completed.')
+        print("Database initialization has been completed.")
 
     # start server
     app.run(debug=debug, host=host, port=int(port))
 
 
-@cli.command(short_help='Initialize database.')
+@cli.command(short_help="Initialize database.")
 def create_db():
     with app.app_context():
         db.create_all()
         database.init_migration(MIGRATION_DIR)
         database.create_migration(MIGRATION_DIR)
-    print('Database initialization has been completed.')
+    print("Database initialization has been completed.")
 
 
-@cli.command(short_help='Upgrade database schema.')
+@cli.command(short_help="Upgrade database schema.")
 def upgrade_db():
     with app.app_context():
         database.create_migration(MIGRATION_DIR)
         database.upgrade_db(MIGRATION_DIR)
-    print('Database migration has been completed.')
+    print("Database migration has been completed.")
 
 
-@cli.command(short_help='Rollback database schema.')
+@cli.command(short_help="Rollback database schema.")
 def downgrade_db():
     with app.app_context():
         database.downgrade_db(MIGRATION_DIR)
-    print('Database rollback has been completed.')
+    print("Database rollback has been completed.")
 
 
-@cli.command(short_help='Delete all data from the disk.')
+@cli.command(short_help="Delete all data from the disk.")
 def clean():
-    print(f'{ROOT_DIR} is being deleted...')
+    print(f"{ROOT_DIR} is being deleted...")
     shutil.rmtree(ROOT_DIR)
-    print(f'{ROOT_DIR} has been deleted.')
+    print(f"{ROOT_DIR} has been deleted.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()
