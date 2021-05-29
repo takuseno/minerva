@@ -1,4 +1,4 @@
-FROM takuseno/d3rlpy:0.70
+FROM takuseno/d3rlpy:0.90
 
 RUN pip install minerva-ui
 
