@@ -12,24 +12,10 @@ export const SCALER_OPTIONS = {
   pixel: 'PIXEL'
 }
 
-export const IMAGE_AUGMENTATION_OPTIONS = {
-  random_shift: 'RANDOM SHIFT',
-  random_rotation: 'RANDOM ROTATION',
-  cutout: 'CUTOUT',
-  horizontal_flip: 'HORIZONTAL FLIP',
-  vertical_flip: 'VERTICAL FLIP',
-  intensity: 'INTENSITY',
-  color_jitter: 'COLOR JITTER'
-}
-
-export const VECTOR_AUGMENTATION_OPTIONS = {
-  single_amplitude_scaling: 'SINGLE AMPLITUDE SCALING',
-  multiple_amplitude_scaling: 'MULTIPLE AMPLITUDE SCALING'
-}
-
 export const COMMON_CONFIGS = {
   basic_config: {
     n_epochs: 100,
+    n_steps_per_epoch: 1000,
     q_func_factory: 'mean',
     scaler: null,
     n_frames: 4,
@@ -39,11 +25,7 @@ export const COMMON_CONFIGS = {
   advanced_config: {
     n_steps: 1,
     gamma: 0.99,
-    n_critics: 1,
-    bootstrap: false,
-    share_encoder: false,
-    augmentation: [],
-    n_augmentations: 1
+    n_critics: 1
   }
 }
 
@@ -57,17 +39,6 @@ export const CONTINUOUS_CONFIGS = {
     n_action_samples: 1,
     n_critics: 2
   },
-  awr: {
-    actor_learning_rate: 5e-5,
-    critic_learning_rate: 1e-4,
-    batch_size: 2048,
-    batch_size_per_update: 256,
-    n_actor_updates: 1000,
-    n_critic_updates: 200,
-    lam: 0.95,
-    beta: 1.0,
-    max_weight: 20.0
-  },
   bcq: {
     actor_learning_rate: 1e-3,
     critic_learning_rate: 1e-3,
@@ -78,7 +49,7 @@ export const CONTINUOUS_CONFIGS = {
     lam: 0.75,
     n_action_samples: 100,
     action_flexibility: 0.05,
-    rl_start_epoch: 0,
+    rl_start_step: 0,
     latent_size: 32,
     beta: 0.5,
     n_critics: 2
@@ -98,7 +69,7 @@ export const CONTINUOUS_CONFIGS = {
     lam: 0.75,
     n_action_samples: 4,
     mmd_sigma: 20.0,
-    rl_start_epoch: 0,
+    warmup_steps: 0,
     n_critics: 2
   },
   cql: {
@@ -138,7 +109,7 @@ export const CONTINUOUS_CONFIGS = {
     lam: 0.75,
     action_flexibility: 0.05,
     update_actor_interval: 1,
-    rl_start_epoch: 20,
+    warmup_steps: 10000,
     beta: 0.5,
     n_critics: 2
   },
@@ -165,17 +136,6 @@ export const CONTINUOUS_CONFIGS = {
 }
 
 export const DISCRETE_CONFIGS = {
-  awr: {
-    actor_learning_rate: 5e-5,
-    critic_learning_rate: 1e-4,
-    batch_size: 2048,
-    batch_size_per_update: 256,
-    n_actor_updates: 1000,
-    n_critic_updates: 200,
-    lam: 0.95,
-    beta: 1.0,
-    max_weight: 20.0
-  },
   bcq: {
     learning_rate: 6.25e-5,
     batch_size: 32,

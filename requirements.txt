@@ -1,4 +1,4 @@
-d3rlpy==0.70
+d3rlpy==0.90
 Flask==1.1.2
 flask_sqlalchemy==2.4.4
 flask-marshmallow==0.13.0

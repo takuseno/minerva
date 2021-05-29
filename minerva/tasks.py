@@ -44,14 +44,6 @@ def train(
     # evaluate
     scorers = _get_scorers(dataset.is_action_discrete(), stats)
 
-    # data augmentation setting
-    if "augmentation" in params:
-        aug_names = params["augmentation"]
-        n_mean = params["n_augmentations"]
-        augmentations = [create_augmentation(name) for name in aug_names]
-        augmentation = DrQPipeline(augmentations, n_mean=n_mean)
-        params["augmentation"] = augmentation
-
     # add action scaler if continuous action-space
     if not dataset.is_action_discrete():
         params["action_scaler"] = "min_max"
@@ -60,7 +52,8 @@ def train(
     algo = create_algo(algo_name, dataset.is_action_discrete(), **params)
     algo.fit(
         train_data,
-        n_epochs=params["n_epochs"],
+        n_steps=params["n_epochs"] * params["n_steps_per_epoch"],
+        n_steps_per_epoch=params["n_steps_per_epoch"],
         eval_episodes=test_data,
         scorers=scorers,
         experiment_name=experiment_name,
