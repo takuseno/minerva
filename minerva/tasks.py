@@ -1,7 +1,6 @@
 # pylint: disable=no-name-in-module
 
 from d3rlpy.algos import create_algo
-from d3rlpy.augmentation import DrQPipeline, create_augmentation
 from d3rlpy.dataset import MDPDataset
 from d3rlpy.metrics.scorer import (
     average_value_estimation_scorer,

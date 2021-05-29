@@ -22,7 +22,7 @@ def test_vector_dataset_with_discrete_action():
     assert np.allclose(dataset.observations, ref.observations)
     assert np.all(dataset.actions == ref.actions)
     assert np.allclose(dataset.rewards, ref.rewards)
-    assert np.all(dataset.terminals == ref.terminals)
+    assert len(ref) == len(dataset)
     assert dataset.is_action_discrete()
 
 
@@ -40,7 +40,7 @@ def test_vector_dataset_with_continuous_action():
     assert np.allclose(dataset.observations, ref.observations)
     assert np.allclose(dataset.actions, ref.actions)
     assert np.allclose(dataset.rewards, ref.rewards)
-    assert np.all(dataset.terminals == ref.terminals)
+    assert len(ref) == len(dataset)
     assert not dataset.is_action_discrete()
 
 

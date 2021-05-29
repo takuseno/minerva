@@ -1,21 +1,13 @@
 import {
   Checkbox,
   FormRow,
-  MultiSelectForm,
   SelectForm,
   TextFormUnderline
 } from '../forms.js'
-import {
-  IMAGE_AUGMENTATION_OPTIONS,
-  Q_FUNC_TYPE_OPTIONS,
-  SCALER_OPTIONS,
-  VECTOR_AUGMENTATION_OPTIONS
-} from '../../constants'
+import { Q_FUNC_TYPE_OPTIONS, SCALER_OPTIONS } from '../../constants'
 import React from 'react'
 
 export const ConfigForm = (props) => {
-  const { dataset } = props
-
   let form = null
   switch (props.label) {
     case 'q_func_factory': {
@@ -41,22 +33,6 @@ export const ConfigForm = (props) => {
             props.onChange(props.label, newValue === 'null' ? null : newValue)
           }}
         />
-      )
-      break
-    }
-    case 'augmentation': {
-      const augmentations = dataset.isImage ? IMAGE_AUGMENTATION_OPTIONS
-        : VECTOR_AUGMENTATION_OPTIONS
-      const options = Object.entries(augmentations)
-        .map(([key, value]) => ({ text: value, value: key }))
-      form = (
-        <FormRow>
-          <MultiSelectForm
-            options={options}
-            onChange={(newValue) => props.onChange(props.label, newValue)}
-            value={props.value}
-          />
-        </FormRow>
       )
       break
     }

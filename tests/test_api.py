@@ -239,7 +239,8 @@ def test_experiment_api(client):
     project_id = res.json["id"]
 
     # check create experiment
-    data = {"name": "test_experiment", "config": {"n_epochs": 1}}
+    experiment_config = {"n_epochs": 1, "n_steps_per_epoch": 10}
+    data = {"name": "test_experiment", "config": experiment_config}
     res = client.post(
         "/api/projects/%d/experiments" % project_id,
         data=json.dumps(data),
